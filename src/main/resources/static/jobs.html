@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jobs | SkillForge</title>
+    <script src="https://cdn.tailwindcss.com" defer></script>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        /* Page transition effects */
+        #pageWrapper {
+          transition: transform 0.5s ease, opacity 0.5s ease;
+          transform: scale(0.9);
+          opacity: 0;
+        }
+        #pageWrapper.show {
+          transform: scale(1);
+          opacity: 1;
+        }
+        #pageWrapper.zoom-out {
+          transform: scale(0.9);
+          opacity: 0;
+        }
+    </style>
+</head>
+<body class="bg-black text-gray-100 font-sans overflow-x-hidden">
+
+<!-- Page Wrapper -->
+<div id="pageWrapper">
+
+    <!-- Navbar -->
+    <header class="bg-[#0d0d0d] text-white sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <img src="logo.png" alt="SkillForge Logo" class="h-8 w-8">
+                <h1 class="text-2xl font-bold">SkillForge</h1>
+            </div>
+            <nav class="hidden md:flex space-x-6 text-gray-300 font-medium">
+                <a href="dashboard.html" class="hover:text-indigo-400 transition duration-200 page-link">Home</a>
+                <a href="pricing.html" class="hover:text-indigo-400 transition duration-200 page-link">Pricing</a>
+                <a href="jobs.html" class="text-indigo-400 font-semibold page-link">Jobs</a>
+                <a href="contact.html" class="hover:text-indigo-400 transition duration-200 page-link">Contact</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <a href="user_login.html" class="hidden md:inline-block text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition page-link">Sign In</a>
+                <button class="bg-indigo-600 text-white px-5 py-2 rounded-md font-semibold hover:scale-105 hover:bg-indigo-700 transition-all duration-200">Get Started</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="text-center py-24 px-6 bg-black">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Find Your Next Opportunity</h1>
+        <p class="text-gray-400 text-lg mb-10">
+            Browse the latest jobs and internships in tech and business, tailored for your growth.
+        </p>
+
+        <!-- Job Search Bar -->
+        <div class="max-w-3xl mx-auto bg-[#111111] shadow-md rounded-full flex items-center px-4 py-2 border border-gray-700">
+            <input type="text" placeholder="Search job title or keyword" class="flex-1 px-4 py-2 focus:outline-none text-gray-200 bg-transparent rounded-l-full" />
+            <select class="bg-transparent text-gray-400 font-medium focus:outline-none px-2">
+                <option>All Locations</option>
+                <option>Bengaluru</option>
+                <option>Remote</option>
+                <option>Mumbai</option>
+            </select>
+            <button class="ml-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold px-6 py-2 rounded-full hover:from-indigo-700 hover:to-purple-700 transition transform hover:scale-105">
+                Search
+            </button>
+        </div>
+    </section>
+
+    <!-- Job Listings -->
+    <section class="max-w-6xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Job Card -->
+        <div class="p-6 rounded-2xl shadow-lg bg-[#111111] border border-gray-700 hover:scale-105 hover:shadow-xl transition">
+            <h3 class="text-xl font-semibold text-white mb-2">Frontend Developer</h3>
+            <p class="text-gray-400 mb-3">Bengaluru, India • Full-time</p>
+            <p class="text-gray-300 mb-4">Build responsive web applications with modern frameworks and collaborate with design teams.</p>
+            <button class="bg-indigo-600 text-white px-5 py-2 rounded-md font-semibold hover:bg-indigo-700 transition page-link">Apply Now</button>
+        </div>
+
+        <div class="p-6 rounded-2xl shadow-lg bg-[#111111] border border-gray-700 hover:scale-105 hover:shadow-xl transition">
+            <h3 class="text-xl font-semibold text-white mb-2">Backend Developer</h3>
+            <p class="text-gray-400 mb-3">Remote • Full-time</p>
+            <p class="text-gray-300 mb-4">Develop APIs, work with databases, and implement server-side logic for scalable applications.</p>
+            <button class="bg-indigo-600 text-white px-5 py-2 rounded-md font-semibold hover:bg-indigo-700 transition page-link">Apply Now</button>
+        </div>
+
+        <div class="p-6 rounded-2xl shadow-lg bg-[#111111] border border-gray-700 hover:scale-105 hover:shadow-xl transition">
+            <h3 class="text-xl font-semibold text-white mb-2">UI/UX Designer</h3>
+            <p class="text-gray-400 mb-3">Mumbai, India • Part-time</p>
+            <p class="text-gray-300 mb-4">Design user-friendly interfaces and collaborate with developers to implement intuitive workflows.</p>
+            <button class="bg-indigo-600 text-white px-5 py-2 rounded-md font-semibold hover:bg-indigo-700 transition page-link">Apply Now</button>
+        </div>
+
+        <div class="p-6 rounded-2xl shadow-lg bg-[#111111] border border-gray-700 hover:scale-105 hover:shadow-xl transition">
+            <h3 class="text-xl font-semibold text-white mb-2">Data Analyst</h3>
+            <p class="text-gray-400 mb-3">Bengaluru, India • Full-time</p>
+            <p class="text-gray-300 mb-4">Analyze datasets, generate insights, and create dashboards for business decision-making.</p>
+            <button class="bg-indigo-600 text-white px-5 py-2 rounded-md font-semibold hover:bg-indigo-700 transition page-link">Apply Now</button>
+        </div>
+
+        <div class="p-6 rounded-2xl shadow-lg bg-[#111111] border border-gray-700 hover:scale-105 hover:shadow-xl transition">
+            <h3 class="text-xl font-semibold text-white mb-2">HR Intern</h3>
+            <p class="text-gray-400 mb-3">Remote • Internship</p>
+            <p class="text-gray-300 mb-4">Support HR operations, recruitments, and employee engagement initiatives.</p>
+            <button class="bg-indigo-600 text-white px-5 py-2 rounded-md font-semibold hover:bg-indigo-700 transition page-link">Apply Now</button>
+        </div>
+
+        <div class="p-6 rounded-2xl shadow-lg bg-[#111111] border border-gray-700 hover:scale-105 hover:shadow-xl transition">
+            <h3 class="text-xl font-semibold text-white mb-2">Full Stack Developer</h3>
+            <p class="text-gray-400 mb-3">Bengaluru, India • Full-time</p>
+            <p class="text-gray-300 mb-4">Work on both frontend and backend, building scalable web applications with modern technologies.</p>
+            <button class="bg-indigo-600 text-white px-5 py-2 rounded-md font-semibold hover:bg-indigo-700 transition page-link">Apply Now</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#0d0d0d] text-gray-300 py-12 mt-16">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center space-x-2 mb-3">
+                    <img src="logo.png" alt="SkillForge Logo" class="h-8 w-8">
+                    <h3 class="font-bold text-lg text-white">SkillForge</h3>
+                </div>
+                <p class="text-sm text-gray-400">Empowering learners to ace every interview through AI-driven practice and analytics.</p>
+            </div>
+            <div>
+                <h4 class="font-semibold text-white mb-2">Product</h4>
+                <ul class="space-y-1 text-sm">
+                    <li><a href="#" class="hover:text-indigo-400 transition page-link">Mock Interviews</a></li>
+                    <li><a href="#" class="hover:text-indigo-400 transition page-link">Coding Practice</a></li>
+                    <li><a href="#" class="hover:text-indigo-400 transition page-link">Aptitude Tests</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-white mb-2">Resources</h4>
+                <ul class="space-y-1 text-sm">
+                    <li><a href="#" class="hover:text-indigo-400 transition page-link">Blog</a></li>
+                    <li><a href="#" class="hover:text-indigo-400 transition page-link">Help Center</a></li>
+                    <li><a href="#" class="hover:text-indigo-400 transition page-link">Contact Support</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-white mb-2">Legal</h4>
+                <ul class="space-y-1 text-sm">
+                    <li><a href="#" class="hover:text-indigo-400 transition page-link">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-indigo-400 transition page-link">Terms & Conditions</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt-10 text-center text-sm text-gray-500">
+            © 2025 SkillForge. All rights reserved.
+        </div>
+    </footer>
+
+</div> <!-- End pageWrapper -->
+
+<!-- Scripts -->
+<script>
+    const pageWrapper = document.getElementById('pageWrapper');
+    window.addEventListener('load', () => pageWrapper.classList.add('show'));
+
+    document.querySelectorAll('.page-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if(!href || href === "#") return;
+        e.preventDefault();
+        pageWrapper.classList.add('zoom-out');
+        setTimeout(() => { window.location.href = href; }, 500);
+      });
+    });
+</script>
+
+</body>
+</html>

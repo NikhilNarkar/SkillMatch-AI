@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aptitude Training | SkillForge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        #pageWrapper { transition: transform 0.5s ease, opacity 0.5s ease; transform: scale(0.95); opacity:0;}
+        #pageWrapper.show {transform: scale(1); opacity:1;}
+        #pageWrapper.zoom-out {transform: scale(0.9); opacity:0;}
+    </style>
+</head>
+<body class="bg-black text-gray-100 font-sans overflow-x-hidden">
+<div id="pageWrapper">
+
+    <!-- Navbar -->
+    <header class="bg-[#0d0d0d] text-white sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <img src="logo.png" class="h-8 w-8" alt="SkillForge">
+                <h1 class="text-2xl font-bold">SkillForge</h1>
+            </div>
+            <nav class="hidden md:flex space-x-6 text-gray-300 font-medium">
+                <a href="dashboard.html" class="hover:text-indigo-400 transition duration-200 page-link">Home</a>
+                <a href="pricing.html" class="hover:text-indigo-400 transition duration-200 page-link">Pricing</a>
+                <a href="jobs.html" class="hover:text-indigo-400 transition duration-200 page-link">Jobs</a>
+                <a href="contact.html" class="hover:text-indigo-400 transition duration-200 page-link">Contact</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <a href="user_login.html" class="hidden md:inline-block text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition page-link">Sign In</a>
+                <button class="bg-indigo-600 text-white px-5 py-2 rounded-md font-semibold hover:scale-105 hover:bg-indigo-700 transition-all duration-200">Get Started</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="text-center py-24 px-6 bg-black">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Aptitude Training</h1>
+        <p class="text-gray-400 text-lg mb-10">
+            Improve your problem-solving and logical reasoning skills with interactive aptitude questions.
+        </p>
+        <button id="startAptitude" class="bg-indigo-600 px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 hover:scale-105 transition">Start Training</button>
+    </section>
+
+    <!-- Aptitude Questions Panel -->
+    <section class="max-w-5xl mx-auto px-6 py-16 space-y-8 hidden" id="aptitudePanel">
+        <div id="aptitudeQuestions" class="space-y-6"></div>
+        <div class="text-center">
+            <button id="submitAptitude" class="bg-green-600 px-6 py-3 rounded-full font-semibold hover:bg-green-700 hover:scale-105 transition">
+                Submit Answers
+            </button>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="max-w-6xl mx-auto px-6 py-16 hidden" id="aptitudeStats">
+        <h2 class="text-3xl font-bold text-white text-center mb-10">Performance Summary</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-[#111111] p-6 rounded-2xl shadow-lg border border-gray-700 text-center hover:scale-105 transition">
+                <h3 class="text-xl font-semibold text-indigo-400 mb-2">Correct Answers</h3>
+                <p id="aptitudeCorrect" class="text-white text-4xl font-extrabold">--</p>
+            </div>
+            <div class="bg-[#111111] p-6 rounded-2xl shadow-lg border border-gray-700 text-center hover:scale-105 transition">
+                <h3 class="text-xl font-semibold text-indigo-400 mb-2">Accuracy</h3>
+                <p id="aptitudeAccuracy" class="text-white text-4xl font-extrabold">--%</p>
+            </div>
+            <div class="bg-[#111111] p-6 rounded-2xl shadow-lg border border-gray-700 text-center hover:scale-105 transition">
+                <h3 class="text-xl font-semibold text-indigo-400 mb-2">Time Taken</h3>
+                <p id="aptitudeTime" class="text-white text-4xl font-extrabold">-- min</p>
+            </div>
+        </div>
+        <div class="bg-[#111111] p-6 rounded-2xl shadow-lg border border-gray-700 mt-10">
+            <h3 class="text-xl font-semibold text-indigo-400 mb-4 text-center">Question-wise Score</h3>
+            <canvas id="aptitudeChart" class="w-full h-64"></canvas>
+        </div>
+    </section>
+
+    <footer class="bg-[#0d0d0d] text-gray-300 py-12 mt-16 text-center">
+        © 2025 SkillForge. All rights reserved.
+    </footer>
+
+</div>
+
+<script>
+    const pageWrapper = document.getElementById('pageWrapper');
+    window.addEventListener('load', () => pageWrapper.classList.add('show'));
+    document.querySelectorAll('.page-link').forEach(link=>{
+      link.addEventListener('click', function(e){
+        const href=this.getAttribute('href');
+        if(!href||href=="#") return;
+        e.preventDefault();
+        pageWrapper.classList.add('zoom-out');
+        setTimeout(()=>window.location.href=href,500);
+      });
+    });
+
+    const aptitudeQuestionsData = [
+      "What is 15% of 200?",
+      "If a train travels 60 km in 1 hour, how far will it travel in 3 hours?",
+      "Solve: 12 × 15 ÷ 5"
+    ];
+
+    const startBtn = document.getElementById('startAptitude');
+    const aptitudePanel = document.getElementById('aptitudePanel');
+    const aptitudeQuestions = document.getElementById('aptitudeQuestions');
+    const aptitudeStats = document.getElementById('aptitudeStats');
+
+    startBtn.addEventListener('click', ()=>{
+      aptitudePanel.classList.remove('hidden');
+      aptitudeStats.classList.add('hidden');
+      aptitudeQuestions.innerHTML="";
+      aptitudeQuestionsData.forEach((q,i)=>{
+        const card=document.createElement('div');
+        card.className="bg-[#111111] p-6 rounded-2xl shadow-lg border border-gray-700 hover:scale-105 transition";
+        card.innerHTML=`<h4 class="text-indigo-400 font-semibold mb-2">Q${i+1}</h4>
+          <p class="text-gray-300 mb-4">${q}</p>
+          <input type="text" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600" placeholder="Type answer here...">`;
+        aptitudeQuestions.appendChild(card);
+      });
+    });
+
+    document.getElementById('submitAptitude').addEventListener('click', ()=>{
+      aptitudePanel.classList.add('hidden');
+      aptitudeStats.classList.remove('hidden');
+      const correct=Math.floor(Math.random()*3)+1;
+      const accuracy=Math.floor(Math.random()*21)+80;
+      const time=Math.floor(Math.random()*10)+5;
+      document.getElementById('aptitudeCorrect').textContent=correct;
+      document.getElementById('aptitudeAccuracy').textContent=accuracy+"%";
+      document.getElementById('aptitudeTime').textContent=time+" min";
+
+      const ctx=document.getElementById('aptitudeChart').getContext('2d');
+      new Chart(ctx,{
+        type:'bar',
+        data:{
+          labels: aptitudeQuestionsData.map((_,i)=>`Q${i+1}`),
+          datasets:[{label:'Score', data:aptitudeQuestionsData.map(()=>Math.floor(Math.random()*21)+80), backgroundColor:'#6366F1'}]
+        },
+        options:{responsive:true,plugins:{legend:{display:false},tooltip:{backgroundColor:'#111',titleColor:'white',bodyColor:'white'}},scales:{x:{ticks:{color:'white'}},y:{ticks:{color:'white',beginAtZero:true,max:100}}}}
+      });
+    });
+</script>
+</body>
+</html>

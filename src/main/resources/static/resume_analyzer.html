@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resume Analyzer | SkillForge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        #pageWrapper {
+          transition: transform 0.5s ease, opacity 0.5s ease;
+          transform: scale(0.95);
+          opacity: 0;
+        }
+        #pageWrapper.show {
+          transform: scale(1);
+          opacity: 1;
+        }
+        #pageWrapper.zoom-out {
+          transform: scale(0.9);
+          opacity: 0;
+        }
+    </style>
+</head>
+<body class="bg-black text-gray-100 font-sans overflow-x-hidden">
+<div id="pageWrapper">
+
+    <!-- Navbar -->
+    <header class="bg-[#0d0d0d] text-white sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <img src="logo.png" alt="SkillForge Logo" class="h-8 w-8">
+                <h1 class="text-2xl font-bold">SkillForge</h1>
+            </div>
+            <nav class="hidden md:flex space-x-6 text-gray-300 font-medium">
+                <a href="dashboard.html" class="hover:text-indigo-400 transition duration-200 page-link">Home</a>
+                <a href="pricing.html" class="hover:text-indigo-400 transition duration-200 page-link">Pricing</a>
+                <a href="jobs.html" class="hover:text-indigo-400 transition duration-200 page-link">Jobs</a>
+                <a href="contact.html" class="hover:text-indigo-400 transition duration-200 page-link">Contact</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <a href="user_login.html" class="hidden md:inline-block text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition page-link">Sign In</a>
+                <button class="bg-indigo-600 text-white px-5 py-2 rounded-md font-semibold hover:scale-105 hover:bg-indigo-700 transition-all duration-200">Get Started</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="text-center py-24 px-6 bg-black">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Professional Resume Analyzer</h1>
+        <p class="text-gray-400 text-lg mb-10">
+            AI-powered resume analysis with detailed scoring, keyword matching, formatting check, and ATS readiness.
+        </p>
+        <label for="resumeUpload" class="cursor-pointer inline-block bg-indigo-600 px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 transition">
+            Upload Resume
+        </label>
+        <input type="file" id="resumeUpload" class="hidden" accept=".pdf,.doc,.docx"/>
+        <p id="fileName" class="mt-2 text-gray-400">No file chosen</p>
+    </section>
+
+    <!-- Analysis Stats Section -->
+    <section class="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 gap-8">
+
+        <!-- Stats Cards -->
+        <div class="space-y-6">
+            <div class="bg-[#111111] p-6 rounded-2xl shadow-lg border border-gray-700 hover:scale-105 hover:shadow-xl transition">
+                <h3 class="text-xl font-semibold text-indigo-400 mb-2">Overall Resume Score</h3>
+                <p id="score" class="text-white text-4xl font-extrabold">--%</p>
+            </div>
+            <div class="bg-[#111111] p-6 rounded-2xl shadow-lg border border-gray-700 hover:scale-105 hover:shadow-xl transition">
+                <h3 class="text-xl font-semibold text-indigo-400 mb-2">Keyword Match</h3>
+                <p id="keywords" class="text-white text-4xl font-extrabold">--%</p>
+            </div>
+            <div class="bg-[#111111] p-6 rounded-2xl shadow-lg border border-gray-700 hover:scale-105 hover:shadow-xl transition">
+                <h3 class="text-xl font-semibold text-indigo-400 mb-2">Formatting Score</h3>
+                <p id="formatting" class="text-white text-4xl font-extrabold">--%</p>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="bg-[#111111] p-6 rounded-2xl shadow-lg border border-gray-700 transition">
+            <h3 class="text-xl font-semibold text-indigo-400 mb-4">Skills & Keywords Distribution</h3>
+            <canvas id="skillsChart" class="w-full h-64"></canvas>
+        </div>
+    </section>
+
+    <!-- Detailed Feedback Section -->
+    <section class="max-w-6xl mx-auto px-6 py-16 space-y-6">
+        <h2 class="text-3xl font-bold text-white text-center mb-10">Detailed Feedback</h2>
+
+        <div id="feedback" class="space-y-4">
+
+            <div class="bg-[#111111] p-6 rounded-2xl border border-gray-700 hover:shadow-lg transition cursor-pointer" onclick="toggleFeedback(this)">
+                <h4 class="text-indigo-400 font-semibold">Strengths</h4>
+                <p class="text-gray-300 mt-2 hidden">Well-structured summary, strong action verbs, and clear role descriptions.</p>
+            </div>
+
+            <div class="bg-[#111111] p-6 rounded-2xl border border-gray-700 hover:shadow-lg transition cursor-pointer" onclick="toggleFeedback(this)">
+                <h4 class="text-indigo-400 font-semibold">Improvements</h4>
+                <p class="text-gray-300 mt-2 hidden">Add measurable achievements, maintain consistent bullet points, and optimize section lengths.</p>
+            </div>
+
+            <div class="bg-[#111111] p-6 rounded-2xl border border-gray-700 hover:shadow-lg transition cursor-pointer" onclick="toggleFeedback(this)">
+                <h4 class="text-indigo-400 font-semibold">ATS Keywords</h4>
+                <p class="text-gray-300 mt-2 hidden">Include industry-specific keywords for better ATS scanning.</p>
+            </div>
+
+            <div class="bg-[#111111] p-6 rounded-2xl border border-gray-700 hover:shadow-lg transition cursor-pointer" onclick="toggleFeedback(this)">
+                <h4 class="text-indigo-400 font-semibold">Formatting</h4>
+                <p class="text-gray-300 mt-2 hidden">Use consistent font sizes, headings, and spacing for a professional look.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="bg-[#0d0d0d] text-gray-300 py-12 mt-16 text-center">
+        © 2025 SkillForge. All rights reserved.
+    </footer>
+</div>
+
+<script>
+    // Page transitions
+    const pageWrapper = document.getElementById('pageWrapper');
+    window.addEventListener('load', () => pageWrapper.classList.add('show'));
+
+    document.querySelectorAll('.page-link').forEach(link => {
+      link.addEventListener('click', function(e){
+        const href = this.getAttribute('href');
+        if(!href || href === "#") return;
+        e.preventDefault();
+        pageWrapper.classList.add('zoom-out');
+        setTimeout(() => window.location.href = href, 500);
+      });
+    });
+
+    // File upload
+    const resumeUpload = document.getElementById('resumeUpload');
+    const fileName = document.getElementById('fileName');
+    const score = document.getElementById('score');
+    const keywords = document.getElementById('keywords');
+    const formatting = document.getElementById('formatting');
+
+    resumeUpload.addEventListener('change', () => {
+      const file = resumeUpload.files[0];
+      if(file) {
+        fileName.textContent = file.name;
+        // Dummy analytics
+        score.textContent = Math.floor(Math.random() * 21 + 80) + "%";
+        keywords.textContent = Math.floor(Math.random() * 21 + 70) + "%";
+        formatting.textContent = Math.floor(Math.random() * 21 + 75) + "%";
+
+        // Update chart
+        updateChart();
+      }
+    });
+
+    // Toggle feedback panels
+    function toggleFeedback(card) {
+      const p = card.querySelector('p');
+      p.classList.toggle('hidden');
+    }
+
+    // Chart.js for skills distribution
+    const ctx = document.getElementById('skillsChart').getContext('2d');
+    let skillsChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Leadership', 'Communication', 'Technical', 'Problem Solving', 'Keywords'],
+        datasets: [{
+          label: 'Skills %',
+          data: [80, 70, 85, 75, 60],
+          backgroundColor: ['#6366F1','#8B5CF6','#EC4899','#F59E0B','#10B981'],
+          borderColor: ['#0d0d0d','#0d0d0d','#0d0d0d','#0d0d0d','#0d0d0d'],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'bottom', labels: { color: 'white' } },
+          tooltip: { backgroundColor: '#111111', titleColor: 'white', bodyColor: 'white' }
+        }
+      }
+    });
+
+    function updateChart() {
+      skillsChart.data.datasets[0].data = [
+        Math.floor(Math.random() * 21 + 70),
+        Math.floor(Math.random() * 21 + 65),
+        Math.floor(Math.random() * 21 + 75),
+        Math.floor(Math.random() * 21 + 70),
+        Math.floor(Math.random() * 21 + 60)
+      ];
+      skillsChart.update();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resume Builder | SkillForge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        #pageWrapper {
+          transition: transform 0.5s ease, opacity 0.5s ease;
+          transform: scale(0.95);
+          opacity: 0;
+        }
+        #pageWrapper.show {
+          transform: scale(1);
+          opacity: 1;
+        }
+        #pageWrapper.zoom-out {
+          transform: scale(0.9);
+          opacity: 0;
+        }
+    </style>
+</head>
+<body class="bg-black text-gray-100 font-sans overflow-x-hidden">
+
+<div id="pageWrapper">
+
+    <!-- Navbar -->
+    <header class="bg-[#0d0d0d] text-white sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <img src="logo.png" alt="SkillForge Logo" class="h-8 w-8">
+                <h1 class="text-2xl font-bold">SkillForge</h1>
+            </div>
+            <nav class="hidden md:flex space-x-6 text-gray-300 font-medium">
+                <a href="dashboard.html" class="hover:text-indigo-400 transition duration-200 page-link">Home</a>
+                <a href="pricing.html" class="hover:text-indigo-400 transition duration-200 page-link">Pricing</a>
+                <a href="jobs.html" class="hover:text-indigo-400 transition duration-200 page-link">Jobs</a>
+                <a href="contact.html" class="hover:text-indigo-400 transition duration-200 page-link">Contact</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <a href="user_login.html" class="hidden md:inline-block text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition page-link">Sign In</a>
+                <button class="bg-indigo-600 text-white px-5 py-2 rounded-md font-semibold hover:scale-105 hover:bg-indigo-700 transition-all duration-200">Get Started</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="text-center py-24 px-6 bg-black">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Build Your Professional Resume</h1>
+        <p class="text-gray-400 text-lg mb-10">
+            Step-by-step resume builder with live preview and AI-powered suggestions for interviews.
+        </p>
+        <button id="startBuilder" class="bg-indigo-600 px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 hover:scale-105 transition">
+            Start Building
+        </button>
+    </section>
+
+    <!-- Resume Builder Panel -->
+    <section id="builderPanel" class="max-w-6xl mx-auto px-6 py-16 space-y-10 hidden">
+
+        <!-- Step Form -->
+        <form id="resumeForm" class="space-y-8">
+
+            <!-- Personal Info -->
+            <div class="bg-[#111111] p-6 rounded-2xl border border-gray-700 shadow-lg hover:shadow-xl transition">
+                <h3 class="text-xl font-semibold text-indigo-400 mb-4 cursor-pointer" onclick="toggleSection(this)">Personal Information</h3>
+                <div class="space-y-4">
+                    <input type="text" placeholder="Full Name" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600" required/>
+                    <input type="email" placeholder="Email Address" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600" required/>
+                    <input type="text" placeholder="Phone Number" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600" />
+                </div>
+            </div>
+
+            <!-- Education -->
+            <div class="bg-[#111111] p-6 rounded-2xl border border-gray-700 shadow-lg hover:shadow-xl transition">
+                <h3 class="text-xl font-semibold text-indigo-400 mb-4 cursor-pointer" onclick="toggleSection(this)">Education</h3>
+                <div class="space-y-4">
+                    <input type="text" placeholder="Degree" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600"/>
+                    <input type="text" placeholder="University / College" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600"/>
+                    <input type="text" placeholder="Year of Graduation" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600"/>
+                </div>
+            </div>
+
+            <!-- Experience -->
+            <div class="bg-[#111111] p-6 rounded-2xl border border-gray-700 shadow-lg hover:shadow-xl transition">
+                <h3 class="text-xl font-semibold text-indigo-400 mb-4 cursor-pointer" onclick="toggleSection(this)">Experience</h3>
+                <div class="space-y-4">
+                    <input type="text" placeholder="Company Name" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600"/>
+                    <input type="text" placeholder="Role / Position" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600"/>
+                    <textarea placeholder="Responsibilities / Achievements" rows="3" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600"></textarea>
+                </div>
+            </div>
+
+            <!-- Skills -->
+            <div class="bg-[#111111] p-6 rounded-2xl border border-gray-700 shadow-lg hover:shadow-xl transition">
+                <h3 class="text-xl font-semibold text-indigo-400 mb-4 cursor-pointer" onclick="toggleSection(this)">Skills</h3>
+                <div class="space-y-4">
+                    <input type="text" placeholder="Add Skill (comma separated)" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600"/>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="bg-green-600 px-6 py-3 rounded-full font-semibold hover:bg-green-700 hover:scale-105 transition">
+                    Preview & Save Resume
+                </button>
+            </div>
+
+        </form>
+
+        <!-- Live Preview Section -->
+        <section class="bg-[#111111] p-6 rounded-2xl border border-gray-700 shadow-lg transition mt-10" id="livePreview" style="display:none;">
+            <h2 class="text-2xl font-bold text-indigo-400 mb-4">Resume Preview</h2>
+            <div id="previewContent" class="text-gray-200 space-y-2"></div>
+            <div class="mt-6 text-center">
+                <button id="downloadResume" class="bg-indigo-600 px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 hover:scale-105 transition">
+                    Download Resume
+                </button>
+            </div>
+        </section>
+
+    </section>
+
+    <footer class="bg-[#0d0d0d] text-gray-300 py-12 mt-16 text-center">
+        © 2025 SkillForge. All rights reserved.
+    </footer>
+
+</div>
+
+<script>
+    // Page transitions
+    const pageWrapper = document.getElementById('pageWrapper');
+    window.addEventListener('load', () => pageWrapper.classList.add('show'));
+
+    document.querySelectorAll('.page-link').forEach(link => {
+      link.addEventListener('click', function(e){
+        const href = this.getAttribute('href');
+        if(!href || href === "#") return;
+        e.preventDefault();
+        pageWrapper.classList.add('zoom-out');
+        setTimeout(() => window.location.href = href, 500);
+      });
+    });
+
+    // Start Builder
+    const startBuilder = document.getElementById('startBuilder');
+    const builderPanel = document.getElementById('builderPanel');
+    startBuilder.addEventListener('click', () => {
+      builderPanel.classList.remove('hidden');
+      startBuilder.disabled = true;
+    });
+
+    // Toggle form sections
+    function toggleSection(header) {
+      const div = header.nextElementSibling;
+      if(div.style.display === "none" || div.style.display === "") {
+        div.style.display = "block";
+      } else {
+        div.style.display = "none";
+      }
+    }
+
+    // Handle Resume Preview
+    const resumeForm = document.getElementById('resumeForm');
+    const livePreview = document.getElementById('livePreview');
+    const previewContent = document.getElementById('previewContent');
+
+    resumeForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      previewContent.innerHTML = "";
+      const inputs = resumeForm.querySelectorAll('input, textarea');
+      inputs.forEach(input => {
+        if(input.value) {
+          const p = document.createElement('p');
+          p.textContent = input.placeholder + ": " + input.value;
+          previewContent.appendChild(p);
+        }
+      });
+      livePreview.style.display = "block";
+    });
+
+    // Download Resume (simulated)
+    document.getElementById('downloadResume').addEventListener('click', () => {
+      alert("Resume download simulated! In a real app, PDF download would happen here.");
+    });
+</script>
+
+</body>
+</html>

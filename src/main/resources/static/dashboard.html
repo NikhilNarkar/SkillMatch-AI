@@ -1,0 +1,486 @@
+<!--    <!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8" />-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+<!--    <title>Dashboard - Skillmatch</title>-->
+<!--    <link rel="stylesheet" href="/css/styles.css" />-->
+<!--</head>-->
+<!--<body>-->
+<!--<main class="container card">-->
+<!--    <h2>Dashboard</h2>-->
+<!--    <div id="userBox" class="mt"></div>-->
+<!--    <section class="mt">-->
+<!--      <h3>Tech News</h3>-->
+<!--      <ul id="newsList"></ul>-->
+<!--    </section>-->
+<!--    <button id="logoutBtn" class="btn btn-secondary mt">Logout</button>-->
+<!--    <p class="mt"><a href="/">Home</a></p>-->
+<!--  </main>-->
+
+<!--<script src="/js/api.js"></script>-->
+<!--<script>-->
+<!--  if (!window.Api.isLoggedIn()) {-->
+<!--    location.href = '/login.html';-->
+<!--  }-->
+<!--  const user = window.Api.getUser();-->
+<!--  const box = document.getElementById('userBox');-->
+<!--  box.innerHTML = `<pre>${JSON.stringify(user, null, 2)}</pre>`;-->
+<!--  document.getElementById('logoutBtn').addEventListener('click', () => { window.Api.logout(); location.href='/'; });-->
+
+<!--  // Simple tech news using Hacker News Algolia API-->
+<!--  fetch('https://hn.algolia.com/api/v1/search?query=technology&tags=story&hitsPerPage=5')-->
+<!--    .then(r => r.json())-->
+<!--    .then(j => {-->
+<!--      const ul = document.getElementById('newsList');-->
+<!--      ul.innerHTML = '';-->
+<!--      j.hits.forEach(item => {-->
+<!--        const li = document.createElement('li');-->
+<!--        li.innerHTML = `<a href="${item.url}" target="_blank" rel="noopener">${item.title}</a>`;-->
+<!--        ul.appendChild(li);-->
+<!--      });-->
+<!--    })-->
+<!--    .catch(() => { document.getElementById('newsList').innerHTML = '<li>Unable to load news.</li>'; });-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>SkillForge Dashboard</title>-->
+<!--    <script src="https://cdn.tailwindcss.com"></script>-->
+<!--    <style>-->
+<!--        body {-->
+<!--          background: linear-gradient(135deg, #0f172a, #1e293b);-->
+<!--          font-family: 'Segoe UI', sans-serif;-->
+<!--          color: white;-->
+<!--        }-->
+
+<!--        .logo {-->
+<!--          font-size: 2rem;-->
+<!--          font-weight: bold;-->
+<!--          color: #00f2fe;-->
+<!--        }-->
+
+<!--        .btn {-->
+<!--          background: linear-gradient(to right, #4facfe, #00f2fe);-->
+<!--          color: white;-->
+<!--          padding: 10px 20px;-->
+<!--          border-radius: 8px;-->
+<!--          font-weight: 600;-->
+<!--          transition: transform 0.2s;-->
+<!--        }-->
+
+<!--        .btn:hover { transform: scale(1.05); }-->
+
+<!--        .card {-->
+<!--          background: rgba(255,255,255,0.05);-->
+<!--          border-radius: 12px;-->
+<!--          padding: 20px;-->
+<!--          backdrop-filter: blur(8px);-->
+<!--          box-shadow: 0 8px 20px rgba(0,0,0,0.5);-->
+<!--          transition: transform 0.2s;-->
+<!--        }-->
+
+<!--        .card:hover { transform: translateY(-5px); }-->
+
+<!--        .section-title {-->
+<!--          font-size: 1.5rem;-->
+<!--          font-weight: bold;-->
+<!--          margin-bottom: 12px;-->
+<!--        }-->
+
+<!--        /* Top nav bar */-->
+<!--        .navbar {-->
+<!--          display: flex;-->
+<!--          justify-content: space-between;-->
+<!--          align-items: center;-->
+<!--          padding: 20px 40px;-->
+<!--          background: rgba(0,0,0,0.5);-->
+<!--          backdrop-filter: blur(10px);-->
+<!--          position: sticky;-->
+<!--          top: 0;-->
+<!--          z-index: 50;-->
+<!--        }-->
+
+<!--        .nav-buttons .btn {-->
+<!--          margin-left: 10px;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body class="min-h-screen">-->
+
+<!--&lt;!&ndash; Top Navbar &ndash;&gt;-->
+<!--<nav class="navbar">-->
+<!--    <div class="logo">SkillForge</div>-->
+<!--    <div class="nav-buttons">-->
+<!--        <a href="user_login.html" class="btn">Login</a>-->
+<!--        <a href="user_signup.html" class="btn">Signup</a>-->
+<!--    </div>-->
+<!--</nav>-->
+
+<!--&lt;!&ndash; Hero Section &ndash;&gt;-->
+<!--<header class="p-8 text-center mt-6">-->
+<!--    <h1 class="text-4xl font-bold mb-2">Enhance Your Skills. Ace Company Rounds.</h1>-->
+<!--    <p class="text-gray-300 mb-6">Practice aptitude tests, coding challenges, and interviews all in one platform.</p>-->
+<!--    <div class="flex justify-center gap-4">-->
+<!--        <button class="btn">Start Learning</button>-->
+<!--        <button class="btn">Take Free Tests</button>-->
+<!--    </div>-->
+<!--</header>-->
+
+<!--&lt;!&ndash; Progress Section &ndash;&gt;-->
+<!--<section class="p-8 grid grid-cols-1 md:grid-cols-3 gap-6">-->
+<!--    <div class="card text-center">-->
+<!--        <h2 class="section-title">Aptitude</h2>-->
+<!--        <p>70% Completed</p>-->
+<!--        <div class="bg-gray-600 h-2 w-full mt-2 rounded">-->
+<!--            <div class="bg-blue-400 h-2 w-[70%] rounded"></div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="card text-center">-->
+<!--        <h2 class="section-title">Coding</h2>-->
+<!--        <p>50% Completed</p>-->
+<!--        <div class="bg-gray-600 h-2 w-full mt-2 rounded">-->
+<!--            <div class="bg-blue-400 h-2 w-[50%] rounded"></div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="card text-center">-->
+<!--        <h2 class="section-title">Interview Prep</h2>-->
+<!--        <p>30% Completed</p>-->
+<!--        <div class="bg-gray-600 h-2 w-full mt-2 rounded">-->
+<!--            <div class="bg-blue-400 h-2 w-[30%] rounded"></div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
+<!--&lt;!&ndash; Top Company Rounds &ndash;&gt;-->
+<!--<section class="p-8">-->
+<!--    <h2 class="section-title mb-4">Top Company Rounds</h2>-->
+<!--    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">-->
+<!--        <div class="card text-center">-->
+<!--            <h3 class="font-semibold text-xl mb-2">Google</h3>-->
+<!--            <p>Aptitude + Coding + Interview</p>-->
+<!--            <button class="btn mt-3">Take Assessment</button>-->
+<!--        </div>-->
+<!--        <div class="card text-center">-->
+<!--            <h3 class="font-semibold text-xl mb-2">Microsoft</h3>-->
+<!--            <p>Aptitude + Coding + Interview</p>-->
+<!--            <button class="btn mt-3">Take Assessment</button>-->
+<!--        </div>-->
+<!--        <div class="card text-center">-->
+<!--            <h3 class="font-semibold text-xl mb-2">Amazon</h3>-->
+<!--            <p>Aptitude + Coding + Interview</p>-->
+<!--            <button class="btn mt-3">Take Assessment</button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
+<!--&lt;!&ndash; Upload Resume Section &ndash;&gt;-->
+<!--<section class="p-8 text-center">-->
+<!--    <h2 class="section-title mb-4">Boost your skills — Upload your resume and take a test</h2>-->
+<!--    <input type="file" accept=".pdf,.doc,.docx" class="p-2 rounded mb-4 bg-gray-800 border border-gray-600"/>-->
+<!--    <br>-->
+<!--    <button class="btn">Upload & Take Test</button>-->
+<!--</section>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkillMatch – Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        /* 🌌 Background gradient for consistency with login page */
+        body {
+          background: radial-gradient(circle at 20% 20%, #0f172a, #020617);
+          color: #f3f4f6;
+          font-family: 'Inter', sans-serif;
+          overflow-x: hidden;
+        }
+
+        /* ✨ Page load zoom effect */
+        #pageWrapper {
+          transition: all 0.6s ease;
+          opacity: 0;
+          transform: scale(0.96);
+        }
+        #pageWrapper.show {
+          opacity: 1;
+          transform: scale(1);
+        }
+
+        /* 🔹 Dropdown animation */
+        .dropdown {
+          transition: all 0.25s ease;
+          transform-origin: top;
+        }
+
+        /* 🔹 Navbar styling */
+        header {
+          backdrop-filter: blur(12px);
+          background: rgba(15, 23, 42, 0.85);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 🔹 Buttons + hover animation */
+        .btn-glow {
+          background: linear-gradient(135deg, #6366f1, #7c3aed);
+          color: white;
+          font-weight: 600;
+          border-radius: 9999px;
+          padding: 0.6rem 1.5rem;
+          box-shadow: 0 0 15px rgba(99,102,241,0.4);
+          transition: all 0.3s ease;
+        }
+        .btn-glow:hover {
+          transform: translateY(-3px) scale(1.05);
+          box-shadow: 0 0 25px rgba(99,102,241,0.6);
+        }
+
+        /* 🔹 Card hover effects */
+        .card {
+          background: rgba(30, 41, 59, 0.6);
+          border: 1px solid rgba(99,102,241,0.15);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+          transition: all 0.3s ease;
+        }
+        .card:hover {
+          transform: translateY(-4px) scale(1.02);
+          border-color: rgba(99,102,241,0.35);
+          box-shadow: 0 12px 30px rgba(99,102,241,0.25);
+        }
+
+        /* 🔹 Search bar glass effect */
+        .search-bar {
+          background: rgba(17, 17, 27, 0.7);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(99,102,241,0.2);
+        }
+
+        /* 🔹 Section titles */
+        h1, h2, h3 {
+          background: linear-gradient(90deg, #818cf8, #c084fc);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        /* 🔹 Footer glass look */
+        footer {
+          background: rgba(15, 23, 42, 0.8);
+          backdrop-filter: blur(8px);
+          border-top: 1px solid rgba(99,102,241,0.2);
+        }
+
+        /* Dropdown container */
+        .dropdown a:hover {
+          background: rgba(99,102,241,0.1);
+        }
+    </style>
+</head>
+<body>
+
+<div id="pageWrapper">
+
+    <!-- 🌐 Navbar -->
+    <header class="sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <img src="logo.png" alt="SkillMatch Logo" class="h-8 w-8">
+                <h1 class="text-2xl font-bold tracking-wide text-white">SkillMatch</h1>
+            </div>
+
+            <nav class="hidden md:flex space-x-6 text-gray-300 font-medium">
+                <div class="relative">
+                    <button onclick="toggleMenu('menu1')" class="hover:text-indigo-400 transition">Interviews ▼</button>
+                    <div id="menu1" class="dropdown hidden absolute bg-slate-800 text-gray-200 shadow-lg rounded-lg p-3 w-44 mt-2">
+                        <a href="#" class="block px-3 py-1 rounded transition">Mock Interviews</a>
+                        <a href="#" class="block px-3 py-1 rounded transition">Practice Sets</a>
+                    </div>
+                </div>
+                <div class="relative">
+                    <button onclick="toggleMenu('menu2')" class="hover:text-indigo-400 transition">Resume ▼</button>
+                    <div id="menu2" class="dropdown hidden absolute bg-slate-800 text-gray-200 shadow-lg rounded-lg p-3 w-44 mt-2">
+                        <a href="resume_builder.html" class="block px-3 py-1 rounded transition">Resume Builder</a>
+                        <a href="resume_analyzer.html" class="block px-3 py-1 rounded transition">Resume Analyzer</a>
+                    </div>
+                </div>
+                <a href="jobs.html" class="hover:text-indigo-400 transition page-link">Jobs</a>
+                <a href="pricing.html" class="hover:text-indigo-400 transition page-link">Pricing</a>
+                <a href="#" class="hover:text-indigo-400 transition page-link">Business</a>
+                <a href="contact.html" class="hover:text-indigo-400 transition page-link">Contact</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <button id="logoutBtn" class="btn-glow">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 🌠 Hero Section -->
+    <section class="text-center py-24 px-6">
+        <h1 class="text-5xl font-extrabold mb-4">Ready to Ace Your Next Interview?</h1>
+        <p class="text-gray-400 text-lg mb-10">
+            AI mock interviews with personalized practice and real-time analytics — everything on
+            <span class="text-indigo-400 font-semibold">SkillMatch</span>.
+        </p>
+
+        <div class="max-w-3xl mx-auto search-bar rounded-full flex items-center px-4 py-2 shadow-md">
+            <select class="bg-transparent text-gray-400 font-medium focus:outline-none pl-2">
+                <option>Job</option>
+                <option>Internship</option>
+                <option>Technical</option>
+            </select>
+            <input type="text" placeholder="Search position" class="flex-1 px-4 py-2 focus:outline-none text-gray-200 bg-transparent" />
+            <select class="bg-transparent text-gray-400 font-medium focus:outline-none">
+                <option>Select Round</option>
+                <option>Aptitude</option>
+                <option>Coding</option>
+                <option>HR</option>
+            </select>
+            <button class="ml-4 btn-glow">Start Practice</button>
+        </div>
+
+        <a href="#" class="mt-6 block text-indigo-400 font-medium hover:underline page-link">View sample analytics</a>
+    </section>
+
+    <!-- 💎 Cards Section -->
+    <section class="max-w-6xl mx-auto py-20 px-6 grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div class="card p-6 rounded-2xl text-center">
+            <h3 class="text-xl font-semibold mb-2">Aptitude Training</h3>
+            <p class="text-gray-400">Sharpen your problem-solving and logical reasoning skills.</p>
+            <a href = "aptitude.html"  class="mt-4 btn-glow page-link">Start Now</a>
+        </div>
+        <div class="card p-6 rounded-2xl text-center">
+            <h3 class="text-xl font-semibold mb-2">Coding Challenges</h3>
+            <p class="text-gray-400">Solve real interview-style coding problems with test cases.</p>
+            <button class="mt-4 btn-glow page-link">Practice Coding</button>
+        </div>
+        <div class="card p-6 rounded-2xl text-center">
+            <h3 class="text-xl font-semibold mb-2">Interview Simulation</h3>
+            <p class="text-gray-400">Experience realistic AI mock interviews with instant feedback.</p>
+            <button class="mt-4 btn-glow page-link">Try Interview</button>
+        </div>
+    </section>
+
+    <!-- 📰 News Section -->
+    <section class="max-w-6xl mx-auto px-6 py-14">
+        <div class="flex items-center justify-between">
+            <h2 class="text-2xl font-bold">Tech News</h2>
+            <button id="refreshNews" class="px-3 py-2 rounded-md bg-slate-800 text-gray-200 border border-gray-700 hover:bg-indigo-600 hover:text-white transition">Refresh</button>
+        </div>
+        <p id="newsStatus" class="text-gray-400 mt-2">Loading latest stories…</p>
+        <div id="newsGrid" class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- ⚡ Footer -->
+    <footer class="py-12 mt-16 text-gray-300">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center space-x-2 mb-3">
+                    <img src="logo.png" class="h-8 w-8">
+                    <h3 class="font-bold text-lg text-white">SkillMatch</h3>
+                </div>
+                <p class="text-sm text-gray-400">Empowering learners to ace every interview through AI-driven practice and analytics.</p>
+            </div>
+            <div>
+                <h4 class="font-semibold text-white mb-2">Product</h4>
+                <ul class="space-y-1 text-sm">
+                    <li><a href="#" class="hover:text-indigo-400 transition page-link">Mock Interviews</a></li>
+                    <li><a href="#" class="hover:text-indigo-400 transition page-link">Coding Practice</a></li>
+                    <li><a href="#" class="hover:text-indigo-400 transition page-link">Aptitude Tests</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-white mb-2">Resources</h4>
+                <ul class="space-y-1 text-sm">
+                    <li><a href="#" class="hover:text-indigo-400 transition page-link">Blog</a></li>
+                    <li><a href="#" class="hover:text-indigo-400 transition page-link">Help Center</a></li>
+                    <li><a href="#" class="hover:text-indigo-400 transition page-link">Contact Support</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold text-white mb-2">Legal</h4>
+                <ul class="space-y-1 text-sm">
+                    <li><a href="#" class="hover:text-indigo-400 transition page-link">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-indigo-400 transition page-link">Terms & Conditions</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt-10 text-center text-sm text-gray-500">
+            © 2025 SkillMatch. All rights reserved.
+        </div>
+    </footer>
+
+</div>
+
+<script>
+    // Smooth dropdown toggle
+    function toggleMenu(menuId) {
+      const menu = document.getElementById(menuId);
+      menu.classList.toggle('hidden');
+      document.querySelectorAll('.dropdown').forEach(m => {
+        if (m.id !== menuId) m.classList.add('hidden');
+      });
+    }
+    document.addEventListener('click', e => {
+      if (!e.target.closest('button') && !e.target.closest('.dropdown')) {
+        document.querySelectorAll('.dropdown').forEach(m => m.classList.add('hidden'));
+      }
+    });
+
+    // Page load animation
+    const wrapper = document.getElementById('pageWrapper');
+    window.addEventListener('load', () => wrapper.classList.add('show'));
+
+    // Load tech news
+    async function loadNews() {
+      const grid = document.getElementById('newsGrid');
+      const status = document.getElementById('newsStatus');
+      status.textContent = 'Loading latest stories…';
+      grid.innerHTML = '';
+      try {
+        const res = await fetch('https://hn.algolia.com/api/v1/search?query=ai%20technology&tags=story&hitsPerPage=9');
+        const data = await res.json();
+        status.textContent = '';
+        data.hits.forEach(item => {
+          const card = document.createElement('a');
+          card.href = item.url || '#';
+          card.target = '_blank';
+          card.className = 'block p-5 rounded-2xl card hover:shadow-indigo-600/30 transition';
+          card.innerHTML = `
+            <h3 class="text-lg font-semibold mb-2">${item.title}</h3>
+            <p class="text-gray-400 text-sm">${item.author || 'HN'} • ${new Date(item.created_at).toLocaleDateString()}</p>
+          `;
+          grid.appendChild(card);
+        });
+      } catch {
+        status.textContent = 'Unable to load news.';
+      }
+    }
+    document.getElementById('refreshNews').addEventListener('click', loadNews);
+    loadNews();
+
+  // Logout behavior
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      try { if (window.Api) window.Api.logout(); } catch(e) {}
+      window.location.href = '/index.html';
+    });
+  }
+</script>
+
+</body>
+</html>
+
+
+

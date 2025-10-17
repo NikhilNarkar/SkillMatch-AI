@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recruiter Dashboard | SkillForge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="logo.png">
+    <style>
+        #pageWrapper {
+          transition: all 0.6s ease;
+          transform: scale(0.95);
+          opacity: 0;
+        }
+        #pageWrapper.show {
+          transform: scale(1);
+          opacity: 1;
+        }
+        .glass {
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .job-card:hover {
+          transform: scale(1.02);
+          border-color: #6366f1;
+        }
+        /* Modal animation */
+        .modal-bg {
+          background-color: rgba(0, 0, 0, 0.75);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          transition: all 0.3s ease;
+        }
+        .modal {
+          transform: scale(0.95);
+          opacity: 0;
+          transition: all 0.3s ease;
+        }
+        .modal.show {
+          transform: scale(1);
+          opacity: 1;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-black via-[#0b0b0b] to-[#121212] text-gray-100 font-sans overflow-x-hidden">
+<div id="pageWrapper">
+    <!-- ===== NAVBAR ===== -->
+    <header class="bg-[#0f0f0f]/90 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <img src="logo.png" alt="SkillForge" class="h-9 w-9">
+                <h1 class="text-2xl font-bold text-white tracking-wide">Recruiter Dashboard</h1>
+            </div>
+            <a href="recruiter_login.html" class="page-link px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-md text-white font-semibold transition">Logout</a>
+        </div>
+    </header>
+
+    <!-- ===== HERO ===== -->
+    <section class="max-w-7xl mx-auto px-6 py-14">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500">
+            Welcome, Recruiter 👋
+        </h1>
+        <p class="mt-3 text-gray-400 text-lg">
+            Manage job listings, post new jobs, and streamline your hiring process efficiently.
+        </p>
+    </section>
+
+    <!-- ===== JOB LISTINGS ===== -->
+    <section class="max-w-7xl mx-auto px-6 mb-24">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-3xl font-semibold text-white">Job Listings</h2>
+            <button id="openModal" class="bg-gradient-to-r from-indigo-500 to-purple-600 px-5 py-2 rounded-md text-white font-semibold hover:scale-105 transition">
+                + Post New Job
+            </button>
+        </div>
+
+        <div id="jobBody" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="bg-[#0d0d0d] border-t border-gray-800 py-6 text-center text-gray-400">
+        © 2025 SkillForge | Designed for Professionals 🚀
+    </footer>
+</div>
+
+<!-- ===== MODAL FORM ===== -->
+<div id="modalBg" class="hidden fixed inset-0 modal-bg z-50">
+    <div id="modalBox" class="modal bg-[#111111] p-8 rounded-2xl shadow-2xl w-[90%] max-w-lg border border-gray-700">
+        <h2 class="text-2xl font-semibold text-white mb-4 text-center">Post a New Job</h2>
+        <form id="jobForm" class="space-y-4">
+            <div>
+                <label class="text-gray-300 text-sm">Job Title</label>
+                <input type="text" id="jobTitle" required class="w-full px-4 py-2 rounded-md bg-transparent border border-gray-700 text-gray-200 focus:ring-2 focus:ring-indigo-600 outline-none">
+            </div>
+            <div>
+                <label class="text-gray-300 text-sm">Department</label>
+                <select id="jobDept" required class="w-full px-4 py-2 rounded-md bg-transparent border border-gray-700 text-gray-200 focus:ring-2 focus:ring-indigo-600">
+                    <option value="">Select Department</option>
+                    <option>Engineering</option>
+                    <option>Marketing</option>
+                    <option>Finance</option>
+                    <option>HR</option>
+                    <option>Design</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-gray-300 text-sm">Job Type</label>
+                <select id="jobType" required class="w-full px-4 py-2 rounded-md bg-transparent border border-gray-700 text-gray-200 focus:ring-2 focus:ring-indigo-600">
+                    <option>Full-Time</option>
+                    <option>Part-Time</option>
+                    <option>Internship</option>
+                    <option>Remote</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-gray-300 text-sm">Location</label>
+                <input type="text" id="jobLoc" required class="w-full px-4 py-2 rounded-md bg-transparent border border-gray-700 text-gray-200 focus:ring-2 focus:ring-indigo-600 outline-none">
+            </div>
+            <div>
+                <label class="text-gray-300 text-sm">Experience Required</label>
+                <input type="text" id="jobExp" required class="w-full px-4 py-2 rounded-md bg-transparent border border-gray-700 text-gray-200 focus:ring-2 focus:ring-indigo-600 outline-none" placeholder="e.g. 2+ years">
+            </div>
+            <div>
+                <label class="text-gray-300 text-sm">Salary Range</label>
+                <input type="text" id="jobSal" required class="w-full px-4 py-2 rounded-md bg-transparent border border-gray-700 text-gray-200 focus:ring-2 focus:ring-indigo-600 outline-none" placeholder="e.g. ₹5 - ₹10 LPA">
+            </div>
+            <div>
+                <label class="text-gray-300 text-sm">Job Description</label>
+                <textarea id="jobDesc" rows="3" required class="w-full px-4 py-2 rounded-md bg-transparent border border-gray-700 text-gray-200 focus:ring-2 focus:ring-indigo-600 outline-none"></textarea>
+            </div>
+            <div class="flex justify-end space-x-3 pt-3">
+                <button type="button" id="closeModal" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-md text-gray-200 transition">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-md font-semibold hover:scale-105 transition">Post Job</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const pageWrapper = document.getElementById('pageWrapper');
+    window.addEventListener('load', () => pageWrapper.classList.add('show'));
+
+    const jobs = [
+      { title: "Frontend Developer", dept: "Engineering", loc: "Bengaluru", exp: "2+ yrs", sal: "₹6 - 10 LPA", type: "Full-Time", desc: "React developer with good UI/UX knowledge." },
+      { title: "HR Executive", dept: "HR", loc: "Delhi", exp: "1+ yr", sal: "₹3 - 5 LPA", type: "Full-Time", desc: "Responsible for recruitment and employee engagement." }
+    ];
+
+    const jobBody = document.getElementById('jobBody');
+    const modalBg = document.getElementById('modalBg');
+    const modalBox = document.getElementById('modalBox');
+    const openModal = document.getElementById('openModal');
+    const closeModal = document.getElementById('closeModal');
+    const jobForm = document.getElementById('jobForm');
+
+    // Show & Hide Modal
+    openModal.onclick = () => {
+      modalBg.classList.remove('hidden');
+      setTimeout(() => modalBox.classList.add('show'), 50);
+    };
+    closeModal.onclick = () => {
+      modalBox.classList.remove('show');
+      setTimeout(() => modalBg.classList.add('hidden'), 300);
+    };
+    window.onclick = e => {
+      if (e.target === modalBg) closeModal.click();
+    };
+
+    // Create Job Card
+    function createJobCard(job) {
+      return `
+        <div class="job-card glass rounded-xl p-5 border border-gray-800 transition hover:shadow-lg">
+          <h3 class="text-xl font-semibold text-indigo-400 mb-2">${job.title}</h3>
+          <p class="text-gray-400">${job.dept} • ${job.type}</p>
+          <p class="mt-2 text-gray-300"><strong>Location:</strong> ${job.loc}</p>
+          <p class="text-gray-300"><strong>Experience:</strong> ${job.exp}</p>
+          <p class="text-gray-300"><strong>Salary:</strong> ${job.sal}</p>
+          <p class="text-gray-400 mt-2 text-sm">${job.desc}</p>
+          <button class="mt-4 bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-2 rounded-md text-sm font-medium hover:scale-105 transition">View Details</button>
+        </div>`;
+    }
+
+    function renderJobs() {
+      jobBody.innerHTML = jobs.map(createJobCard).join('');
+    }
+
+    // Post New Job
+    jobForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const newJob = {
+        title: jobTitle.value,
+        dept: jobDept.value,
+        loc: jobLoc.value,
+        exp: jobExp.value,
+        sal: jobSal.value,
+        type: jobType.value,
+        desc: jobDesc.value
+      };
+      jobs.push(newJob);
+      renderJobs();
+      closeModal.click();
+      jobForm.reset();
+    });
+
+    renderJobs();
+</script>
+</body>
+</html>

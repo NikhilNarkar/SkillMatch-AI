@@ -1,0 +1,640 @@
+<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
+<!--&lt;!&ndash;<html lang="en">&ndash;&gt;-->
+<!--&lt;!&ndash;<head>&ndash;&gt;-->
+<!--&lt;!&ndash;    <meta charset="UTF-8">&ndash;&gt;-->
+<!--&lt;!&ndash;    <meta name="viewport" content="width=device-width, initial-scale=1.0">&ndash;&gt;-->
+<!--&lt;!&ndash;    <title>SkillMatch AI Portal</title>&ndash;&gt;-->
+<!--&lt;!&ndash;    <link rel="preconnect" href="https://fonts.googleapis.com">&ndash;&gt;-->
+<!--&lt;!&ndash;    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">&ndash;&gt;-->
+<!--&lt;!&ndash;    <link rel="stylesheet" href="style.css">&ndash;&gt;-->
+<!--&lt;!&ndash;    <style>&ndash;&gt;-->
+<!--&lt;!&ndash;        /* 🌈 Base styles */&ndash;&gt;-->
+<!--&lt;!&ndash;        * {&ndash;&gt;-->
+<!--&lt;!&ndash;          box-sizing: border-box;&ndash;&gt;-->
+<!--&lt;!&ndash;          font-family: 'Inter', sans-serif;&ndash;&gt;-->
+<!--&lt;!&ndash;          margin: 0;&ndash;&gt;-->
+<!--&lt;!&ndash;          padding: 0;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        body {&ndash;&gt;-->
+<!--&lt;!&ndash;          background: linear-gradient(135deg, #eef2f3, #d9e4ec);&ndash;&gt;-->
+<!--&lt;!&ndash;          color: #333;&ndash;&gt;-->
+<!--&lt;!&ndash;          min-height: 100vh;&ndash;&gt;-->
+<!--&lt;!&ndash;          display: flex;&ndash;&gt;-->
+<!--&lt;!&ndash;          flex-direction: column;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        /* 🔹 Navbar */&ndash;&gt;-->
+<!--&lt;!&ndash;        .navbar {&ndash;&gt;-->
+<!--&lt;!&ndash;          background-color: #0d6efd;&ndash;&gt;-->
+<!--&lt;!&ndash;          color: #fff;&ndash;&gt;-->
+<!--&lt;!&ndash;          padding: 1rem 2rem;&ndash;&gt;-->
+<!--&lt;!&ndash;          display: flex;&ndash;&gt;-->
+<!--&lt;!&ndash;          justify-content: space-between;&ndash;&gt;-->
+<!--&lt;!&ndash;          align-items: center;&ndash;&gt;-->
+<!--&lt;!&ndash;          box-shadow: 0 2px 8px rgba(0,0,0,0.1);&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        .navbar .site-title {&ndash;&gt;-->
+<!--&lt;!&ndash;          font-size: 1.5rem;&ndash;&gt;-->
+<!--&lt;!&ndash;          font-weight: 700;&ndash;&gt;-->
+<!--&lt;!&ndash;          letter-spacing: 0.5px;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        .btn-red {&ndash;&gt;-->
+<!--&lt;!&ndash;          background: #dc3545;&ndash;&gt;-->
+<!--&lt;!&ndash;          border: none;&ndash;&gt;-->
+<!--&lt;!&ndash;          color: white;&ndash;&gt;-->
+<!--&lt;!&ndash;          padding: 0.6rem 1.2rem;&ndash;&gt;-->
+<!--&lt;!&ndash;          border-radius: 8px;&ndash;&gt;-->
+<!--&lt;!&ndash;          cursor: pointer;&ndash;&gt;-->
+<!--&lt;!&ndash;          transition: background 0.2s ease;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        .btn-red:hover {&ndash;&gt;-->
+<!--&lt;!&ndash;          background: #b02a37;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        /* 🔹 Container & Cards */&ndash;&gt;-->
+<!--&lt;!&ndash;        .container {&ndash;&gt;-->
+<!--&lt;!&ndash;          max-width: 600px;&ndash;&gt;-->
+<!--&lt;!&ndash;          margin: 2rem auto;&ndash;&gt;-->
+<!--&lt;!&ndash;          background: #fff;&ndash;&gt;-->
+<!--&lt;!&ndash;          padding: 2rem;&ndash;&gt;-->
+<!--&lt;!&ndash;          border-radius: 16px;&ndash;&gt;-->
+<!--&lt;!&ndash;          box-shadow: 0 6px 20px rgba(0,0,0,0.08);&ndash;&gt;-->
+<!--&lt;!&ndash;          transition: transform 0.2s ease;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        .container:hover {&ndash;&gt;-->
+<!--&lt;!&ndash;          transform: translateY(-2px);&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        h2 {&ndash;&gt;-->
+<!--&lt;!&ndash;          color: #0d6efd;&ndash;&gt;-->
+<!--&lt;!&ndash;          margin-bottom: 1.2rem;&ndash;&gt;-->
+<!--&lt;!&ndash;          text-align: center;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        .message {&ndash;&gt;-->
+<!--&lt;!&ndash;          margin-top: 1rem;&ndash;&gt;-->
+<!--&lt;!&ndash;          color: #28a745;&ndash;&gt;-->
+<!--&lt;!&ndash;          font-size: 0.9rem;&ndash;&gt;-->
+<!--&lt;!&ndash;          text-align: center;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        /* 🔹 Form Styles */&ndash;&gt;-->
+<!--&lt;!&ndash;        form {&ndash;&gt;-->
+<!--&lt;!&ndash;          display: flex;&ndash;&gt;-->
+<!--&lt;!&ndash;          flex-direction: column;&ndash;&gt;-->
+<!--&lt;!&ndash;          gap: 0.9rem;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        input, select, textarea, button {&ndash;&gt;-->
+<!--&lt;!&ndash;          padding: 0.75rem 1rem;&ndash;&gt;-->
+<!--&lt;!&ndash;          border: 1px solid #ccc;&ndash;&gt;-->
+<!--&lt;!&ndash;          border-radius: 8px;&ndash;&gt;-->
+<!--&lt;!&ndash;          font-size: 1rem;&ndash;&gt;-->
+<!--&lt;!&ndash;          width: 100%;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        input:focus, select:focus, textarea:focus {&ndash;&gt;-->
+<!--&lt;!&ndash;          border-color: #0d6efd;&ndash;&gt;-->
+<!--&lt;!&ndash;          outline: none;&ndash;&gt;-->
+<!--&lt;!&ndash;          box-shadow: 0 0 0 3px rgba(13,110,253,0.15);&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        button {&ndash;&gt;-->
+<!--&lt;!&ndash;          background: #0d6efd;&ndash;&gt;-->
+<!--&lt;!&ndash;          color: white;&ndash;&gt;-->
+<!--&lt;!&ndash;          border: none;&ndash;&gt;-->
+<!--&lt;!&ndash;          cursor: pointer;&ndash;&gt;-->
+<!--&lt;!&ndash;          font-weight: 600;&ndash;&gt;-->
+<!--&lt;!&ndash;          transition: background 0.2s ease;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        button:hover {&ndash;&gt;-->
+<!--&lt;!&ndash;          background: #0b5ed7;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        textarea {&ndash;&gt;-->
+<!--&lt;!&ndash;          resize: none;&ndash;&gt;-->
+<!--&lt;!&ndash;          height: 100px;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        /* 🔹 Dashboard Buttons */&ndash;&gt;-->
+<!--&lt;!&ndash;        .menu {&ndash;&gt;-->
+<!--&lt;!&ndash;          display: flex;&ndash;&gt;-->
+<!--&lt;!&ndash;          gap: 1rem;&ndash;&gt;-->
+<!--&lt;!&ndash;          justify-content: center;&ndash;&gt;-->
+<!--&lt;!&ndash;          margin: 1.5rem 0;&ndash;&gt;-->
+<!--&lt;!&ndash;          flex-wrap: wrap;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        .menu button {&ndash;&gt;-->
+<!--&lt;!&ndash;          flex: 1;&ndash;&gt;-->
+<!--&lt;!&ndash;          min-width: 130px;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        footer {&ndash;&gt;-->
+<!--&lt;!&ndash;          text-align: center;&ndash;&gt;-->
+<!--&lt;!&ndash;          padding: 1rem;&ndash;&gt;-->
+<!--&lt;!&ndash;          margin-top: auto;&ndash;&gt;-->
+<!--&lt;!&ndash;          font-size: 0.9rem;&ndash;&gt;-->
+<!--&lt;!&ndash;          color: #666;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        /* 🔹 Responsive */&ndash;&gt;-->
+<!--&lt;!&ndash;        @media (max-width: 600px) {&ndash;&gt;-->
+<!--&lt;!&ndash;          .container {&ndash;&gt;-->
+<!--&lt;!&ndash;            margin: 1rem;&ndash;&gt;-->
+<!--&lt;!&ndash;            padding: 1.5rem;&ndash;&gt;-->
+<!--&lt;!&ndash;          }&ndash;&gt;-->
+<!--&lt;!&ndash;          .navbar {&ndash;&gt;-->
+<!--&lt;!&ndash;            flex-direction: column;&ndash;&gt;-->
+<!--&lt;!&ndash;            align-items: flex-start;&ndash;&gt;-->
+<!--&lt;!&ndash;          }&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        /* ✨ Fade-in animation for sections */&ndash;&gt;-->
+<!--&lt;!&ndash;        .fade {&ndash;&gt;-->
+<!--&lt;!&ndash;          animation: fadeIn 0.3s ease-in-out;&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+
+<!--&lt;!&ndash;        @keyframes fadeIn {&ndash;&gt;-->
+<!--&lt;!&ndash;          from {opacity: 0; transform: translateY(5px);}&ndash;&gt;-->
+<!--&lt;!&ndash;          to {opacity: 1; transform: translateY(0);}&ndash;&gt;-->
+<!--&lt;!&ndash;        }&ndash;&gt;-->
+<!--&lt;!&ndash;    </style>&ndash;&gt;-->
+<!--&lt;!&ndash;</head>&ndash;&gt;-->
+<!--&lt;!&ndash;<body>&ndash;&gt;-->
+<!--&lt;!&ndash;<nav class="navbar">&ndash;&gt;-->
+<!--&lt;!&ndash;    <div class="site-title">SkillMatch AI Portal</div>&ndash;&gt;-->
+<!--&lt;!&ndash;    <button id="logoutBtn" class="btn-red" style="display:none;">Logout</button>&ndash;&gt;-->
+<!--&lt;!&ndash;</nav>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<main class="container fade">&ndash;&gt;-->
+<!--&lt;!&ndash;    &lt;!&ndash; Login Section &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <div id="loginSection">&ndash;&gt;-->
+<!--&lt;!&ndash;        <h2>Welcome Back 👋</h2>&ndash;&gt;-->
+<!--&lt;!&ndash;        <p style="text-align:center;color:#666;margin-bottom:1rem;">Login to explore personalized AI career insights</p>&ndash;&gt;-->
+<!--&lt;!&ndash;        <form id="loginForm">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="email" id="loginEmail" placeholder="Email" required />&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="password" id="loginPassword" placeholder="Password" required />&ndash;&gt;-->
+<!--&lt;!&ndash;            <button type="submit">Login</button>&ndash;&gt;-->
+<!--&lt;!&ndash;        </form>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div id="loginMsg" class="message"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <p style="text-align:center;margin-top:1rem;">New here? <a href="/register.html" style="color:#0d6efd;text-decoration:none;">Create an account</a></p>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; Dashboard Section &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <div id="dashboardSection" style="display:none;">&ndash;&gt;-->
+<!--&lt;!&ndash;        <h2>Welcome, <span id="userFullName"></span> 👋</h2>&ndash;&gt;-->
+<!--&lt;!&ndash;        <p style="text-align:center;color:#666;">Your personalized SkillMatch dashboard</p>&ndash;&gt;-->
+<!--&lt;!&ndash;        <nav class="menu">&ndash;&gt;-->
+<!--&lt;!&ndash;            <button onclick="showSection('profileSection')">Profile</button>&ndash;&gt;-->
+<!--&lt;!&ndash;            <button onclick="showSection('resumeSection')">Resume Upload</button>&ndash;&gt;-->
+<!--&lt;!&ndash;        </nav>&ndash;&gt;-->
+<!--&lt;!&ndash;        <button class="btn-red" onclick="window.Api.logout()">Logout</button>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; Profile Section &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <div id="profileSection" style="display:none;">&ndash;&gt;-->
+<!--&lt;!&ndash;        <h2>My Profile</h2>&ndash;&gt;-->
+<!--&lt;!&ndash;        <form id="profileForm">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="date" id="profileDob" required />&ndash;&gt;-->
+<!--&lt;!&ndash;            <select id="profileGender">&ndash;&gt;-->
+<!--&lt;!&ndash;                <option value="MALE">Male</option>&ndash;&gt;-->
+<!--&lt;!&ndash;                <option value="FEMALE">Female</option>&ndash;&gt;-->
+<!--&lt;!&ndash;                <option value="OTHER">Other</option>&ndash;&gt;-->
+<!--&lt;!&ndash;            </select>&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="text" id="profileCity" placeholder="City" />&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="text" id="profileState" placeholder="State" />&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="text" id="profileCountry" placeholder="Country" />&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="number" id="profileExperience" placeholder="Experience (Years)" min="0"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="number" id="profileExpectedSalary" placeholder="Expected Salary (₹)" min="0"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            <textarea id="profileBio" placeholder="Tell us about your professional background..."></textarea>&ndash;&gt;-->
+<!--&lt;!&ndash;            <button type="submit">Save Profile</button>&ndash;&gt;-->
+<!--&lt;!&ndash;        </form>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div id="profileMsg" class="message"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <button onclick="showSection('dashboardSection')">⬅ Back to Dashboard</button>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; Resume Section &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    <div id="resumeSection" style="display:none;">&ndash;&gt;-->
+<!--&lt;!&ndash;        <h2>Upload Resume</h2>&ndash;&gt;-->
+<!--&lt;!&ndash;        <form id="resumeForm" enctype="multipart/form-data">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" required />&ndash;&gt;-->
+<!--&lt;!&ndash;            <button type="submit">Upload</button>&ndash;&gt;-->
+<!--&lt;!&ndash;        </form>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div id="resumeMsg" class="message"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <button onclick="showSection('dashboardSection')">⬅ Back to Dashboard</button>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;</main>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<footer>&ndash;&gt;-->
+<!--&lt;!&ndash;    © 2025 SkillMatch AI — Empowering Careers with Intelligence 🚀&ndash;&gt;-->
+<!--&lt;!&ndash;</footer>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<script src="/js/api.js"></script>&ndash;&gt;-->
+<!--&lt;!&ndash;<script src="main.js"></script>&ndash;&gt;-->
+<!--&lt;!&ndash;<script>&ndash;&gt;-->
+<!--&lt;!&ndash;    function showSection(id) {&ndash;&gt;-->
+<!--&lt;!&ndash;      document.querySelectorAll('main > div').forEach(div => div.style.display = 'none');&ndash;&gt;-->
+<!--&lt;!&ndash;      const section = document.getElementById(id);&ndash;&gt;-->
+<!--&lt;!&ndash;      section.style.display = 'block';&ndash;&gt;-->
+<!--&lt;!&ndash;      section.classList.add('fade');&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+<!--&lt;!&ndash;</script>&ndash;&gt;-->
+<!--&lt;!&ndash;</body>&ndash;&gt;-->
+<!--&lt;!&ndash;</html>&ndash;&gt;-->
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>SkillMatch</title>-->
+<!--    <script src="https://cdn.tailwindcss.com"></script>-->
+<!--    &lt;!&ndash; Three.js and Vanta.js for 3D background &ndash;&gt;-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.net.min.js"></script>-->
+<!--    <style>-->
+<!--        body, html { margin: 0; padding: 0; height: 100%; }-->
+<!--        #landing { height: 100vh; width: 100vw; }-->
+<!--        .btn:hover { transform: scale(1.1); transition: 0.3s; }-->
+<!--        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body class="text-white font-sans">-->
+
+<!--<div id="landing" class="flex flex-col items-center justify-center relative overflow-hidden">-->
+<!--    &lt;!&ndash; New Logo &ndash;&gt;-->
+<!--    <div class="absolute top-6 left-8 flex items-center space-x-2 z-10">-->
+<!--        <img src="https://cdn-icons-png.flaticon.com/512/2910/2910763.png" class="w-10 h-10" />-->
+<!--        <span class="logo">SkillMatch</span>-->
+<!--    </div>-->
+
+<!--    <h1 class="text-5xl font-bold mb-8 z-10">SkillMatch AI</h1>-->
+<!--    <div class="flex gap-6 z-10">-->
+<!--        &lt;!&ndash; Updated link to the new portal page &ndash;&gt;-->
+<!--        <a href="login.html" class="btn px-6 py-3 bg-white text-black rounded-2xl font-semibold shadow-lg">User Login</a>-->
+<!--        <a href="register.html" class="btn px-6 py-3 bg-white text-black rounded-2xl font-semibold shadow-lg">Recruiter Login</a>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    VANTA.NET({-->
+<!--      el: "#landing",-->
+<!--      mouseControls: true,-->
+<!--      touchControls: true,-->
+<!--      minHeight: 200.00,-->
+<!--      minWidth: 200.00,-->
+<!--      scale: 1.00,-->
+<!--      scaleMobile: 1.00,-->
+<!--      color: 0x00ffff,-->
+<!--      backgroundColor: 0x0f172a,-->
+<!--      points: 12.0,-->
+<!--      maxDistance: 25.0,-->
+<!--      spacing: 18.0-->
+<!--    });-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkillMatch AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.net.min.js"></script>
+    <link rel="icon" href="logo.png" />
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        html, body { height: 100%; overflow: hidden; color: white; background: #000; }
+
+        /* Wrapper for entry animation */
+        #pageWrapper {
+          transition: transform 0.6s ease, opacity 0.6s ease;
+          transform: scale(0.9);
+          opacity: 0;
+        }
+        #pageWrapper.show {
+          transform: scale(1);
+          opacity: 1;
+        }
+
+        /* Floating icons aesthetic */
+        .icon {
+          position: absolute;
+          width: 55px;
+          height: 55px;
+          opacity: 0.18;
+          animation: floatIcon 14s ease-in-out infinite;
+          z-index: 1;
+        }
+
+        @keyframes floatIcon {
+          0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.2; }
+          50% { transform: translateY(-25px) rotate(15deg); opacity: 0.4; }
+        }
+
+        /* Glow logo */
+        .logo {
+          font-size: 1.8rem;
+          font-weight: 800;
+          letter-spacing: 1px;
+          color: #00ffff;
+          text-shadow: 0 0 18px #00ffffb0;
+        }
+
+        /* Main heading */
+        h1 {
+          font-size: 4.5rem;
+          font-weight: 800;
+          color: #e0f7ff;
+          text-shadow: 0 0 25px #00ffff80;
+          z-index: 10;
+          animation: fadeIn 1.4s ease;
+        }
+
+        /* Buttons */
+        .btn {
+          background: linear-gradient(90deg, #00ffff, #0099ff);
+          color: #000;
+          border-radius: 1rem;
+          font-weight: 600;
+          box-shadow: 0 0 18px #00ffff80;
+          transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+          transform: scale(1.1);
+          box-shadow: 0 0 25px #00ffffd0;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in { animation: fadeIn 1.2s ease forwards; }
+    </style>
+</head>
+
+<body class="text-white font-sans">
+
+<div id="pageWrapper">
+    <div id="landing" class="relative flex flex-col items-center justify-center h-screen w-screen text-center overflow-hidden">
+        <!-- Floating icons -->
+<!--        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="icon" style="top:8%; left:10%; animation-delay: 0s;">-->
+<!--        <img src="https://cdn-icons-png.flaticon.com/512/201/201623.png" class="icon" style="top:70%; left:15%; animation-delay: 2s;">-->
+<!--        <img src="https://cdn-icons-png.flaticon.com/512/2910/2910763.png" class="icon" style="top:20%; right:12%; animation-delay: 4s;">-->
+<!--        <img src="https://cdn-icons-png.flaticon.com/512/1055/1055646.png" class="icon" style="bottom:10%; right:18%; animation-delay: 6s;">-->
+<!--        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135810.png" class="icon" style="top:35%; left:40%; animation-delay: 3s;">-->
+<!--        <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" class="icon" style="bottom:20%; left:25%; animation-delay: 5s;">-->
+
+        <!-- Logo top-left -->
+        <div class="absolute top-8 left-10 flex items-center space-x-3 z-10 fade-in">
+            <img src="logo.png" alt="SkillMatch Logo" class="w-10 h-10" />
+            <span class="logo">SkillMatch</span>
+        </div>
+
+        <!-- Main Heading -->
+        <h1 class="mb-10 fade-in">SkillMatch AI</h1>
+
+        <!-- Buttons -->
+        <div class="flex flex-wrap gap-6 justify-center z-10 fade-in">
+            <a href="login.html" class="btn px-7 py-3 text-black text-lg">User Login</a>
+            <a href="recruiter_login.html" class="btn px-7 py-3 text-black text-lg">Recruiter Login</a>
+        </div>
+    </div>
+</div>
+
+<!-- Vanta Background -->
+<script>
+    VANTA.NET({
+      el: "#landing",
+      mouseControls: true,
+      touchControls: true,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color: 0x00ffff,
+      backgroundColor: 0x0a0a0a,
+      points: 14.0,
+      maxDistance: 25.0,
+      spacing: 18.0
+    });
+
+    // Zoom-in animation
+    window.addEventListener("load", () => {
+      document.getElementById("pageWrapper").classList.add("show");
+    });
+</script>
+
+</body>
+</html>
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8" />-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+<!--    <title>SkillMatch AI | Empower Your Career</title>-->
+
+<!--    &lt;!&ndash; Tailwind + Fonts &ndash;&gt;-->
+<!--    <script src="https://cdn.tailwindcss.com"></script>-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.net.min.js"></script>-->
+
+<!--    <style>-->
+<!--        * {-->
+<!--          font-family: 'Inter', sans-serif;-->
+<!--        }-->
+
+<!--        body {-->
+<!--          background: #000;-->
+<!--          color: #fff;-->
+<!--          overflow-x: hidden;-->
+<!--        }-->
+
+<!--        /* Vanta Background Layer */-->
+<!--        #vanta-bg {-->
+<!--          position: fixed;-->
+<!--          width: 100%;-->
+<!--          height: 100%;-->
+<!--          top: 0;-->
+<!--          left: 0;-->
+<!--          z-index: -1;-->
+<!--        }-->
+
+<!--        /* Navbar */-->
+<!--        nav {-->
+<!--          backdrop-filter: blur(12px);-->
+<!--          background: rgba(0, 0, 0, 0.6);-->
+<!--          border-bottom: 1px solid rgba(255, 255, 255, 0.08);-->
+<!--        }-->
+
+<!--        .brand {-->
+<!--          color: #00ffff;-->
+<!--          font-size: 1.6rem;-->
+<!--          font-weight: 800;-->
+<!--          text-shadow: 0 0 15px #00ffffb0;-->
+<!--        }-->
+
+<!--        /* Hero Section */-->
+<!--        .hero {-->
+<!--          min-height: 100vh;-->
+<!--          display: flex;-->
+<!--          flex-direction: column;-->
+<!--          justify-content: center;-->
+<!--          text-align: center;-->
+<!--          padding: 2rem;-->
+<!--        }-->
+
+<!--        .hero h1 {-->
+<!--          font-size: 3rem;-->
+<!--          font-weight: 800;-->
+<!--          background: linear-gradient(90deg, #00ffff, #ffffff);-->
+<!--          -webkit-background-clip: text;-->
+<!--          -webkit-text-fill-color: transparent;-->
+<!--          text-shadow: 0 0 25px #00ffff88;-->
+<!--        }-->
+
+<!--        .hero p {-->
+<!--          color: #b3b3b3;-->
+<!--          font-size: 1.1rem;-->
+<!--          margin-top: 1rem;-->
+<!--        }-->
+
+<!--        .btn-primary {-->
+<!--          background: #00ffff;-->
+<!--          color: #000;-->
+<!--          padding: 0.9rem 2rem;-->
+<!--          border-radius: 12px;-->
+<!--          font-weight: 700;-->
+<!--          margin-top: 2rem;-->
+<!--          transition: all 0.3s ease;-->
+<!--        }-->
+
+<!--        .btn-primary:hover {-->
+<!--          background: #0ff9ff;-->
+<!--          transform: scale(1.05);-->
+<!--        }-->
+
+<!--        /* Features Section */-->
+<!--        .features {-->
+<!--          max-width: 1100px;-->
+<!--          margin: 5rem auto;-->
+<!--          display: grid;-->
+<!--          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));-->
+<!--          gap: 2rem;-->
+<!--          padding: 0 1rem;-->
+<!--        }-->
+
+<!--        .card {-->
+<!--          background: rgba(255, 255, 255, 0.07);-->
+<!--          border: 1px solid rgba(255, 255, 255, 0.15);-->
+<!--          border-radius: 20px;-->
+<!--          padding: 2rem;-->
+<!--          backdrop-filter: blur(10px);-->
+<!--          transition: 0.3s ease;-->
+<!--        }-->
+
+<!--        .card:hover {-->
+<!--          transform: translateY(-8px);-->
+<!--          box-shadow: 0 0 25px rgba(0, 255, 255, 0.25);-->
+<!--        }-->
+
+<!--        .card h3 {-->
+<!--          color: #00ffff;-->
+<!--          font-size: 1.3rem;-->
+<!--          font-weight: 700;-->
+<!--          margin-bottom: 0.8rem;-->
+<!--        }-->
+
+<!--        .card p {-->
+<!--          color: #ccc;-->
+<!--          font-size: 0.95rem;-->
+<!--          line-height: 1.6;-->
+<!--        }-->
+
+<!--        footer {-->
+<!--          text-align: center;-->
+<!--          padding: 3rem 1rem;-->
+<!--          color: #aaa;-->
+<!--          border-top: 1px solid rgba(255, 255, 255, 0.08);-->
+<!--          background: rgba(0, 0, 0, 0.7);-->
+<!--          backdrop-filter: blur(12px);-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+
+<!--<body>-->
+<!--<div id="vanta-bg"></div>-->
+
+<!--&lt;!&ndash; Navbar &ndash;&gt;-->
+<!--<nav class="w-full fixed top-0 z-50 px-6 py-4 flex justify-between items-center">-->
+<!--    <div class="brand">SkillMatch AI</div>-->
+<!--    <div class="space-x-6 text-gray-300 font-medium">-->
+<!--        <a href="#" class="hover:text-cyan-400 transition">Home</a>-->
+<!--        <a href="#" class="hover:text-cyan-400 transition">Features</a>-->
+<!--        <a href="contact.html" class="hover:text-cyan-400 transition">Contact</a>-->
+<!--        <a href="login.html" class="hover:text-cyan-400 transition">Login</a>-->
+<!--    </div>-->
+<!--</nav>-->
+
+<!--&lt;!&ndash; Hero Section &ndash;&gt;-->
+<!--<section class="hero">-->
+<!--    <h1>Empower Your Career with AI</h1>-->
+<!--    <p>Transform your resume into actionable insights, interview prep, and job matches — powered by AI.</p>-->
+<!--    <a href="register.html" class="btn-primary inline-block">Get Started</a>-->
+<!--</section>-->
+
+<!--&lt;!&ndash; Features &ndash;&gt;-->
+<!--<section class="features">-->
+<!--    <div class="card">-->
+<!--        <h3>AI-Powered Resume Analysis</h3>-->
+<!--        <p>Let our smart AI break down your resume to find your strengths, weaknesses, and skill gaps instantly.</p>-->
+<!--    </div>-->
+<!--    <div class="card">-->
+<!--        <h3>Mock Interviews</h3>-->
+<!--        <p>Prepare with confidence through real-time mock interviews customized to your experience level.</p>-->
+<!--    </div>-->
+<!--    <div class="card">-->
+<!--        <h3>Personalized Job Matches</h3>-->
+<!--        <p>Get job recommendations that truly fit your skills and goals — no more irrelevant listings.</p>-->
+<!--    </div>-->
+<!--</section>-->
+
+<!--&lt;!&ndash; Footer &ndash;&gt;-->
+<!--<footer>-->
+<!--    © 2025 SkillMatch AI — Empowering Careers with Intelligence-->
+<!--</footer>-->
+
+<!--<script>-->
+<!--    // Initialize Vanta background-->
+<!--    VANTA.NET({-->
+<!--      el: "#vanta-bg",-->
+<!--      mouseControls: true,-->
+<!--      touchControls: true,-->
+<!--      minHeight: 200.00,-->
+<!--      minWidth: 200.00,-->
+<!--      scale: 1.00,-->
+<!--      scaleMobile: 1.00,-->
+<!--      color: 0x00ffff,-->
+<!--      backgroundColor: 0x000000,-->
+<!--      points: 12.00,-->
+<!--      maxDistance: 20.00,-->
+<!--      spacing: 18.00-->
+<!--    });-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->

@@ -1,0 +1,507 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8" />-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+<!--    <title>Login - Skillmatch</title>-->
+<!--    <link rel="stylesheet" href="/css/styles.css" />-->
+<!--</head>-->
+<!--<body>-->
+<!--<main class="container card">-->
+<!--    <h2>Login</h2>-->
+<!--    <form id="loginForm">-->
+<!--        <label>Email-->
+<!--            <input type="email" id="email" required />-->
+<!--        </label>-->
+<!--        <label>Password-->
+<!--            <input type="password" id="password" required />-->
+<!--        </label>-->
+<!--        <button class="btn" type="submit">Login</button>-->
+<!--    </form>-->
+<!--    <div id="msg" class="mt"></div>-->
+<!--    <p class="mt">No account? <a href="/register.html">Register</a></p>-->
+<!--    <p><a href="/">Back home</a></p>-->
+<!--</main>-->
+
+<!--<script src="/js/api.js"></script>-->
+<!--<script>-->
+<!--  const form = document.getElementById('loginForm');-->
+<!--  const msg = document.getElementById('msg');-->
+<!--  form.addEventListener('submit', async (e) => {-->
+<!--    e.preventDefault();-->
+<!--    msg.textContent = '';-->
+<!--    try {-->
+<!--      const email = document.getElementById('email').value.trim();-->
+<!--      const password = document.getElementById('password').value;-->
+<!--      const res = await window.Api.login({ email, password });-->
+<!--      msg.textContent = 'Login successful. Redirecting...';-->
+<!--      setTimeout(() => location.href = '/dashboard.html', 600);-->
+<!--    } catch (err) {-->
+<!--      msg.textContent = err.message || 'Login failed';-->
+<!--      msg.classList.add('error');-->
+<!--    }-->
+<!--  });-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8" />-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+<!--    <title>Login - SkillMatch</title>-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">-->
+<!--    <style>-->
+<!--        /* General reset */-->
+<!--        * {-->
+<!--          box-sizing: border-box;-->
+<!--          margin: 0;-->
+<!--          padding: 0;-->
+<!--          font-family: "Inter", sans-serif;-->
+<!--        }-->
+
+<!--        body {-->
+<!--          background: linear-gradient(135deg, #e3f2fd, #f3e5f5);-->
+<!--          min-height: 100vh;-->
+<!--          display: flex;-->
+<!--          align-items: center;-->
+<!--          justify-content: center;-->
+<!--        }-->
+
+<!--        .container.card {-->
+<!--          background: #fff;-->
+<!--          padding: 2.5rem 2rem;-->
+<!--          border-radius: 1.25rem;-->
+<!--          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);-->
+<!--          width: 100%;-->
+<!--          max-width: 400px;-->
+<!--          text-align: center;-->
+<!--          animation: fadeIn 0.6s ease-in-out;-->
+<!--        }-->
+
+<!--        h2 {-->
+<!--          font-weight: 700;-->
+<!--          margin-bottom: 1.5rem;-->
+<!--          color: #333;-->
+<!--        }-->
+
+<!--        form {-->
+<!--          display: flex;-->
+<!--          flex-direction: column;-->
+<!--          gap: 1rem;-->
+<!--        }-->
+
+<!--        label {-->
+<!--          display: flex;-->
+<!--          flex-direction: column;-->
+<!--          align-items: flex-start;-->
+<!--          font-weight: 600;-->
+<!--          color: #444;-->
+<!--          font-size: 0.9rem;-->
+<!--        }-->
+
+<!--        input {-->
+<!--          width: 100%;-->
+<!--          padding: 0.75rem;-->
+<!--          border: 1.5px solid #ccc;-->
+<!--          border-radius: 0.5rem;-->
+<!--          margin-top: 0.4rem;-->
+<!--          font-size: 0.95rem;-->
+<!--          transition: border 0.3s, box-shadow 0.3s;-->
+<!--        }-->
+
+<!--        input:focus {-->
+<!--          outline: none;-->
+<!--          border-color: #007bff;-->
+<!--          box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);-->
+<!--        }-->
+
+<!--        .btn {-->
+<!--          background-color: #007bff;-->
+<!--          color: #fff;-->
+<!--          border: none;-->
+<!--          border-radius: 0.5rem;-->
+<!--          padding: 0.75rem;-->
+<!--          font-size: 1rem;-->
+<!--          font-weight: 600;-->
+<!--          cursor: pointer;-->
+<!--          transition: all 0.3s ease;-->
+<!--        }-->
+
+<!--        .btn:hover {-->
+<!--          background-color: #0056b3;-->
+<!--          transform: translateY(-1px);-->
+<!--        }-->
+
+<!--        #msg {-->
+<!--          margin-top: 1rem;-->
+<!--          font-size: 0.95rem;-->
+<!--          transition: opacity 0.3s ease;-->
+<!--        }-->
+
+<!--        #msg.error {-->
+<!--          color: #d32f2f;-->
+<!--        }-->
+
+<!--        #msg.success {-->
+<!--          color: #388e3c;-->
+<!--        }-->
+
+<!--        .mt {-->
+<!--          margin-top: 1rem;-->
+<!--        }-->
+
+<!--        a {-->
+<!--          color: #007bff;-->
+<!--          text-decoration: none;-->
+<!--          transition: color 0.3s;-->
+<!--        }-->
+
+<!--        a:hover {-->
+<!--          text-decoration: underline;-->
+<!--          color: #0056b3;-->
+<!--        }-->
+
+<!--        @keyframes fadeIn {-->
+<!--          from { opacity: 0; transform: translateY(-10px); }-->
+<!--          to { opacity: 1; transform: translateY(0); }-->
+<!--        }-->
+
+<!--        @media (max-width: 480px) {-->
+<!--          .container.card {-->
+<!--            padding: 2rem 1.5rem;-->
+<!--          }-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+
+<!--<body>-->
+<!--<main class="container card">-->
+<!--    <h2>Welcome Back 👋</h2>-->
+<!--    <p style="margin-bottom: 1.5rem; color: #666;">Sign in to continue to SkillMatch</p>-->
+
+<!--    <form id="loginForm">-->
+<!--        <label>Email-->
+<!--            <input type="email" id="email" required />-->
+<!--        </label>-->
+<!--        <label>Password-->
+<!--            <input type="password" id="password" required />-->
+<!--        </label>-->
+<!--        <button class="btn" type="submit">Login</button>-->
+<!--    </form>-->
+
+<!--    <div id="msg" class="mt"></div>-->
+
+<!--    <p class="mt">No account? <a href="/register.html">Register</a></p>-->
+<!--    <p><a href="/">← Back home</a></p>-->
+<!--</main>-->
+
+<!--<script src="/js/api.js"></script>-->
+<!--<script>-->
+<!--    const form = document.getElementById('loginForm');-->
+<!--    const msg = document.getElementById('msg');-->
+
+<!--    form.addEventListener('submit', async (e) => {-->
+<!--      e.preventDefault();-->
+<!--      msg.textContent = '';-->
+<!--      msg.classList.remove('error', 'success');-->
+
+<!--      try {-->
+<!--        const email = document.getElementById('email').value.trim();-->
+<!--        const password = document.getElementById('password').value;-->
+<!--        const res = await window.Api.login({ email, password });-->
+
+<!--        msg.textContent = '✅ Login successful! Redirecting...';-->
+<!--        msg.classList.add('success');-->
+<!--        setTimeout(() => (location.href = '/dashboard.html'), 800);-->
+<!--      } catch (err) {-->
+<!--        msg.textContent = err.message || '❌ Login failed. Please try again.';-->
+<!--        msg.classList.add('error');-->
+<!--      }-->
+<!--    });-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - SkillMatch AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: "Inter", sans-serif;
+        }
+
+        body {
+          background: radial-gradient(circle at top left, #1e1e2f, #0f0f17);
+          color: #f5f5f5;
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          position: relative;
+        }
+
+        /* Rotating gradient light */
+        body::before {
+          content: "";
+          position: absolute;
+          width: 160%;
+          height: 160%;
+          background: conic-gradient(
+            from 180deg,
+            #5b21b6,
+            #2563eb,
+            #9333ea,
+            #5b21b6
+          );
+          filter: blur(200px);
+          opacity: 0.25;
+          animation: rotateBg 25s linear infinite;
+          z-index: 0;
+        }
+
+        @keyframes rotateBg {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+
+        /* Floating icons */
+        .icon {
+          position: absolute;
+          font-size: 2.4rem;
+          opacity: 0.12;
+          animation: floatIcons 10s ease-in-out infinite;
+          user-select: none;
+          color: #c084fc;
+          filter: drop-shadow(0 0 10px #7c3aed);
+        }
+
+        @keyframes floatIcons {
+          0%, 100% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 0.15;
+          }
+          50% {
+            transform: translateY(-30px) rotate(15deg);
+            opacity: 0.28;
+          }
+        }
+
+        /* Random placement of icons */
+        .icon:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .icon:nth-child(2) { top: 20%; left: 80%; animation-delay: 1s; }
+        .icon:nth-child(3) { top: 70%; left: 15%; animation-delay: 2s; }
+        .icon:nth-child(4) { top: 50%; left: 90%; animation-delay: 3s; }
+        .icon:nth-child(5) { top: 30%; left: 40%; animation-delay: 4s; }
+        .icon:nth-child(6) { top: 85%; left: 60%; animation-delay: 5s; }
+        .icon:nth-child(7) { top: 15%; left: 55%; animation-delay: 6s; }
+        .icon:nth-child(8) { top: 75%; left: 80%; animation-delay: 7s; }
+        .icon:nth-child(9) { top: 60%; left: 35%; animation-delay: 8s; }
+        .icon:nth-child(10) { top: 5%; left: 30%; animation-delay: 9s; }
+        .icon:nth-child(11) { top: 40%; left: 5%; animation-delay: 10s; }
+        .icon:nth-child(12) { top: 90%; left: 25%; animation-delay: 11s; }
+        .icon:nth-child(13) { top: 65%; left: 70%; animation-delay: 12s; }
+
+        /* Title */
+        .site-title {
+          position: relative;
+          z-index: 2;
+          font-size: 2.8rem;
+          font-weight: 800;
+          letter-spacing: 1px;
+          margin-bottom: 1.5rem;
+          background: linear-gradient(90deg, #818cf8, #c084fc);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+          animation: fadeInDown 1s ease forwards;
+        }
+
+        @keyframes fadeInDown {
+          from { opacity: 0; transform: translateY(-30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Login card */
+        .container.card {
+          position: relative;
+          background: rgba(30, 30, 46, 0.85);
+          backdrop-filter: blur(10px);
+          padding: 2.8rem 2.4rem;
+          border-radius: 1.25rem;
+          width: 100%;
+          max-width: 400px;
+          text-align: center;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+          z-index: 2;
+          animation: fadeUp 1s ease forwards;
+        }
+
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(40px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+          font-weight: 700;
+          margin-bottom: 0.5rem;
+          color: #fff;
+        }
+
+        p {
+          color: #bbb;
+          font-size: 0.9rem;
+        }
+
+        form {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          margin-top: 1.5rem;
+        }
+
+        label {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          font-weight: 600;
+          color: #ddd;
+          font-size: 0.9rem;
+        }
+
+        input {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1.5px solid #444;
+          border-radius: 0.5rem;
+          margin-top: 0.4rem;
+          font-size: 0.95rem;
+          background-color: #1b1b28;
+          color: #fff;
+          transition: all 0.3s ease;
+        }
+
+        input:focus {
+          outline: none;
+          border-color: #8b5cf6;
+          box-shadow: 0 0 10px #8b5cf6;
+          transform: scale(1.02);
+        }
+
+        .btn {
+          background: linear-gradient(90deg, #6366f1, #8b5cf6);
+          color: #fff;
+          border: none;
+          border-radius: 0.5rem;
+          padding: 0.75rem;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+          transform: scale(1.05);
+          box-shadow: 0 0 14px rgba(139, 92, 246, 0.8);
+        }
+
+        #msg {
+          margin-top: 1rem;
+          font-size: 0.95rem;
+        }
+
+        #msg.error { color: #ef4444; }
+        #msg.success { color: #22c55e; }
+
+        .mt { margin-top: 1rem; }
+
+        a {
+          color: #8b5cf6;
+          text-decoration: none;
+          transition: color 0.3s;
+        }
+
+        a:hover {
+          text-decoration: underline;
+          color: #a78bfa;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Floating icons -->
+<div class="icon">💼</div>
+<div class="icon">⚙️</div>
+<div class="icon">💡</div>
+<div class="icon">💻</div>
+<div class="icon">🧠</div>
+<div class="icon">📊</div>
+<div class="icon">📈</div>
+<div class="icon">🪄</div>
+<div class="icon">🤖</div>
+<div class="icon">🧩</div>
+<div class="icon">🗂️</div>
+<div class="icon">📘</div>
+<div class="icon">🔍</div>
+
+<!-- Site Title -->
+<div class="site-title">SkillMatch AI</div>
+
+<!-- Login Card -->
+<main class="container card">
+    <h2>Welcome Back 👋</h2>
+    <p>Sign in to continue to <strong>SkillMatch AI</strong></p>
+
+    <form id="loginForm">
+        <label>Email
+            <input type="email" id="email" required />
+        </label>
+        <label>Password
+            <input type="password" id="password" required />
+        </label>
+        <button class="btn" type="submit">Login</button>
+    </form>
+
+    <div id="msg" class="mt"></div>
+
+    <p class="mt">No account? <a href="/register.html">Register</a></p>
+    <p><a href="/">← Back home</a></p>
+</main>
+
+<script src="/js/api.js"></script>
+<script>
+    const form = document.getElementById('loginForm');
+    const msg = document.getElementById('msg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msg.textContent = '';
+      msg.classList.remove('error', 'success');
+
+      try {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const res = await window.Api.login({ email, password });
+
+        msg.textContent = '✅ Login successful! Redirecting...';
+        msg.classList.add('success');
+        setTimeout(() => (location.href = '/dashboard.html'), 800);
+      } catch (err) {
+        msg.textContent = err.message || '❌ Login failed. Please try again.';
+        msg.classList.add('error');
+      }
+    });
+</script>
+</body>
+</html>
+
+

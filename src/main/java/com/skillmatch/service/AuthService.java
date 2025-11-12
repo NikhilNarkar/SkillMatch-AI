@@ -50,7 +50,11 @@ public class AuthService {
         user.setPasswordHash(passwordEncoder.encode(registerRequest.getPassword()));
         user.setFirstName(registerRequest.getFirstName());
         user.setLastName(registerRequest.getLastName());
-        user.setPhone(registerRequest.getPhone());
+        String phone = registerRequest.getPhone();
+        if (phone != null && phone.isBlank()) {
+            phone = null;
+        }
+        user.setPhone(phone);
         user.setUserType(registerRequest.getUserType());
         user.setIsActive(true);
 

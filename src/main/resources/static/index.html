@@ -1,423 +1,462 @@
-<!--&lt;!&ndash;<!DOCTYPE html>&ndash;&gt;-->
-<!--&lt;!&ndash;<html lang="en">&ndash;&gt;-->
-<!--&lt;!&ndash;<head>&ndash;&gt;-->
-<!--&lt;!&ndash;    <meta charset="UTF-8">&ndash;&gt;-->
-<!--&lt;!&ndash;    <meta name="viewport" content="width=device-width, initial-scale=1.0">&ndash;&gt;-->
-<!--&lt;!&ndash;    <title>SkillMatch AI Portal</title>&ndash;&gt;-->
-<!--&lt;!&ndash;    <link rel="preconnect" href="https://fonts.googleapis.com">&ndash;&gt;-->
-<!--&lt;!&ndash;    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">&ndash;&gt;-->
-<!--&lt;!&ndash;    <link rel="stylesheet" href="style.css">&ndash;&gt;-->
-<!--&lt;!&ndash;    <style>&ndash;&gt;-->
-<!--&lt;!&ndash;        /* 🌈 Base styles */&ndash;&gt;-->
-<!--&lt;!&ndash;        * {&ndash;&gt;-->
-<!--&lt;!&ndash;          box-sizing: border-box;&ndash;&gt;-->
-<!--&lt;!&ndash;          font-family: 'Inter', sans-serif;&ndash;&gt;-->
-<!--&lt;!&ndash;          margin: 0;&ndash;&gt;-->
-<!--&lt;!&ndash;          padding: 0;&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        body {&ndash;&gt;-->
-<!--&lt;!&ndash;          background: linear-gradient(135deg, #eef2f3, #d9e4ec);&ndash;&gt;-->
-<!--&lt;!&ndash;          color: #333;&ndash;&gt;-->
-<!--&lt;!&ndash;          min-height: 100vh;&ndash;&gt;-->
-<!--&lt;!&ndash;          display: flex;&ndash;&gt;-->
-<!--&lt;!&ndash;          flex-direction: column;&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        /* 🔹 Navbar */&ndash;&gt;-->
-<!--&lt;!&ndash;        .navbar {&ndash;&gt;-->
-<!--&lt;!&ndash;          background-color: #0d6efd;&ndash;&gt;-->
-<!--&lt;!&ndash;          color: #fff;&ndash;&gt;-->
-<!--&lt;!&ndash;          padding: 1rem 2rem;&ndash;&gt;-->
-<!--&lt;!&ndash;          display: flex;&ndash;&gt;-->
-<!--&lt;!&ndash;          justify-content: space-between;&ndash;&gt;-->
-<!--&lt;!&ndash;          align-items: center;&ndash;&gt;-->
-<!--&lt;!&ndash;          box-shadow: 0 2px 8px rgba(0,0,0,0.1);&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        .navbar .site-title {&ndash;&gt;-->
-<!--&lt;!&ndash;          font-size: 1.5rem;&ndash;&gt;-->
-<!--&lt;!&ndash;          font-weight: 700;&ndash;&gt;-->
-<!--&lt;!&ndash;          letter-spacing: 0.5px;&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        .btn-red {&ndash;&gt;-->
-<!--&lt;!&ndash;          background: #dc3545;&ndash;&gt;-->
-<!--&lt;!&ndash;          border: none;&ndash;&gt;-->
-<!--&lt;!&ndash;          color: white;&ndash;&gt;-->
-<!--&lt;!&ndash;          padding: 0.6rem 1.2rem;&ndash;&gt;-->
-<!--&lt;!&ndash;          border-radius: 8px;&ndash;&gt;-->
-<!--&lt;!&ndash;          cursor: pointer;&ndash;&gt;-->
-<!--&lt;!&ndash;          transition: background 0.2s ease;&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        .btn-red:hover {&ndash;&gt;-->
-<!--&lt;!&ndash;          background: #b02a37;&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        /* 🔹 Container & Cards */&ndash;&gt;-->
-<!--&lt;!&ndash;        .container {&ndash;&gt;-->
-<!--&lt;!&ndash;          max-width: 600px;&ndash;&gt;-->
-<!--&lt;!&ndash;          margin: 2rem auto;&ndash;&gt;-->
-<!--&lt;!&ndash;          background: #fff;&ndash;&gt;-->
-<!--&lt;!&ndash;          padding: 2rem;&ndash;&gt;-->
-<!--&lt;!&ndash;          border-radius: 16px;&ndash;&gt;-->
-<!--&lt;!&ndash;          box-shadow: 0 6px 20px rgba(0,0,0,0.08);&ndash;&gt;-->
-<!--&lt;!&ndash;          transition: transform 0.2s ease;&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        .container:hover {&ndash;&gt;-->
-<!--&lt;!&ndash;          transform: translateY(-2px);&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        h2 {&ndash;&gt;-->
-<!--&lt;!&ndash;          color: #0d6efd;&ndash;&gt;-->
-<!--&lt;!&ndash;          margin-bottom: 1.2rem;&ndash;&gt;-->
-<!--&lt;!&ndash;          text-align: center;&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        .message {&ndash;&gt;-->
-<!--&lt;!&ndash;          margin-top: 1rem;&ndash;&gt;-->
-<!--&lt;!&ndash;          color: #28a745;&ndash;&gt;-->
-<!--&lt;!&ndash;          font-size: 0.9rem;&ndash;&gt;-->
-<!--&lt;!&ndash;          text-align: center;&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        /* 🔹 Form Styles */&ndash;&gt;-->
-<!--&lt;!&ndash;        form {&ndash;&gt;-->
-<!--&lt;!&ndash;          display: flex;&ndash;&gt;-->
-<!--&lt;!&ndash;          flex-direction: column;&ndash;&gt;-->
-<!--&lt;!&ndash;          gap: 0.9rem;&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        input, select, textarea, button {&ndash;&gt;-->
-<!--&lt;!&ndash;          padding: 0.75rem 1rem;&ndash;&gt;-->
-<!--&lt;!&ndash;          border: 1px solid #ccc;&ndash;&gt;-->
-<!--&lt;!&ndash;          border-radius: 8px;&ndash;&gt;-->
-<!--&lt;!&ndash;          font-size: 1rem;&ndash;&gt;-->
-<!--&lt;!&ndash;          width: 100%;&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        input:focus, select:focus, textarea:focus {&ndash;&gt;-->
-<!--&lt;!&ndash;          border-color: #0d6efd;&ndash;&gt;-->
-<!--&lt;!&ndash;          outline: none;&ndash;&gt;-->
-<!--&lt;!&ndash;          box-shadow: 0 0 0 3px rgba(13,110,253,0.15);&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        button {&ndash;&gt;-->
-<!--&lt;!&ndash;          background: #0d6efd;&ndash;&gt;-->
-<!--&lt;!&ndash;          color: white;&ndash;&gt;-->
-<!--&lt;!&ndash;          border: none;&ndash;&gt;-->
-<!--&lt;!&ndash;          cursor: pointer;&ndash;&gt;-->
-<!--&lt;!&ndash;          font-weight: 600;&ndash;&gt;-->
-<!--&lt;!&ndash;          transition: background 0.2s ease;&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        button:hover {&ndash;&gt;-->
-<!--&lt;!&ndash;          background: #0b5ed7;&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        textarea {&ndash;&gt;-->
-<!--&lt;!&ndash;          resize: none;&ndash;&gt;-->
-<!--&lt;!&ndash;          height: 100px;&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        /* 🔹 Dashboard Buttons */&ndash;&gt;-->
-<!--&lt;!&ndash;        .menu {&ndash;&gt;-->
-<!--&lt;!&ndash;          display: flex;&ndash;&gt;-->
-<!--&lt;!&ndash;          gap: 1rem;&ndash;&gt;-->
-<!--&lt;!&ndash;          justify-content: center;&ndash;&gt;-->
-<!--&lt;!&ndash;          margin: 1.5rem 0;&ndash;&gt;-->
-<!--&lt;!&ndash;          flex-wrap: wrap;&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        .menu button {&ndash;&gt;-->
-<!--&lt;!&ndash;          flex: 1;&ndash;&gt;-->
-<!--&lt;!&ndash;          min-width: 130px;&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        footer {&ndash;&gt;-->
-<!--&lt;!&ndash;          text-align: center;&ndash;&gt;-->
-<!--&lt;!&ndash;          padding: 1rem;&ndash;&gt;-->
-<!--&lt;!&ndash;          margin-top: auto;&ndash;&gt;-->
-<!--&lt;!&ndash;          font-size: 0.9rem;&ndash;&gt;-->
-<!--&lt;!&ndash;          color: #666;&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        /* 🔹 Responsive */&ndash;&gt;-->
-<!--&lt;!&ndash;        @media (max-width: 600px) {&ndash;&gt;-->
-<!--&lt;!&ndash;          .container {&ndash;&gt;-->
-<!--&lt;!&ndash;            margin: 1rem;&ndash;&gt;-->
-<!--&lt;!&ndash;            padding: 1.5rem;&ndash;&gt;-->
-<!--&lt;!&ndash;          }&ndash;&gt;-->
-<!--&lt;!&ndash;          .navbar {&ndash;&gt;-->
-<!--&lt;!&ndash;            flex-direction: column;&ndash;&gt;-->
-<!--&lt;!&ndash;            align-items: flex-start;&ndash;&gt;-->
-<!--&lt;!&ndash;          }&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        /* ✨ Fade-in animation for sections */&ndash;&gt;-->
-<!--&lt;!&ndash;        .fade {&ndash;&gt;-->
-<!--&lt;!&ndash;          animation: fadeIn 0.3s ease-in-out;&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-
-<!--&lt;!&ndash;        @keyframes fadeIn {&ndash;&gt;-->
-<!--&lt;!&ndash;          from {opacity: 0; transform: translateY(5px);}&ndash;&gt;-->
-<!--&lt;!&ndash;          to {opacity: 1; transform: translateY(0);}&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-<!--&lt;!&ndash;    </style>&ndash;&gt;-->
-<!--&lt;!&ndash;</head>&ndash;&gt;-->
-<!--&lt;!&ndash;<body>&ndash;&gt;-->
-<!--&lt;!&ndash;<nav class="navbar">&ndash;&gt;-->
-<!--&lt;!&ndash;    <div class="site-title">SkillMatch AI Portal</div>&ndash;&gt;-->
-<!--&lt;!&ndash;    <button id="logoutBtn" class="btn-red" style="display:none;">Logout</button>&ndash;&gt;-->
-<!--&lt;!&ndash;</nav>&ndash;&gt;-->
-
-<!--&lt;!&ndash;<main class="container fade">&ndash;&gt;-->
-<!--&lt;!&ndash;    &lt;!&ndash; Login Section &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;    <div id="loginSection">&ndash;&gt;-->
-<!--&lt;!&ndash;        <h2>Welcome Back 👋</h2>&ndash;&gt;-->
-<!--&lt;!&ndash;        <p style="text-align:center;color:#666;margin-bottom:1rem;">Login to explore personalized AI career insights</p>&ndash;&gt;-->
-<!--&lt;!&ndash;        <form id="loginForm">&ndash;&gt;-->
-<!--&lt;!&ndash;            <input type="email" id="loginEmail" placeholder="Email" required />&ndash;&gt;-->
-<!--&lt;!&ndash;            <input type="password" id="loginPassword" placeholder="Password" required />&ndash;&gt;-->
-<!--&lt;!&ndash;            <button type="submit">Login</button>&ndash;&gt;-->
-<!--&lt;!&ndash;        </form>&ndash;&gt;-->
-<!--&lt;!&ndash;        <div id="loginMsg" class="message"></div>&ndash;&gt;-->
-<!--&lt;!&ndash;        <p style="text-align:center;margin-top:1rem;">New here? <a href="/register.html" style="color:#0d6efd;text-decoration:none;">Create an account</a></p>&ndash;&gt;-->
-<!--&lt;!&ndash;    </div>&ndash;&gt;-->
-
-<!--&lt;!&ndash;    &lt;!&ndash; Dashboard Section &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;    <div id="dashboardSection" style="display:none;">&ndash;&gt;-->
-<!--&lt;!&ndash;        <h2>Welcome, <span id="userFullName"></span> 👋</h2>&ndash;&gt;-->
-<!--&lt;!&ndash;        <p style="text-align:center;color:#666;">Your personalized SkillMatch dashboard</p>&ndash;&gt;-->
-<!--&lt;!&ndash;        <nav class="menu">&ndash;&gt;-->
-<!--&lt;!&ndash;            <button onclick="showSection('profileSection')">Profile</button>&ndash;&gt;-->
-<!--&lt;!&ndash;            <button onclick="showSection('resumeSection')">Resume Upload</button>&ndash;&gt;-->
-<!--&lt;!&ndash;        </nav>&ndash;&gt;-->
-<!--&lt;!&ndash;        <button class="btn-red" onclick="window.Api.logout()">Logout</button>&ndash;&gt;-->
-<!--&lt;!&ndash;    </div>&ndash;&gt;-->
-
-<!--&lt;!&ndash;    &lt;!&ndash; Profile Section &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;    <div id="profileSection" style="display:none;">&ndash;&gt;-->
-<!--&lt;!&ndash;        <h2>My Profile</h2>&ndash;&gt;-->
-<!--&lt;!&ndash;        <form id="profileForm">&ndash;&gt;-->
-<!--&lt;!&ndash;            <input type="date" id="profileDob" required />&ndash;&gt;-->
-<!--&lt;!&ndash;            <select id="profileGender">&ndash;&gt;-->
-<!--&lt;!&ndash;                <option value="MALE">Male</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                <option value="FEMALE">Female</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                <option value="OTHER">Other</option>&ndash;&gt;-->
-<!--&lt;!&ndash;            </select>&ndash;&gt;-->
-<!--&lt;!&ndash;            <input type="text" id="profileCity" placeholder="City" />&ndash;&gt;-->
-<!--&lt;!&ndash;            <input type="text" id="profileState" placeholder="State" />&ndash;&gt;-->
-<!--&lt;!&ndash;            <input type="text" id="profileCountry" placeholder="Country" />&ndash;&gt;-->
-<!--&lt;!&ndash;            <input type="number" id="profileExperience" placeholder="Experience (Years)" min="0"/>&ndash;&gt;-->
-<!--&lt;!&ndash;            <input type="number" id="profileExpectedSalary" placeholder="Expected Salary (₹)" min="0"/>&ndash;&gt;-->
-<!--&lt;!&ndash;            <textarea id="profileBio" placeholder="Tell us about your professional background..."></textarea>&ndash;&gt;-->
-<!--&lt;!&ndash;            <button type="submit">Save Profile</button>&ndash;&gt;-->
-<!--&lt;!&ndash;        </form>&ndash;&gt;-->
-<!--&lt;!&ndash;        <div id="profileMsg" class="message"></div>&ndash;&gt;-->
-<!--&lt;!&ndash;        <button onclick="showSection('dashboardSection')">⬅ Back to Dashboard</button>&ndash;&gt;-->
-<!--&lt;!&ndash;    </div>&ndash;&gt;-->
-
-<!--&lt;!&ndash;    &lt;!&ndash; Resume Section &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;    <div id="resumeSection" style="display:none;">&ndash;&gt;-->
-<!--&lt;!&ndash;        <h2>Upload Resume</h2>&ndash;&gt;-->
-<!--&lt;!&ndash;        <form id="resumeForm" enctype="multipart/form-data">&ndash;&gt;-->
-<!--&lt;!&ndash;            <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" required />&ndash;&gt;-->
-<!--&lt;!&ndash;            <button type="submit">Upload</button>&ndash;&gt;-->
-<!--&lt;!&ndash;        </form>&ndash;&gt;-->
-<!--&lt;!&ndash;        <div id="resumeMsg" class="message"></div>&ndash;&gt;-->
-<!--&lt;!&ndash;        <button onclick="showSection('dashboardSection')">⬅ Back to Dashboard</button>&ndash;&gt;-->
-<!--&lt;!&ndash;    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;</main>&ndash;&gt;-->
-
-<!--&lt;!&ndash;<footer>&ndash;&gt;-->
-<!--&lt;!&ndash;    © 2025 SkillMatch AI — Empowering Careers with Intelligence 🚀&ndash;&gt;-->
-<!--&lt;!&ndash;</footer>&ndash;&gt;-->
-
-<!--&lt;!&ndash;<script src="/js/api.js"></script>&ndash;&gt;-->
-<!--&lt;!&ndash;<script src="main.js"></script>&ndash;&gt;-->
-<!--&lt;!&ndash;<script>&ndash;&gt;-->
-<!--&lt;!&ndash;    function showSection(id) {&ndash;&gt;-->
-<!--&lt;!&ndash;      document.querySelectorAll('main > div').forEach(div => div.style.display = 'none');&ndash;&gt;-->
-<!--&lt;!&ndash;      const section = document.getElementById(id);&ndash;&gt;-->
-<!--&lt;!&ndash;      section.style.display = 'block';&ndash;&gt;-->
-<!--&lt;!&ndash;      section.classList.add('fade');&ndash;&gt;-->
-<!--&lt;!&ndash;    }&ndash;&gt;-->
-<!--&lt;!&ndash;</script>&ndash;&gt;-->
-<!--&lt;!&ndash;</body>&ndash;&gt;-->
-<!--&lt;!&ndash;</html>&ndash;&gt;-->
-
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>SkillMatch</title>-->
-<!--    <script src="https://cdn.tailwindcss.com"></script>-->
-<!--    &lt;!&ndash; Three.js and Vanta.js for 3D background &ndash;&gt;-->
-<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>-->
-<!--    <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.net.min.js"></script>-->
-<!--    <style>-->
-<!--        body, html { margin: 0; padding: 0; height: 100%; }-->
-<!--        #landing { height: 100vh; width: 100vw; }-->
-<!--        .btn:hover { transform: scale(1.1); transition: 0.3s; }-->
-<!--        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; }-->
-<!--    </style>-->
-<!--</head>-->
-<!--<body class="text-white font-sans">-->
-
-<!--<div id="landing" class="flex flex-col items-center justify-center relative overflow-hidden">-->
-<!--    &lt;!&ndash; New Logo &ndash;&gt;-->
-<!--    <div class="absolute top-6 left-8 flex items-center space-x-2 z-10">-->
-<!--        <img src="https://cdn-icons-png.flaticon.com/512/2910/2910763.png" class="w-10 h-10" />-->
-<!--        <span class="logo">SkillMatch</span>-->
-<!--    </div>-->
-
-<!--    <h1 class="text-5xl font-bold mb-8 z-10">SkillMatch AI</h1>-->
-<!--    <div class="flex gap-6 z-10">-->
-<!--        &lt;!&ndash; Updated link to the new portal page &ndash;&gt;-->
-<!--        <a href="login.html" class="btn px-6 py-3 bg-white text-black rounded-2xl font-semibold shadow-lg">User Login</a>-->
-<!--        <a href="register.html" class="btn px-6 py-3 bg-white text-black rounded-2xl font-semibold shadow-lg">Recruiter Login</a>-->
-<!--    </div>-->
-<!--</div>-->
-
-<!--<script>-->
-<!--    VANTA.NET({-->
-<!--      el: "#landing",-->
-<!--      mouseControls: true,-->
-<!--      touchControls: true,-->
-<!--      minHeight: 200.00,-->
-<!--      minWidth: 200.00,-->
-<!--      scale: 1.00,-->
-<!--      scaleMobile: 1.00,-->
-<!--      color: 0x00ffff,-->
-<!--      backgroundColor: 0x0f172a,-->
-<!--      points: 12.0,-->
-<!--      maxDistance: 25.0,-->
-<!--      spacing: 18.0-->
-<!--    });-->
-<!--</script>-->
-
-<!--</body>-->
-<!--</html>-->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SkillMatch AI</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.net.min.js"></script>
     <link rel="icon" href="logo.png" />
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        html, body { height: 100%; overflow: hidden; color: white; background: #000; }
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          font-family: 'Inter', sans-serif;
+        }
 
-        /* Wrapper for entry animation */
+        body {
+          background: radial-gradient(circle at 20% 20%, #0f172a, #020617);
+          color: #f1f5f9;
+          min-height: 100vh;
+          overflow-x: hidden;
+        }
+
+        a {
+          color: inherit;
+        }
+
         #pageWrapper {
-          transition: transform 0.6s ease, opacity 0.6s ease;
-          transform: scale(0.9);
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          transition: opacity 0.7s ease, transform 0.8s ease;
           opacity: 0;
+          transform: scale(0.97) translateY(35px);
         }
+
         #pageWrapper.show {
-          transform: scale(1);
           opacity: 1;
+          transform: scale(1) translateY(0);
         }
 
-        /* Floating icons aesthetic */
-        .icon {
-          position: absolute;
-          width: 55px;
-          height: 55px;
-          opacity: 0.18;
-          animation: floatIcon 14s ease-in-out infinite;
-          z-index: 1;
+        .top-nav {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          z-index: 20;
+          padding: 1.4rem 3rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background: linear-gradient(180deg, rgba(15,23,42,0.85) 0%, rgba(15,23,42,0.45) 65%, transparent 100%);
+          backdrop-filter: blur(8px);
+          border-bottom: 1px solid rgba(99, 102, 241, 0.18);
         }
 
-        @keyframes floatIcon {
-          0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.2; }
-          50% { transform: translateY(-25px) rotate(15deg); opacity: 0.4; }
+        .brand {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.75rem;
+          font-weight: 700;
+          font-size: 1.1rem;
+          letter-spacing: 0.12rem;
+          text-transform: uppercase;
+          color: #60a5fa;
         }
 
-        /* Glow logo */
-        .logo {
-          font-size: 1.8rem;
-          font-weight: 800;
-          letter-spacing: 1px;
-          color: #00ffff;
-          text-shadow: 0 0 18px #00ffffb0;
+        .brand img {
+          width: 2.2rem;
+          height: 2.2rem;
         }
 
-        /* Main heading */
-        h1 {
-          font-size: 4.5rem;
-          font-weight: 800;
-          color: #e0f7ff;
-          text-shadow: 0 0 25px #00ffff80;
-          z-index: 10;
-          animation: fadeIn 1.4s ease;
+        .nav-links {
+          display: flex;
+          gap: 1.2rem;
         }
 
-        /* Buttons */
-        .btn {
-          background: linear-gradient(90deg, #00ffff, #0099ff);
-          color: #000;
-          border-radius: 1rem;
+        .nav-links a {
+          padding: 0.55rem 1.2rem;
+          border-radius: 999px;
+          border: 1px solid rgba(148, 163, 184, 0.25);
+          color: #cbd5f5;
+          text-decoration: none;
           font-weight: 600;
-          box-shadow: 0 0 18px #00ffff80;
+          transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .nav-links a:hover {
+          background: rgba(99, 102, 241, 0.18);
+          transform: translateY(-2px);
+          box-shadow: 0 10px 22px rgba(99, 102, 241, 0.35);
+        }
+
+        .nav-primary {
+          border-color: rgba(99, 102, 241, 0.35);
+          color: #e0e7ff;
+          background: linear-gradient(120deg, rgba(99,102,241,0.45), rgba(139,92,246,0.35));
+        }
+
+        .nav-primary:hover {
+          background: linear-gradient(120deg, rgba(99,102,241,0.65), rgba(139,92,246,0.55));
+        }
+
+        #hero {
+          position: relative;
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 7rem 2rem 4rem;
+        }
+
+        #landing {
+          position: relative;
+          width: 100%;
+          max-width: 1200px;
+          min-height: 75vh;
+          border-radius: 32px;
+          overflow: hidden;
+          border: 1px solid rgba(99, 102, 241, 0.18);
+          box-shadow: 0 35px 80px rgba(8, 16, 32, 0.65);
+        }
+
+        .hero-overlay {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          padding: 4rem 2.5rem 4.5rem;
+          gap: 2.2rem;
+        }
+
+        .hero-overlay h1 {
+          font-size: 4rem;
+          font-weight: 800;
+          background: linear-gradient(90deg, #818cf8, #c084fc);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .hero-overlay p {
+          font-size: 1.15rem;
+          max-width: 740px;
+          color: #cbd5f5;
+          line-height: 1.6;
+        }
+
+        .hero-actions {
+          display: flex;
+          gap: 1rem;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .btn {
+          background: linear-gradient(135deg, #6366f1, #7c3aed);
+          color: white;
+          font-weight: 600;
+          border-radius: 9999px;
+          padding: 0.9rem 1.9rem;
+          box-shadow: 0 0 18px rgba(99, 102, 241, 0.4);
+          border: none;
+          cursor: pointer;
           transition: all 0.3s ease;
+          font-size: 1rem;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.4rem;
         }
 
         .btn:hover {
-          transform: scale(1.1);
-          box-shadow: 0 0 25px #00ffffd0;
+          transform: translateY(-3px) scale(1.03);
+          box-shadow: 0 0 28px rgba(99, 102, 241, 0.6);
         }
 
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
+        .btn-secondary {
+          background: transparent;
+          border: 1px solid rgba(148, 163, 184, 0.35);
+          box-shadow: none;
         }
 
-        .fade-in { animation: fadeIn 1.2s ease forwards; }
+        .btn-secondary:hover {
+          background: rgba(148, 163, 184, 0.18);
+          box-shadow: 0 10px 24px rgba(148, 163, 184, 0.32);
+        }
+
+        main {
+          position: relative;
+          z-index: 5;
+          margin: 0 auto;
+          width: min(1100px, 92%);
+          display: grid;
+          gap: 3.5rem;
+          padding-bottom: 5rem;
+        }
+
+        .section {
+          background: rgba(15, 23, 42, 0.82);
+          border: 1px solid rgba(99, 102, 241, 0.15);
+          border-radius: 24px;
+          padding: 2.8rem;
+          box-shadow: 0 26px 60px rgba(8, 16, 32, 0.55);
+          backdrop-filter: blur(14px);
+        }
+
+        .section h2 {
+          font-size: 2rem;
+          font-weight: 700;
+          margin-bottom: 1.8rem;
+          color: #e0e7ff;
+          text-align: center;
+        }
+
+        .feature-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 1.6rem;
+        }
+
+        .feature-card {
+          background: rgba(30, 41, 59, 0.75);
+          border-radius: 18px;
+          padding: 1.8rem;
+          border: 1px solid rgba(148, 163, 184, 0.18);
+          display: grid;
+          gap: 0.85rem;
+          transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+
+        .feature-card:hover {
+          transform: translateY(-6px);
+          border-color: rgba(99, 102, 241, 0.45);
+          box-shadow: 0 22px 40px rgba(99, 102, 241, 0.25);
+        }
+
+        .feature-card span {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 44px;
+          height: 44px;
+          border-radius: 12px;
+          background: rgba(99, 102, 241, 0.18);
+          color: #a5b4fc;
+          font-size: 1.2rem;
+        }
+
+        .feature-card h3 {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #e2e8f0;
+        }
+
+        .feature-card p {
+          color: #cbd5e1;
+          font-size: 0.95rem;
+          line-height: 1.5;
+        }
+
+        .stats-row {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+          gap: 1.4rem;
+        }
+
+        .stat-card {
+          background: linear-gradient(145deg, rgba(99, 102, 241, 0.22), rgba(14, 165, 233, 0.18));
+          border-radius: 18px;
+          padding: 1.6rem;
+          display: grid;
+          gap: 0.45rem;
+        }
+
+        .stat-card strong {
+          font-size: 2rem;
+          font-weight: 700;
+          color: #f8fafc;
+        }
+
+        .stat-card span {
+          font-size: 0.95rem;
+          color: rgba(226, 232, 240, 0.85);
+        }
+
+        .cta-section {
+          display: grid;
+          gap: 1.6rem;
+          text-align: center;
+        }
+
+        .cta-section h2 {
+          margin-bottom: 0.6rem;
+        }
+
+        .cta-section p {
+          max-width: 620px;
+          margin: 0 auto 1.8rem;
+          color: #cbd5e1;
+          line-height: 1.6;
+        }
+
+        footer {
+          margin-top: auto;
+          padding: 2.5rem 0 2rem;
+          text-align: center;
+          color: rgba(203, 213, 225, 0.7);
+          font-size: 0.85rem;
+        }
+
+        @media (max-width: 960px) {
+          .top-nav {
+            padding: 1.1rem 1.75rem;
+          }
+          .nav-links {
+            gap: 0.8rem;
+          }
+          #landing {
+            border-radius: 24px;
+          }
+          .hero-overlay h1 {
+            font-size: 3.4rem;
+          }
+          .section {
+            padding: 2.2rem;
+          }
+        }
+
+        @media (max-width: 680px) {
+          .top-nav {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+          }
+          .nav-links {
+            flex-wrap: wrap;
+            justify-content: center;
+          }
+          #hero {
+            padding-top: 6.5rem;
+          }
+          .hero-overlay {
+            padding: 3rem 1.6rem 3.4rem;
+          }
+          .hero-overlay h1 {
+            font-size: 2.6rem;
+          }
+          .hero-overlay p {
+            font-size: 1rem;
+          }
+          main {
+            width: 94%;
+          }
+        }
     </style>
 </head>
 
-<body class="text-white font-sans">
-
+<body>
 <div id="pageWrapper">
-    <div id="landing" class="relative flex flex-col items-center justify-center h-screen w-screen text-center overflow-hidden">
-        <!-- Floating icons -->
-<!--        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="icon" style="top:8%; left:10%; animation-delay: 0s;">-->
-<!--        <img src="https://cdn-icons-png.flaticon.com/512/201/201623.png" class="icon" style="top:70%; left:15%; animation-delay: 2s;">-->
-<!--        <img src="https://cdn-icons-png.flaticon.com/512/2910/2910763.png" class="icon" style="top:20%; right:12%; animation-delay: 4s;">-->
-<!--        <img src="https://cdn-icons-png.flaticon.com/512/1055/1055646.png" class="icon" style="bottom:10%; right:18%; animation-delay: 6s;">-->
-<!--        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135810.png" class="icon" style="top:35%; left:40%; animation-delay: 3s;">-->
-<!--        <img src="https://cdn-icons-png.flaticon.com/512/891/891462.png" class="icon" style="bottom:20%; left:25%; animation-delay: 5s;">-->
-
-        <!-- Logo top-left -->
-        <div class="absolute top-8 left-10 flex items-center space-x-3 z-10 fade-in">
-            <img src="logo.png" alt="SkillMatch Logo" class="w-10 h-10" />
-            <span class="logo">SkillMatch</span>
+    <header class="top-nav">
+        <div class="brand">
+            <img src="logo.png" alt="SkillMatch Logo">
+            SkillMatch AI
         </div>
+        <nav class="nav-links">
+            <a href="/register.html">Join Now</a>
+            <a class="nav-primary" href="/login.html">User Login</a>
+            <a class="nav-primary" href="/recruiter_login.html">Recruiter Login</a>
+        </nav>
+    </header>
 
-        <!-- Main Heading -->
-        <h1 class="mb-10 fade-in">SkillMatch AI</h1>
-
-        <!-- Buttons -->
-        <div class="flex flex-wrap gap-6 justify-center z-10 fade-in">
-            <a href="login.html" class="btn px-7 py-3 text-black text-lg">User Login</a>
-            <a href="recruiter_login.html" class="btn px-7 py-3 text-black text-lg">Recruiter Login</a>
+    <section id="hero">
+        <div id="landing">
+            <div class="hero-overlay">
+                <h1>Navigate Your Career with Intelligence</h1>
+                <p>SkillMatch AI connects ambitious talent with visionary teams through adaptive job matching, recruiter tools, and AI-driven insights that keep you ahead of the curve.</p>
+                <div class="hero-actions">
+                    <a href="/register.html" class="btn">Create Account</a>
+                    <a href="/resume_builder.html" class="btn btn-secondary">Build a resume</a>
+                    <a href="/chatbot.html" class="btn btn-secondary">Talk to the AI mentor</a>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <main>
+        <section class="section">
+            <h2>Why SkillMatch?</h2>
+            <div class="feature-grid">
+                <article class="feature-card">
+                    <span>🎯</span>
+                    <h3>Precision job matches</h3>
+                    <p>We map your skills and goals against curated roles, surfacing opportunities tailored to your next move.</p>
+                </article>
+                <article class="feature-card">
+                    <span>🤝</span>
+                    <h3>Recruiter collaboration</h3>
+                    <p>Recruiters gain a real-time view of talent pipelines, making shortlists and outreach effortless.</p>
+                </article>
+                <article class="feature-card">
+                    <span>📄</span>
+                    <h3>AI resume polish</h3>
+                    <p>Enhance resumes instantly with quantified achievements and keyword alignment for each posting.</p>
+                </article>
+                <article class="feature-card">
+                    <span>⚡</span>
+                    <h3>Insightful guidance</h3>
+                    <p>Get always-on support from our AI mentor for interview prep, career planning, and skills growth.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Trusted by a growing community</h2>
+            <div class="stats-row">
+                <div class="stat-card">
+                    <strong>25k+</strong>
+                    <span>Professionals accelerating their careers with SkillMatch</span>
+                </div>
+                <div class="stat-card">
+                    <strong>1.8k</strong>
+                    <span>Recruiters sourcing talent through personalized dashboards</span>
+                </div>
+                <div class="stat-card">
+                    <strong>92%</strong>
+                    <span>Match satisfaction rating across successful placements</span>
+                </div>
+                <div class="stat-card">
+                    <strong>48 hrs</strong>
+                    <span>Average time to shortlist top candidates for new roles</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section cta-section">
+            <h2>Ready to experience your next career leap?</h2>
+            <p>Whether you are exploring new opportunities or building world-class teams, SkillMatch AI gives you the tools, insights, and automation to move faster.</p>
+            <div class="hero-actions">
+                <a href="/register.html" class="btn">Get started free</a>
+                <a href="/contact.html" class="btn btn-secondary">Talk to our team</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        © 2025 SkillMatch AI • Empowering careers with intelligent connections
+    </footer>
 </div>
 
-<!-- Vanta Background -->
 <script>
-    VANTA.NET({
+  let vantaInstance = null;
+  window.addEventListener("DOMContentLoaded", () => {
+    vantaInstance = VANTA.NET({
       el: "#landing",
       mouseControls: true,
       touchControls: true,
@@ -425,216 +464,24 @@
       minWidth: 200.00,
       scale: 1.00,
       scaleMobile: 1.00,
-      color: 0x00ffff,
-      backgroundColor: 0x0a0a0a,
+      color: 0x6366f1,
+      backgroundColor: 0x0f172a,
       points: 14.0,
       maxDistance: 25.0,
       spacing: 18.0
     });
+  });
 
-    // Zoom-in animation
-    window.addEventListener("load", () => {
-      document.getElementById("pageWrapper").classList.add("show");
-    });
+  window.addEventListener("load", () => {
+    document.getElementById("pageWrapper").classList.add("show");
+  });
+
+  window.addEventListener("beforeunload", () => {
+    if (vantaInstance) {
+      vantaInstance.destroy();
+    }
+  });
 </script>
-
 </body>
 </html>
 
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8" />-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
-<!--    <title>SkillMatch AI | Empower Your Career</title>-->
-
-<!--    &lt;!&ndash; Tailwind + Fonts &ndash;&gt;-->
-<!--    <script src="https://cdn.tailwindcss.com"></script>-->
-<!--    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />-->
-<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>-->
-<!--    <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.net.min.js"></script>-->
-
-<!--    <style>-->
-<!--        * {-->
-<!--          font-family: 'Inter', sans-serif;-->
-<!--        }-->
-
-<!--        body {-->
-<!--          background: #000;-->
-<!--          color: #fff;-->
-<!--          overflow-x: hidden;-->
-<!--        }-->
-
-<!--        /* Vanta Background Layer */-->
-<!--        #vanta-bg {-->
-<!--          position: fixed;-->
-<!--          width: 100%;-->
-<!--          height: 100%;-->
-<!--          top: 0;-->
-<!--          left: 0;-->
-<!--          z-index: -1;-->
-<!--        }-->
-
-<!--        /* Navbar */-->
-<!--        nav {-->
-<!--          backdrop-filter: blur(12px);-->
-<!--          background: rgba(0, 0, 0, 0.6);-->
-<!--          border-bottom: 1px solid rgba(255, 255, 255, 0.08);-->
-<!--        }-->
-
-<!--        .brand {-->
-<!--          color: #00ffff;-->
-<!--          font-size: 1.6rem;-->
-<!--          font-weight: 800;-->
-<!--          text-shadow: 0 0 15px #00ffffb0;-->
-<!--        }-->
-
-<!--        /* Hero Section */-->
-<!--        .hero {-->
-<!--          min-height: 100vh;-->
-<!--          display: flex;-->
-<!--          flex-direction: column;-->
-<!--          justify-content: center;-->
-<!--          text-align: center;-->
-<!--          padding: 2rem;-->
-<!--        }-->
-
-<!--        .hero h1 {-->
-<!--          font-size: 3rem;-->
-<!--          font-weight: 800;-->
-<!--          background: linear-gradient(90deg, #00ffff, #ffffff);-->
-<!--          -webkit-background-clip: text;-->
-<!--          -webkit-text-fill-color: transparent;-->
-<!--          text-shadow: 0 0 25px #00ffff88;-->
-<!--        }-->
-
-<!--        .hero p {-->
-<!--          color: #b3b3b3;-->
-<!--          font-size: 1.1rem;-->
-<!--          margin-top: 1rem;-->
-<!--        }-->
-
-<!--        .btn-primary {-->
-<!--          background: #00ffff;-->
-<!--          color: #000;-->
-<!--          padding: 0.9rem 2rem;-->
-<!--          border-radius: 12px;-->
-<!--          font-weight: 700;-->
-<!--          margin-top: 2rem;-->
-<!--          transition: all 0.3s ease;-->
-<!--        }-->
-
-<!--        .btn-primary:hover {-->
-<!--          background: #0ff9ff;-->
-<!--          transform: scale(1.05);-->
-<!--        }-->
-
-<!--        /* Features Section */-->
-<!--        .features {-->
-<!--          max-width: 1100px;-->
-<!--          margin: 5rem auto;-->
-<!--          display: grid;-->
-<!--          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));-->
-<!--          gap: 2rem;-->
-<!--          padding: 0 1rem;-->
-<!--        }-->
-
-<!--        .card {-->
-<!--          background: rgba(255, 255, 255, 0.07);-->
-<!--          border: 1px solid rgba(255, 255, 255, 0.15);-->
-<!--          border-radius: 20px;-->
-<!--          padding: 2rem;-->
-<!--          backdrop-filter: blur(10px);-->
-<!--          transition: 0.3s ease;-->
-<!--        }-->
-
-<!--        .card:hover {-->
-<!--          transform: translateY(-8px);-->
-<!--          box-shadow: 0 0 25px rgba(0, 255, 255, 0.25);-->
-<!--        }-->
-
-<!--        .card h3 {-->
-<!--          color: #00ffff;-->
-<!--          font-size: 1.3rem;-->
-<!--          font-weight: 700;-->
-<!--          margin-bottom: 0.8rem;-->
-<!--        }-->
-
-<!--        .card p {-->
-<!--          color: #ccc;-->
-<!--          font-size: 0.95rem;-->
-<!--          line-height: 1.6;-->
-<!--        }-->
-
-<!--        footer {-->
-<!--          text-align: center;-->
-<!--          padding: 3rem 1rem;-->
-<!--          color: #aaa;-->
-<!--          border-top: 1px solid rgba(255, 255, 255, 0.08);-->
-<!--          background: rgba(0, 0, 0, 0.7);-->
-<!--          backdrop-filter: blur(12px);-->
-<!--        }-->
-<!--    </style>-->
-<!--</head>-->
-
-<!--<body>-->
-<!--<div id="vanta-bg"></div>-->
-
-<!--&lt;!&ndash; Navbar &ndash;&gt;-->
-<!--<nav class="w-full fixed top-0 z-50 px-6 py-4 flex justify-between items-center">-->
-<!--    <div class="brand">SkillMatch AI</div>-->
-<!--    <div class="space-x-6 text-gray-300 font-medium">-->
-<!--        <a href="#" class="hover:text-cyan-400 transition">Home</a>-->
-<!--        <a href="#" class="hover:text-cyan-400 transition">Features</a>-->
-<!--        <a href="contact.html" class="hover:text-cyan-400 transition">Contact</a>-->
-<!--        <a href="login.html" class="hover:text-cyan-400 transition">Login</a>-->
-<!--    </div>-->
-<!--</nav>-->
-
-<!--&lt;!&ndash; Hero Section &ndash;&gt;-->
-<!--<section class="hero">-->
-<!--    <h1>Empower Your Career with AI</h1>-->
-<!--    <p>Transform your resume into actionable insights, interview prep, and job matches — powered by AI.</p>-->
-<!--    <a href="register.html" class="btn-primary inline-block">Get Started</a>-->
-<!--</section>-->
-
-<!--&lt;!&ndash; Features &ndash;&gt;-->
-<!--<section class="features">-->
-<!--    <div class="card">-->
-<!--        <h3>AI-Powered Resume Analysis</h3>-->
-<!--        <p>Let our smart AI break down your resume to find your strengths, weaknesses, and skill gaps instantly.</p>-->
-<!--    </div>-->
-<!--    <div class="card">-->
-<!--        <h3>Mock Interviews</h3>-->
-<!--        <p>Prepare with confidence through real-time mock interviews customized to your experience level.</p>-->
-<!--    </div>-->
-<!--    <div class="card">-->
-<!--        <h3>Personalized Job Matches</h3>-->
-<!--        <p>Get job recommendations that truly fit your skills and goals — no more irrelevant listings.</p>-->
-<!--    </div>-->
-<!--</section>-->
-
-<!--&lt;!&ndash; Footer &ndash;&gt;-->
-<!--<footer>-->
-<!--    © 2025 SkillMatch AI — Empowering Careers with Intelligence-->
-<!--</footer>-->
-
-<!--<script>-->
-<!--    // Initialize Vanta background-->
-<!--    VANTA.NET({-->
-<!--      el: "#vanta-bg",-->
-<!--      mouseControls: true,-->
-<!--      touchControls: true,-->
-<!--      minHeight: 200.00,-->
-<!--      minWidth: 200.00,-->
-<!--      scale: 1.00,-->
-<!--      scaleMobile: 1.00,-->
-<!--      color: 0x00ffff,-->
-<!--      backgroundColor: 0x000000,-->
-<!--      points: 12.00,-->
-<!--      maxDistance: 20.00,-->
-<!--      spacing: 18.00-->
-<!--    });-->
-<!--</script>-->
-<!--</body>-->
-<!--</html>-->

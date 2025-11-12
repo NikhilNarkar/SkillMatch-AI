@@ -50,7 +50,7 @@
 <!--<html lang="en">-->
 <!--<head>-->
 <!--    <meta charset="UTF-8">-->
-<!--    <title>SkillForge Dashboard</title>-->
+<!--    <title>SkillMatch Dashboard</title>-->
 <!--    <script src="https://cdn.tailwindcss.com"></script>-->
 <!--    <style>-->
 <!--        body {-->
@@ -115,7 +115,7 @@
 
 <!--&lt;!&ndash; Top Navbar &ndash;&gt;-->
 <!--<nav class="navbar">-->
-<!--    <div class="logo">SkillForge</div>-->
+<!--    <div class="logo">SkillMatch</div>-->
 <!--    <div class="nav-buttons">-->
 <!--        <a href="user_login.html" class="btn">Login</a>-->
 <!--        <a href="user_signup.html" class="btn">Signup</a>-->
@@ -200,90 +200,159 @@
     <link rel="icon" type="image/png" href="logo.png">
     <style>
         /* 🌌 Background gradient for consistency with login page */
-        body {
-          background: radial-gradient(circle at 20% 20%, #0f172a, #020617);
-          color: #f3f4f6;
-          font-family: 'Inter', sans-serif;
-          overflow-x: hidden;
-        }
+       /* Body and base */
+body {
+    background: radial-gradient(circle at 20% 20%, #0f172a, #020617);
+    color: #f3f4f6;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+}
 
-        /* ✨ Page load zoom effect */
-        #pageWrapper {
-          transition: all 0.6s ease;
-          opacity: 0;
-          transform: scale(0.96);
-        }
-        #pageWrapper.show {
-          opacity: 1;
-          transform: scale(1);
-        }
+/* Container card style (like dashboard's main cards) */
+.container.card {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 16px;
+    padding: 2rem;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+}
 
-        /* 🔹 Dropdown animation */
-        .dropdown {
-          transition: all 0.25s ease;
-          transform-origin: top;
-        }
+.container.card:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: rgba(99, 102, 241, 0.35);
+    box-shadow: 0 12px 30px rgba(99, 102, 241, 0.25);
+}
 
-        /* 🔹 Navbar styling */
-        header {
-          backdrop-filter: blur(12px);
-          background: rgba(15, 23, 42, 0.85);
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        }
+/* Navbar styling */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
 
-        /* 🔹 Buttons + hover animation */
-        .btn-glow {
-          background: linear-gradient(135deg, #6366f1, #7c3aed);
-          color: white;
-          font-weight: 600;
-          border-radius: 9999px;
-          padding: 0.6rem 1.5rem;
-          box-shadow: 0 0 15px rgba(99,102,241,0.4);
-          transition: all 0.3s ease;
-        }
-        .btn-glow:hover {
-          transform: translateY(-3px) scale(1.05);
-          box-shadow: 0 0 25px rgba(99,102,241,0.6);
-        }
+/* Logo style */
+.logo {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #00f2fe;
+}
 
-        /* 🔹 Card hover effects */
-        .card {
-          background: rgba(30, 41, 59, 0.6);
-          border: 1px solid rgba(99,102,241,0.15);
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-          transition: all 0.3s ease;
-        }
-        .card:hover {
-          transform: translateY(-4px) scale(1.02);
-          border-color: rgba(99,102,241,0.35);
-          box-shadow: 0 12px 30px rgba(99,102,241,0.25);
-        }
+/* Button glow effect, copying dashboard .btn-glow */
+.btn-glow {
+    background: linear-gradient(135deg, #6366f1, #7c3aed);
+    color: white;
+    font-weight: 600;
+    border-radius: 9999px;
+    padding: 0.6rem 1.5rem;
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    display: inline-block;
+    text-align: center;
+}
 
-        /* 🔹 Search bar glass effect */
-        .search-bar {
-          background: rgba(17, 17, 27, 0.7);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(99,102,241,0.2);
-        }
+.btn-glow:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 25px rgba(99, 102, 241, 0.6);
+}
 
-        /* 🔹 Section titles */
-        h1, h2, h3 {
-          background: linear-gradient(90deg, #818cf8, #c084fc);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
+/* Section titles with gradient text */
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(90deg, #818cf8, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
-        /* 🔹 Footer glass look */
-        footer {
-          background: rgba(15, 23, 42, 0.8);
-          backdrop-filter: blur(8px);
-          border-top: 1px solid rgba(99,102,241,0.2);
-        }
+/* Footer style with glass effect */
+footer {
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(99, 102, 241, 0.2);
+    color: #9ca3af;
+    padding: 3rem 2rem;
+    text-align: center;
+    font-size: 0.875rem;
+}
 
-        /* Dropdown container */
-        .dropdown a:hover {
-          background: rgba(99,102,241,0.1);
-        }
+/* Card hover animation */
+.card {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: rgba(99, 102, 241, 0.35);
+    box-shadow: 0 12px 30px rgba(99, 102, 241, 0.25);
+}
+
+/* Optional: input and select field styles */
+input, select, textarea {
+    background: rgba(17, 17, 27, 0.7);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    backdrop-filter: blur(10px);
+    color: #cbd5e1;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+    font-size: 1rem;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #6366f1; /* indigo-500 */
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.6);
+    background: rgba(30, 41, 59, 0.8);
+}
+
+/* Scrollbar customization (dark) */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #6366f1;
+    border-radius: 10px;
+}
+
+/* Links style */
+a {
+    color: #818cf8;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #c084fc;
+    text-decoration: underline;
+}
+
     </style>
 </head>
 <body>
@@ -362,7 +431,7 @@
         <div class="card p-6 rounded-2xl text-center">
             <h3 class="text-xl font-semibold mb-2">Coding Challenges</h3>
             <p class="text-gray-400">Solve real interview-style coding problems with test cases.</p>
-            <button class="mt-4 btn-glow page-link">Practice Coding</button>
+            <a href ="https://leetcode.com/" button class="mt-4 btn-glow page-link">Practice Coding</a></button>
         </div>
         <div class="card p-6 rounded-2xl text-center">
             <h3 class="text-xl font-semibold mb-2">Interview Simulation</h3>
@@ -478,6 +547,9 @@
     });
   }
 </script>
+<!-- Chatbot widget -->
+<link rel="stylesheet" href="/chatbot.html">
+<script src="/js/chat-widget.js"></script>
 
 </body>
 </html>

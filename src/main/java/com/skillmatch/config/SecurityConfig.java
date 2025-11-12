@@ -42,6 +42,16 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/public/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        // Static and root
+                        .requestMatchers("/", "/health", "/favicon.ico").permitAll()
+                        .requestMatchers("/static/**", "/assets/**", "/css/**", "/js/**", "/images/**").permitAll()
+                        // All HTML files
+                        .requestMatchers("/*.html").permitAll()
+                        // Chat API (make public or secure as desired)
+                        .requestMatchers("/api/v1/chat/**").permitAll()
+                        .requestMatchers("/api/chatbot/**").permitAll()
+                        // Preflight
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
 
                         // Admin endpoints
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")

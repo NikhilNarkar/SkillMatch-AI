@@ -42,7 +42,7 @@ public class User implements UserDetails {
     @Column(name = "last_name", nullable = false, length = 100)
     private String lastName;
 
-    @Pattern(regexp = "^[+]?[0-9]{10,15}$", message = "Invalid phone number")
+    @Pattern(regexp = "^(\\+?[0-9]{10,15})?$", message = "Invalid phone number")
     private String phone;
 
     @Enumerated(EnumType.STRING)

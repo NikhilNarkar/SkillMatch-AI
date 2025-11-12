@@ -223,9 +223,13 @@
 <!--</script>-->
 <!--</body>-->
 <!--</html>-->
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - SkillMatch AI</title>
@@ -239,77 +243,86 @@
         }
 
         body {
-          background: radial-gradient(circle at top left, #1e1e2f, #0f0f17);
+          background: radial-gradient(circle at top left, #111429, #050510);
           color: #f5f5f5;
-          height: 100vh;
+          min-height: 100vh;
           display: flex;
-          flex-direction: column;
           align-items: center;
           justify-content: center;
           overflow: hidden;
           position: relative;
+          padding: 2rem;
         }
 
-        /* Rotating gradient light */
-        body::before {
+        /* Animated gradients */
+        body::before,
+        body::after {
           content: "";
           position: absolute;
-          width: 160%;
-          height: 160%;
-          background: conic-gradient(
-            from 180deg,
-            #5b21b6,
-            #2563eb,
-            #9333ea,
-            #5b21b6
-          );
-          filter: blur(200px);
-          opacity: 0.25;
-          animation: rotateBg 25s linear infinite;
+          width: 140vmax;
+          height: 140vmax;
+          border-radius: 50%;
+          filter: blur(160px);
+          opacity: 0.32;
           z-index: 0;
+          animation: pulse 24s infinite alternate;
         }
 
-        @keyframes rotateBg {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+        body::before {
+          background: radial-gradient(circle, rgba(99,102,241,0.65) 0%, rgba(79,70,229,0.25) 60%, transparent 100%);
+          top: -70vmax;
+          left: -40vmax;
         }
 
-        /* Floating icons */
-        .icon {
+        body::after {
+          background: radial-gradient(circle, rgba(236,72,153,0.55) 0%, rgba(59,130,246,0.3) 55%, transparent 100%);
+          bottom: -60vmax;
+          right: -35vmax;
+          animation-delay: 6s;
+        }
+
+        @keyframes pulse {
+          0% { transform: scale(0.95) rotate(0deg); }
+          100% { transform: scale(1.05) rotate(8deg); }
+        }
+
+        /* Floating shapes */
+        .shape {
           position: absolute;
-          font-size: 2.4rem;
-          opacity: 0.12;
-          animation: floatIcons 10s ease-in-out infinite;
-          user-select: none;
-          color: #c084fc;
-          filter: drop-shadow(0 0 10px #7c3aed);
+          width: 220px;
+          height: 220px;
+          background: linear-gradient(140deg, rgba(99,102,241,0.35), rgba(14,165,233,0.15));
+          border-radius: 32% 68% 63% 37% / 45% 32% 68% 55%;
+          filter: blur(1px);
+          z-index: 1;
+          animation: float 18s ease-in-out infinite;
+          top: 18%;
+          right: 14%;
         }
 
-        @keyframes floatIcons {
-          0%, 100% {
-            transform: translateY(0) rotate(0deg);
-            opacity: 0.15;
-          }
-          50% {
-            transform: translateY(-30px) rotate(15deg);
-            opacity: 0.28;
-          }
+        .shape.shape-2 {
+          width: 160px;
+          height: 160px;
+          background: linear-gradient(145deg, rgba(236,72,153,0.35), rgba(147,197,253,0.1));
+          top: 10%;
+          left: 8%;
+          animation-duration: 22s;
         }
 
-        /* Random placement of icons */
-        .icon:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
-        .icon:nth-child(2) { top: 20%; left: 80%; animation-delay: 1s; }
-        .icon:nth-child(3) { top: 70%; left: 15%; animation-delay: 2s; }
-        .icon:nth-child(4) { top: 50%; left: 90%; animation-delay: 3s; }
-        .icon:nth-child(5) { top: 30%; left: 40%; animation-delay: 4s; }
-        .icon:nth-child(6) { top: 85%; left: 60%; animation-delay: 5s; }
-        .icon:nth-child(7) { top: 15%; left: 55%; animation-delay: 6s; }
-        .icon:nth-child(8) { top: 75%; left: 80%; animation-delay: 7s; }
-        .icon:nth-child(9) { top: 60%; left: 35%; animation-delay: 8s; }
-        .icon:nth-child(10) { top: 5%; left: 30%; animation-delay: 9s; }
-        .icon:nth-child(11) { top: 40%; left: 5%; animation-delay: 10s; }
-        .icon:nth-child(12) { top: 90%; left: 25%; animation-delay: 11s; }
-        .icon:nth-child(13) { top: 65%; left: 70%; animation-delay: 12s; }
+        .shape.shape-3 {
+          width: 180px;
+          height: 180px;
+          background: linear-gradient(145deg, rgba(34,197,94,0.28), rgba(99,102,241,0.18));
+          bottom: 12%;
+          right: 12%;
+          animation-duration: 20s;
+          animation-delay: 4s;
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+          50% { transform: translate3d(40px, -30px, 0) rotate(12deg); }
+        }
 
         /* Title */
         .site-title {
@@ -334,16 +347,18 @@
         /* Login card */
         .container.card {
           position: relative;
-          background: rgba(30, 30, 46, 0.85);
-          backdrop-filter: blur(10px);
-          padding: 2.8rem 2.4rem;
-          border-radius: 1.25rem;
+          background: rgba(18, 19, 37, 0.82);
+          backdrop-filter: blur(14px);
+          padding: 3.2rem 3rem 2.6rem;
+          border-radius: 1.75rem;
           width: 100%;
-          max-width: 400px;
-          text-align: center;
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+          max-width: 520px;
+          text-align: left;
+          box-shadow: 0 28px 65px rgba(6, 11, 38, 0.65);
           z-index: 2;
-          animation: fadeUp 1s ease forwards;
+          display: grid;
+          gap: 1.6rem;
+          animation: fadeUp 0.9s ease forwards;
         }
 
         @keyframes fadeUp {
@@ -351,22 +366,23 @@
           to { opacity: 1; transform: translateY(0); }
         }
 
-        h2 {
+        header h2 {
           font-weight: 700;
-          margin-bottom: 0.5rem;
           color: #fff;
+          margin-bottom: 0.35rem;
+          font-size: 2rem;
         }
 
-        p {
+        header p {
           color: #bbb;
-          font-size: 0.9rem;
+          font-size: 1rem;
+          max-width: 80%;
         }
 
         form {
           display: flex;
           flex-direction: column;
-          gap: 1rem;
-          margin-top: 1.5rem;
+          gap: 1.1rem;
         }
 
         label {
@@ -398,68 +414,132 @@
         }
 
         .btn {
-          background: linear-gradient(90deg, #6366f1, #8b5cf6);
+          background: linear-gradient(100deg, #6366f1, #8b5cf6);
           color: #fff;
           border: none;
-          border-radius: 0.5rem;
-          padding: 0.75rem;
-          font-size: 1rem;
+          border-radius: 0.75rem;
+          padding: 0.9rem;
+          font-size: 1.05rem;
           font-weight: 600;
           cursor: pointer;
-          transition: all 0.3s ease;
+          transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.3s ease;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.4rem;
         }
 
         .btn:hover {
-          transform: scale(1.05);
-          box-shadow: 0 0 14px rgba(139, 92, 246, 0.8);
+          transform: translateY(-2px) scale(1.01);
+          box-shadow: 0 16px 34px rgba(99, 102, 241, 0.5);
+          filter: brightness(1.05);
         }
 
-        #msg {
-          margin-top: 1rem;
+        .btn:disabled {
+          opacity: 0.7;
+          transform: none;
+          box-shadow: none;
+        }
+
+        .quick-links {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+        }
+
+        .link-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.25rem;
+          padding: 0.75rem 1.1rem;
+          border-radius: 0.75rem;
+          border: 1px solid rgba(99, 102, 241, 0.4);
+          color: #a5b4fc;
+          text-decoration: none;
+          font-weight: 600;
           font-size: 0.95rem;
+          transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
         }
 
-        #msg.error { color: #ef4444; }
-        #msg.success { color: #22c55e; }
+        .link-button:hover {
+          background: rgba(99, 102, 241, 0.18);
+          transform: translateY(-2px);
+          box-shadow: 0 10px 25px rgba(99, 102, 241, 0.25);
+        }
 
-        .mt { margin-top: 1rem; }
+        .link-button.home {
+          border-color: rgba(59, 130, 246, 0.4);
+          color: #bae6fd;
+        }
 
-        a {
+        .link-button.home:hover {
+          background: rgba(59, 130, 246, 0.18);
+          box-shadow: 0 10px 25px rgba(59, 130, 246, 0.28);
+        }
+
+        .auth-links {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          color: #a5b4fc;
+          font-size: 0.9rem;
+        }
+
+        .auth-links a {
           color: #8b5cf6;
           text-decoration: none;
-          transition: color 0.3s;
+          transition: color 0.3s ease;
         }
 
-        a:hover {
+        .auth-links a:hover {
           text-decoration: underline;
-          color: #a78bfa;
+          color: #c4b5fd;
+        }
+
+        footer {
+          font-size: 0.8rem;
+          color: rgba(226, 232, 240, 0.65);
+          text-align: center;
+        }
+
+        @media (max-width: 640px) {
+          body {
+            padding: 1.5rem;
+          }
+          .container.card {
+            padding: 2.6rem 1.8rem 2.1rem;
+            max-width: 100%;
+          }
+          header p {
+            max-width: 100%;
+          }
+          .quick-links {
+            justify-content: center;
+          }
+          .auth-links {
+            flex-direction: column;
+            gap: 0.6rem;
+            align-items: flex-start;
+          }
         }
     </style>
 </head>
 
 <body>
-<!-- Floating icons -->
-<div class="icon">💼</div>
-<div class="icon">⚙️</div>
-<div class="icon">💡</div>
-<div class="icon">💻</div>
-<div class="icon">🧠</div>
-<div class="icon">📊</div>
-<div class="icon">📈</div>
-<div class="icon">🪄</div>
-<div class="icon">🤖</div>
-<div class="icon">🧩</div>
-<div class="icon">🗂️</div>
-<div class="icon">📘</div>
-<div class="icon">🔍</div>
 
-<!-- Site Title -->
-<div class="site-title">SkillMatch AI</div>
+<!-- Floating organic shapes -->
+<div class="shape"></div>
+<div class="shape shape-2"></div>
+<div class="shape shape-3"></div>
 
 <!-- Login Card -->
 <main class="container card">
-    <h2>Welcome Back 👋</h2>
-    <p>Sign in to continue to <strong>SkillMatch AI</strong></p>
+    <header>
+        <div class="site-title">SkillMatch AI</div>
+        <h2>Welcome Back 👋</h2>
+        <p>Ready to dive into your personalized dashboard and discover tailored opportunities.</p>
+    </header>
 
     <form id="loginForm">
         <label>Email
@@ -471,37 +551,69 @@
         <button class="btn" type="submit">Login</button>
     </form>
 
-    <div id="msg" class="mt"></div>
+    <div class="quick-links">
+        <a class="link-button" href="/register.html">Create an account</a>
+        <a class="link-button home" href="/index.html">Go to home</a>
+    </div>
 
-    <p class="mt">No account? <a href="/register.html">Register</a></p>
-    <p><a href="/">← Back home</a></p>
+    <div class="auth-links">
+        <span>No account yet? <a href="/register.html">Register</a></span>
+        <span><a href="/">← Back home</a></span>
+    </div>
+
+    <footer>Secure access powered by SkillMatch AI</footer>
 </main>
 
 <script src="/js/api.js"></script>
 <script>
     const form = document.getElementById('loginForm');
-    const msg = document.getElementById('msg');
+    const submitBtn = form.querySelector('button[type="submit"]');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      msg.textContent = '';
-      msg.classList.remove('error', 'success');
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+      }
 
       try {
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
-        const res = await window.Api.login({ email, password });
+        await window.Api.login({ email, password });
 
-        msg.textContent = '✅ Login successful! Redirecting...';
-        msg.classList.add('success');
-        setTimeout(() => (location.href = '/dashboard.html'), 800);
+        await Swal.fire({
+          title: 'Welcome back!',
+          html: '<strong>Login successful</strong><br>Redirecting…',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1800,
+          timerProgressBar: true,
+          background: 'rgba(30, 30, 46, 0.92)',
+          color: '#f3f4f6',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+
+        window.location.href = '/dashboard.html';
       } catch (err) {
-        msg.textContent = err.message || '❌ Login failed. Please try again.';
-        msg.classList.add('error');
+        Swal.fire({
+          title: 'Login Failed',
+          text: err?.message || 'Please check your email and password and try again.',
+          icon: 'error',
+          confirmButtonColor: '#ef4444',
+          background: 'rgba(30, 30, 46, 0.92)',
+          color: '#f3f4f6',
+          allowOutsideClick: true
+        });
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+        }
       }
     });
+
 </script>
 </body>
 </html>
-
-

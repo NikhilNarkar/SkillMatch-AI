@@ -3,8 +3,8 @@
 <!--<head>-->
 <!--    <meta charset="UTF-8" />-->
 <!--    <meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
-<!--    <meta name="description" content="Contact SkillForge for support, feedback, or collaborations.">-->
-<!--    <title>Contact Us | SkillForge</title>-->
+<!--    <meta name="description" content="Contact SkillMatch for support, feedback, or collaborations.">-->
+<!--    <title>Contact Us | SkillMatch</title>-->
 <!--    <script src="https://cdn.tailwindcss.com" defer></script>-->
 <!--    <link rel="icon" type="image/png" href="logo.png">-->
 <!--</head>-->
@@ -15,7 +15,7 @@
 <!--    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">-->
 <!--        &lt;!&ndash; Logo &ndash;&gt;-->
 <!--        <div class="flex items-center space-x-2">-->
-<!--            <img src="logo.png" alt="SkillForge Logo" class="h-8 w-8">-->
+<!--            <img src="logo.png" alt="SkillMatch Logo" class="h-8 w-8">-->
 <!--            <h1 class="text-2xl font-bold">SkillMatch</h1>-->
 <!--        </div>-->
 
@@ -52,11 +52,11 @@
 <!--            <div class="space-y-4 text-gray-300">-->
 <!--                <div>-->
 <!--                    <h4 class="font-semibold text-white">📍 Address</h4>-->
-<!--                    <p>SkillForge HQ, Bengaluru, India</p>-->
+<!--                    <p>SkillMatch HQ, Bengaluru, India</p>-->
 <!--                </div>-->
 <!--                <div>-->
 <!--                    <h4 class="font-semibold text-white">📧 Email</h4>-->
-<!--                    <p><a href="mailto:support@skillforge.com" class="text-indigo-400 hover:underline">support@skillforge.com</a></p>-->
+<!--                    <p><a href="mailto:support@skillmatch.com" class="text-indigo-400 hover:underline">support@skillmatch.com</a></p>-->
 <!--                </div>-->
 <!--                <div>-->
 <!--                    <h4 class="font-semibold text-white">📞 Phone</h4>-->
@@ -95,8 +95,8 @@
 <!--    <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">-->
 <!--        <div>-->
 <!--            <div class="flex items-center space-x-2 mb-3">-->
-<!--                <img src="logo.png" alt="SkillForge Logo" class="h-8 w-8">-->
-<!--                <h3 class="font-bold text-lg text-white">SkillForge</h3>-->
+<!--                <img src="logo.png" alt="SkillMatch Logo" class="h-8 w-8">-->
+<!--                <h3 class="font-bold text-lg text-white">SkillMatch</h3>-->
 <!--            </div>-->
 <!--            <p class="text-sm text-gray-400">Empowering learners to ace every interview through AI-driven practice and analytics.</p>-->
 <!--        </div>-->
@@ -125,7 +125,7 @@
 <!--        </div>-->
 <!--    </div>-->
 <!--    <div class="mt-10 text-center text-sm text-gray-500">-->
-<!--        © 2025 SkillForge. All rights reserved.-->
+<!--        © 2025 SkillMatch. All rights reserved.-->
 <!--    </div>-->
 <!--</footer>-->
 
@@ -168,38 +168,47 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
+        /* 🌌 Background gradient matching dashboard */
         * {
           box-sizing: border-box;
           font-family: 'Inter', sans-serif;
         }
 
         body {
-          background: radial-gradient(circle at center, #0a0f1f, #000000);
-          color: #e0f7ff;
+          background: radial-gradient(circle at 20% 20%, #0f172a, #020617);
+          color: #f3f4f6;
+          font-family: 'Inter', sans-serif;
           overflow-x: hidden;
           min-height: 100vh;
+          font-weight: 400;
+          margin: 0;
+          padding: 0;
         }
 
-        /* Navbar Styling */
+        /* Navbar Styling matching dashboard */
         header {
-          background: rgba(10, 20, 40, 0.95);
-          backdrop-filter: blur(10px);
-          border-bottom: 1px solid rgba(0, 255, 255, 0.2);
-          box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+          background: rgba(15, 23, 42, 0.85);
+          backdrop-filter: blur(12px);
+          border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+          position: sticky;
+          top: 0;
+          z-index: 50;
         }
 
         header h1 {
-          color: #00ffff;
-          text-shadow: 0 0 10px #00ffffa0;
+          color: #00f2fe;
+          font-size: 2rem;
+          font-weight: 700;
         }
 
         nav a {
           transition: all 0.3s ease;
+          color: #94a3b8;
         }
 
         nav a:hover {
-          color: #00ffff !important;
-          text-shadow: 0 0 8px #00ffff90;
+          color: #818cf8 !important;
         }
 
         /* Section Styling */
@@ -210,113 +219,88 @@
           z-index: 2;
         }
 
-        /* Glowing Border Effect for Contact Form */
+        /* Card style matching dashboard */
         form {
-          background: rgba(15, 25, 45, 0.8);
-          border: 1px solid rgba(0, 255, 255, 0.2);
-          box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
-          transition: all 0.4s ease;
+          background: rgba(30, 41, 59, 0.6);
+          border: 1px solid rgba(99, 102, 241, 0.15);
+          border-radius: 16px;
+          padding: 2rem;
+          backdrop-filter: blur(8px);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+          transition: all 0.3s ease;
         }
 
         form:hover {
-          box-shadow: 0 0 40px rgba(0, 255, 255, 0.3);
-          transform: translateY(-3px);
+          transform: translateY(-4px) scale(1.02);
+          border-color: rgba(99, 102, 241, 0.35);
+          box-shadow: 0 12px 30px rgba(99, 102, 241, 0.25);
         }
 
         input, textarea {
-          background: rgba(10, 15, 30, 0.8);
-          border: 1px solid rgba(0, 255, 255, 0.2);
-          color: #e0f7ff;
+          background: rgba(15, 23, 42, 0.6);
+          border: 1px solid rgba(99, 102, 241, 0.2);
+          color: #f3f4f6;
           transition: all 0.3s ease;
         }
 
         input:focus, textarea:focus {
-          border-color: #00ffff;
-          box-shadow: 0 0 10px #00ffff60;
+          border-color: rgba(99, 102, 241, 0.5);
+          box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
           outline: none;
+          background: rgba(15, 23, 42, 0.8);
         }
 
-        /* Button Glow */
+        /* Button glow effect matching dashboard */
         button {
-          background: linear-gradient(90deg, #00ffff, #0077ff);
-          color: #000;
-          font-weight: 700;
+          background: linear-gradient(135deg, #6366f1, #7c3aed);
+          color: white;
+          font-weight: 600;
           transition: all 0.3s ease;
-          border-radius: 1rem;
-          box-shadow: 0 0 15px #00ffff90;
+          border-radius: 9999px;
+          box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+          border: none;
         }
 
         button:hover {
-          transform: scale(1.05);
-          box-shadow: 0 0 25px #00ffffd0;
+          transform: translateY(-3px) scale(1.05);
+          box-shadow: 0 0 25px rgba(99, 102, 241, 0.6);
         }
 
-        /* Footer Styling */
+        /* Footer Styling matching dashboard */
         footer {
-          background: rgba(10, 15, 25, 0.95);
-          border-top: 1px solid rgba(0, 255, 255, 0.15);
-          box-shadow: 0 -5px 25px rgba(0, 255, 255, 0.05);
+          background: rgba(15, 23, 42, 0.8);
+          backdrop-filter: blur(8px);
+          border-top: 1px solid rgba(99, 102, 241, 0.2);
+          color: #9ca3af;
         }
 
         footer h4 {
-          color: #00ffff;
-          text-shadow: 0 0 6px #00ffff70;
+          color: #f3f4f6;
+          font-weight: 600;
         }
 
         footer a:hover {
-          color: #00ffff !important;
+          color: #818cf8 !important;
         }
 
-        /* Floating Glow Animation */
-        @keyframes glowFloat {
-          0% { box-shadow: 0 0 10px rgba(0,255,255,0.4); }
-          50% { box-shadow: 0 0 25px rgba(0,255,255,0.8); }
-          100% { box-shadow: 0 0 10px rgba(0,255,255,0.4); }
+        /* Gradient text matching dashboard */
+        h2 {
+          background: linear-gradient(90deg, #818cf8, #c084fc);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        h3 {
+          color: #818cf8;
         }
 
         .neon-text {
-          color: #00ffff;
-          text-shadow: 0 0 10px #00ffffa0, 0 0 20px #0077ffa0;
-        }
-
-        /* Floating Background Lights */
-        .glow-circle {
-          position: absolute;
-          border-radius: 50%;
-          filter: blur(80px);
-          opacity: 0.15;
-          animation: float 12s ease-in-out infinite;
-        }
-
-        .glow1 {
-          top: 20%;
-          left: 10%;
-          width: 200px;
-          height: 200px;
-          background: #00ffff;
-          animation-delay: 0s;
-        }
-
-        .glow2 {
-          bottom: 20%;
-          right: 10%;
-          width: 250px;
-          height: 250px;
-          background: #0077ff;
-          animation-delay: 4s;
-        }
-
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-20px); }
+          color: #00f2fe;
         }
     </style>
 </head>
 
 <body>
-<div class="glow-circle glow1"></div>
-<div class="glow-circle glow2"></div>
-
 <!-- Navbar -->
 <header class="text-white sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
@@ -333,10 +317,10 @@
             <a href="contact.html" class="neon-text font-semibold">Contact</a>
         </nav>
 
-        <div class="flex items-center space-x-4">
-            <a href="user_login.html" class="hidden md:inline-block text-sm font-semibold text-[#00ffff] hover:text-[#7eefff] transition">Sign In</a>
-            <button class="px-5 py-2">Get Started</button>
-        </div>
+<!--        <div class="flex items-center space-x-4">-->
+<!--            <a href="user_login.html" class="hidden md:inline-block text-sm font-semibold text-[#00ffff] hover:text-[#7eefff] transition">Sign In</a>-->
+<!--            <button class="px-5 py-2">Get Started</button>-->
+<!--        </div>-->
     </div>
 </header>
 

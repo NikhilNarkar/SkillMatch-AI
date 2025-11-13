@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkillMatch AI</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.net.min.js"></script>
+    <link rel="icon" href="logo.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          font-family: 'Inter', sans-serif;
+        }
+
+        body {
+          background: radial-gradient(circle at 20% 20%, #0f172a, #020617);
+          color: #f1f5f9;
+          min-height: 100vh;
+          overflow-x: hidden;
+        }
+
+        a {
+          color: inherit;
+        }
+
+        #pageWrapper {
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          transition: opacity 0.7s ease, transform 0.8s ease;
+          opacity: 0;
+          transform: scale(0.97) translateY(35px);
+        }
+
+        #pageWrapper.show {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+
+        .top-nav {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          z-index: 20;
+          padding: 1.4rem 3rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background: linear-gradient(180deg, rgba(15,23,42,0.85) 0%, rgba(15,23,42,0.45) 65%, transparent 100%);
+          backdrop-filter: blur(8px);
+          border-bottom: 1px solid rgba(99, 102, 241, 0.18);
+        }
+
+        .brand {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.75rem;
+          font-weight: 700;
+          font-size: 1.1rem;
+          letter-spacing: 0.12rem;
+          text-transform: uppercase;
+          color: #60a5fa;
+        }
+
+        .brand img {
+          width: 2.2rem;
+          height: 2.2rem;
+        }
+
+        .nav-links {
+          display: flex;
+          gap: 1.2rem;
+        }
+
+        .nav-links a {
+          padding: 0.55rem 1.2rem;
+          border-radius: 999px;
+          border: 1px solid rgba(148, 163, 184, 0.25);
+          color: #cbd5f5;
+          text-decoration: none;
+          font-weight: 600;
+          transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .nav-links a:hover {
+          background: rgba(99, 102, 241, 0.18);
+          transform: translateY(-2px);
+          box-shadow: 0 10px 22px rgba(99, 102, 241, 0.35);
+        }
+
+        .nav-primary {
+          border-color: rgba(99, 102, 241, 0.35);
+          color: #e0e7ff;
+          background: linear-gradient(120deg, rgba(99,102,241,0.45), rgba(139,92,246,0.35));
+        }
+
+        .nav-primary:hover {
+          background: linear-gradient(120deg, rgba(99,102,241,0.65), rgba(139,92,246,0.55));
+        }
+
+        #hero {
+          position: relative;
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 7rem 2rem 4rem;
+        }
+
+        #landing {
+          position: relative;
+          width: 100%;
+          max-width: 1200px;
+          min-height: 75vh;
+          border-radius: 32px;
+          overflow: hidden;
+          border: 1px solid rgba(99, 102, 241, 0.18);
+          box-shadow: 0 35px 80px rgba(8, 16, 32, 0.65);
+        }
+
+        .hero-overlay {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          padding: 4rem 2.5rem 4.5rem;
+          gap: 2.2rem;
+        }
+
+        .hero-overlay h1 {
+          font-size: 4rem;
+          font-weight: 800;
+          background: linear-gradient(90deg, #818cf8, #c084fc);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .hero-overlay p {
+          font-size: 1.15rem;
+          max-width: 740px;
+          color: #cbd5f5;
+          line-height: 1.6;
+        }
+
+        .hero-actions {
+          display: flex;
+          gap: 1rem;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .btn {
+          background: linear-gradient(135deg, #6366f1, #7c3aed);
+          color: white;
+          font-weight: 600;
+          border-radius: 9999px;
+          padding: 0.9rem 1.9rem;
+          box-shadow: 0 0 18px rgba(99, 102, 241, 0.4);
+          border: none;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          font-size: 1rem;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.4rem;
+        }
+
+        .btn:hover {
+          transform: translateY(-3px) scale(1.03);
+          box-shadow: 0 0 28px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-secondary {
+          background: transparent;
+          border: 1px solid rgba(148, 163, 184, 0.35);
+          box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+          background: rgba(148, 163, 184, 0.18);
+          box-shadow: 0 10px 24px rgba(148, 163, 184, 0.32);
+        }
+
+        main {
+          position: relative;
+          z-index: 5;
+          margin: 0 auto;
+          width: min(1100px, 92%);
+          display: grid;
+          gap: 3.5rem;
+          padding-bottom: 5rem;
+        }
+
+        .section {
+          background: rgba(15, 23, 42, 0.82);
+          border: 1px solid rgba(99, 102, 241, 0.15);
+          border-radius: 24px;
+          padding: 2.8rem;
+          box-shadow: 0 26px 60px rgba(8, 16, 32, 0.55);
+          backdrop-filter: blur(14px);
+        }
+
+        .section h2 {
+          font-size: 2rem;
+          font-weight: 700;
+          margin-bottom: 1.8rem;
+          color: #e0e7ff;
+          text-align: center;
+        }
+
+        .feature-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 1.6rem;
+        }
+
+        .feature-card {
+          background: rgba(30, 41, 59, 0.75);
+          border-radius: 18px;
+          padding: 1.8rem;
+          border: 1px solid rgba(148, 163, 184, 0.18);
+          display: grid;
+          gap: 0.85rem;
+          transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+
+        .feature-card:hover {
+          transform: translateY(-6px);
+          border-color: rgba(99, 102, 241, 0.45);
+          box-shadow: 0 22px 40px rgba(99, 102, 241, 0.25);
+        }
+
+        .feature-card span {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 44px;
+          height: 44px;
+          border-radius: 12px;
+          background: rgba(99, 102, 241, 0.18);
+          color: #a5b4fc;
+          font-size: 1.2rem;
+        }
+
+        .feature-card h3 {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #e2e8f0;
+        }
+
+        .feature-card p {
+          color: #cbd5e1;
+          font-size: 0.95rem;
+          line-height: 1.5;
+        }
+
+        .stats-row {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+          gap: 1.4rem;
+        }
+
+        .stat-card {
+          background: linear-gradient(145deg, rgba(99, 102, 241, 0.22), rgba(14, 165, 233, 0.18));
+          border-radius: 18px;
+          padding: 1.6rem;
+          display: grid;
+          gap: 0.45rem;
+        }
+
+        .stat-card strong {
+          font-size: 2rem;
+          font-weight: 700;
+          color: #f8fafc;
+        }
+
+        .stat-card span {
+          font-size: 0.95rem;
+          color: rgba(226, 232, 240, 0.85);
+        }
+
+        .cta-section {
+          display: grid;
+          gap: 1.6rem;
+          text-align: center;
+        }
+
+        .cta-section h2 {
+          margin-bottom: 0.6rem;
+        }
+
+        .cta-section p {
+          max-width: 620px;
+          margin: 0 auto 1.8rem;
+          color: #cbd5e1;
+          line-height: 1.6;
+        }
+
+        footer {
+          margin-top: auto;
+          padding: 2.5rem 0 2rem;
+          text-align: center;
+          color: rgba(203, 213, 225, 0.7);
+          font-size: 0.85rem;
+        }
+
+        @media (max-width: 960px) {
+          .top-nav {
+            padding: 1.1rem 1.75rem;
+          }
+          .nav-links {
+            gap: 0.8rem;
+          }
+          #landing {
+            border-radius: 24px;
+          }
+          .hero-overlay h1 {
+            font-size: 3.4rem;
+          }
+          .section {
+            padding: 2.2rem;
+          }
+        }
+
+        @media (max-width: 680px) {
+          .top-nav {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+          }
+          .nav-links {
+            flex-wrap: wrap;
+            justify-content: center;
+          }
+          #hero {
+            padding-top: 6.5rem;
+          }
+          .hero-overlay {
+            padding: 3rem 1.6rem 3.4rem;
+          }
+          .hero-overlay h1 {
+            font-size: 2.6rem;
+          }
+          .hero-overlay p {
+            font-size: 1rem;
+          }
+          main {
+            width: 94%;
+          }
+        }
+    </style>
+</head>
+
+<body>
+<div id="pageWrapper">
+    <header class="top-nav">
+        <div class="brand">
+            <img src="logo.png" alt="SkillMatch Logo">
+            SkillMatch AI
+        </div>
+        <nav class="nav-links">
+            <a href="/register.html">Join Now</a>
+            <a class="nav-primary" href="/login.html">User Login</a>
+            <a class="nav-primary" href="/recruiter_login.html">Recruiter Login</a>
+        </nav>
+    </header>
+
+    <section id="hero">
+        <div id="landing">
+            <div class="hero-overlay">
+                <h1>Navigate Your Career with Intelligence</h1>
+                <p>SkillMatch AI connects ambitious talent with visionary teams through adaptive job matching, recruiter tools, and AI-driven insights that keep you ahead of the curve.</p>
+                <div class="hero-actions">
+                    <a href="/register.html" class="btn">Create Account</a>
+                    <a href="/resume_builder.html" class="btn btn-secondary">Build a resume</a>
+                    <a href="/chatbot.html" class="btn btn-secondary">Talk to the AI mentor</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <section class="section">
+            <h2>Why SkillMatch?</h2>
+            <div class="feature-grid">
+                <article class="feature-card">
+                    <span>🎯</span>
+                    <h3>Precision job matches</h3>
+                    <p>We map your skills and goals against curated roles, surfacing opportunities tailored to your next move.</p>
+                </article>
+                <article class="feature-card">
+                    <span>🤝</span>
+                    <h3>Recruiter collaboration</h3>
+                    <p>Recruiters gain a real-time view of talent pipelines, making shortlists and outreach effortless.</p>
+                </article>
+                <article class="feature-card">
+                    <span>📄</span>
+                    <h3>AI resume polish</h3>
+                    <p>Enhance resumes instantly with quantified achievements and keyword alignment for each posting.</p>
+                </article>
+                <article class="feature-card">
+                    <span>⚡</span>
+                    <h3>Insightful guidance</h3>
+                    <p>Get always-on support from our AI mentor for interview prep, career planning, and skills growth.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Trusted by a growing community</h2>
+            <div class="stats-row">
+                <div class="stat-card">
+                    <strong>25k+</strong>
+                    <span>Professionals accelerating their careers with SkillMatch</span>
+                </div>
+                <div class="stat-card">
+                    <strong>1.8k</strong>
+                    <span>Recruiters sourcing talent through personalized dashboards</span>
+                </div>
+                <div class="stat-card">
+                    <strong>92%</strong>
+                    <span>Match satisfaction rating across successful placements</span>
+                </div>
+                <div class="stat-card">
+                    <strong>48 hrs</strong>
+                    <span>Average time to shortlist top candidates for new roles</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section cta-section">
+            <h2>Ready to experience your next career leap?</h2>
+            <p>Whether you are exploring new opportunities or building world-class teams, SkillMatch AI gives you the tools, insights, and automation to move faster.</p>
+            <div class="hero-actions">
+                <a href="/register.html" class="btn">Get started free</a>
+                <a href="/contact.html" class="btn btn-secondary">Talk to our team</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        © 2025 SkillMatch AI • Empowering careers with intelligent connections
+    </footer>
+</div>
+
+<script>
+  let vantaInstance = null;
+  window.addEventListener("DOMContentLoaded", () => {
+    vantaInstance = VANTA.NET({
+      el: "#landing",
+      mouseControls: true,
+      touchControls: true,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color: 0x6366f1,
+      backgroundColor: 0x0f172a,
+      points: 14.0,
+      maxDistance: 25.0,
+      spacing: 18.0
+    });
+  });
+
+  window.addEventListener("load", () => {
+    document.getElementById("pageWrapper").classList.add("show");
+  });
+
+  window.addEventListener("beforeunload", () => {
+    if (vantaInstance) {
+      vantaInstance.destroy();
+    }
+  });
+</script>
+</body>
+</html>
+
+

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - SkillMatch AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: "Inter", sans-serif;
+        }
+
+        body {
+          background: radial-gradient(circle at top left, #111429, #050510);
+          color: #f5f5f5;
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          position: relative;
+          padding: 2rem;
+        }
+
+        /* Animated gradients */
+        body::before,
+        body::after {
+          content: "";
+          position: absolute;
+          width: 140vmax;
+          height: 140vmax;
+          border-radius: 50%;
+          filter: blur(160px);
+          opacity: 0.32;
+          z-index: 0;
+          animation: pulse 24s infinite alternate;
+        }
+
+        body::before {
+          background: radial-gradient(circle, rgba(99,102,241,0.65) 0%, rgba(79,70,229,0.25) 60%, transparent 100%);
+          top: -70vmax;
+          left: -40vmax;
+        }
+
+        body::after {
+          background: radial-gradient(circle, rgba(236,72,153,0.55) 0%, rgba(59,130,246,0.3) 55%, transparent 100%);
+          bottom: -60vmax;
+          right: -35vmax;
+          animation-delay: 6s;
+        }
+
+        @keyframes pulse {
+          0% { transform: scale(0.95) rotate(0deg); }
+          100% { transform: scale(1.05) rotate(8deg); }
+        }
+
+        /* Floating shapes */
+        .shape {
+          position: absolute;
+          width: 220px;
+          height: 220px;
+          background: linear-gradient(140deg, rgba(99,102,241,0.35), rgba(14,165,233,0.15));
+          border-radius: 32% 68% 63% 37% / 45% 32% 68% 55%;
+          filter: blur(1px);
+          z-index: 1;
+          animation: float 18s ease-in-out infinite;
+          top: 18%;
+          right: 14%;
+        }
+
+        .shape.shape-2 {
+          width: 160px;
+          height: 160px;
+          background: linear-gradient(145deg, rgba(236,72,153,0.35), rgba(147,197,253,0.1));
+          top: 10%;
+          left: 8%;
+          animation-duration: 22s;
+        }
+
+        .shape.shape-3 {
+          width: 180px;
+          height: 180px;
+          background: linear-gradient(145deg, rgba(34,197,94,0.28), rgba(99,102,241,0.18));
+          bottom: 12%;
+          right: 12%;
+          animation-duration: 20s;
+          animation-delay: 4s;
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+          50% { transform: translate3d(40px, -30px, 0) rotate(12deg); }
+        }
+
+        /* Title */
+        .site-title {
+          position: relative;
+          z-index: 2;
+          font-size: 2.8rem;
+          font-weight: 800;
+          letter-spacing: 1px;
+          margin-bottom: 1.5rem;
+          background: linear-gradient(90deg, #818cf8, #c084fc);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+          animation: fadeInDown 1s ease forwards;
+        }
+
+        @keyframes fadeInDown {
+          from { opacity: 0; transform: translateY(-30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Login card */
+        .container.card {
+          position: relative;
+          background: rgba(18, 19, 37, 0.82);
+          backdrop-filter: blur(14px);
+          padding: 3.2rem 3rem 2.6rem;
+          border-radius: 1.75rem;
+          width: 100%;
+          max-width: 520px;
+          text-align: left;
+          box-shadow: 0 28px 65px rgba(6, 11, 38, 0.65);
+          z-index: 2;
+          display: grid;
+          gap: 1.6rem;
+          animation: fadeUp 0.9s ease forwards;
+        }
+
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(40px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        header h2 {
+          font-weight: 700;
+          color: #fff;
+          margin-bottom: 0.35rem;
+          font-size: 2rem;
+        }
+
+        header p {
+          color: #bbb;
+          font-size: 1rem;
+          max-width: 80%;
+        }
+
+        form {
+          display: flex;
+          flex-direction: column;
+          gap: 1.1rem;
+        }
+
+        label {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          font-weight: 600;
+          color: #ddd;
+          font-size: 0.9rem;
+        }
+
+        input {
+          width: 100%;
+          padding: 0.75rem;
+          border: 1.5px solid #444;
+          border-radius: 0.5rem;
+          margin-top: 0.4rem;
+          font-size: 0.95rem;
+          background-color: #1b1b28;
+          color: #fff;
+          transition: all 0.3s ease;
+        }
+
+        input:focus {
+          outline: none;
+          border-color: #8b5cf6;
+          box-shadow: 0 0 10px #8b5cf6;
+          transform: scale(1.02);
+        }
+
+        .btn {
+          background: linear-gradient(100deg, #6366f1, #8b5cf6);
+          color: #fff;
+          border: none;
+          border-radius: 0.75rem;
+          padding: 0.9rem;
+          font-size: 1.05rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.3s ease;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.4rem;
+        }
+
+        .btn:hover {
+          transform: translateY(-2px) scale(1.01);
+          box-shadow: 0 16px 34px rgba(99, 102, 241, 0.5);
+          filter: brightness(1.05);
+        }
+
+        .btn:disabled {
+          opacity: 0.7;
+          transform: none;
+          box-shadow: none;
+        }
+
+        .quick-links {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+        }
+
+        .link-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.25rem;
+          padding: 0.75rem 1.1rem;
+          border-radius: 0.75rem;
+          border: 1px solid rgba(99, 102, 241, 0.4);
+          color: #a5b4fc;
+          text-decoration: none;
+          font-weight: 600;
+          font-size: 0.95rem;
+          transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .link-button:hover {
+          background: rgba(99, 102, 241, 0.18);
+          transform: translateY(-2px);
+          box-shadow: 0 10px 25px rgba(99, 102, 241, 0.25);
+        }
+
+        .link-button.home {
+          border-color: rgba(59, 130, 246, 0.4);
+          color: #bae6fd;
+        }
+
+        .link-button.home:hover {
+          background: rgba(59, 130, 246, 0.18);
+          box-shadow: 0 10px 25px rgba(59, 130, 246, 0.28);
+        }
+
+        .auth-links {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          color: #a5b4fc;
+          font-size: 0.9rem;
+        }
+
+        .auth-links a {
+          color: #8b5cf6;
+          text-decoration: none;
+          transition: color 0.3s ease;
+        }
+
+        .auth-links a:hover {
+          text-decoration: underline;
+          color: #c4b5fd;
+        }
+
+        footer {
+          font-size: 0.8rem;
+          color: rgba(226, 232, 240, 0.65);
+          text-align: center;
+        }
+
+        @media (max-width: 640px) {
+          body {
+            padding: 1.5rem;
+          }
+          .container.card {
+            padding: 2.6rem 1.8rem 2.1rem;
+            max-width: 100%;
+          }
+          header p {
+            max-width: 100%;
+          }
+          .quick-links {
+            justify-content: center;
+          }
+          .auth-links {
+            flex-direction: column;
+            gap: 0.6rem;
+            align-items: flex-start;
+          }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Floating organic shapes -->
+<div class="shape"></div>
+<div class="shape shape-2"></div>
+<div class="shape shape-3"></div>
+
+<!-- Login Card -->
+<main class="container card">
+    <header>
+        <div class="site-title">SkillMatch AI</div>
+        <h2>Welcome Back 👋</h2>
+        <p>Ready to dive into your personalized dashboard and discover tailored opportunities.</p>
+    </header>
+
+    <form id="loginForm">
+        <label>Email
+            <input type="email" id="email" required />
+        </label>
+        <label>Password
+            <input type="password" id="password" required />
+        </label>
+        <button class="btn" type="submit">Login</button>
+    </form>
+
+    <div class="quick-links">
+        <a class="link-button" href="/register.html">Create an account</a>
+        <a class="link-button home" href="/index.html">Go to home</a>
+    </div>
+
+    <div class="auth-links">
+        <span>No account yet? <a href="/register.html">Register</a></span>
+        <span><a href="/">← Back home</a></span>
+    </div>
+
+    <footer>Secure access powered by SkillMatch AI</footer>
+</main>
+
+<script src="/js/api.js"></script>
+<script>
+    const form = document.getElementById('loginForm');
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+      }
+
+      try {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        await window.Api.login({ email, password });
+
+        await Swal.fire({
+          title: 'Welcome back!',
+          html: '<strong>Login successful</strong><br>Redirecting…',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1800,
+          timerProgressBar: true,
+          background: 'rgba(30, 30, 46, 0.92)',
+          color: '#f3f4f6',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+
+        window.location.href = '/dashboard.html';
+      } catch (err) {
+        Swal.fire({
+          title: 'Login Failed',
+          text: err?.message || 'Please check your email and password and try again.',
+          icon: 'error',
+          confirmButtonColor: '#ef4444',
+          background: 'rgba(30, 30, 46, 0.92)',
+          color: '#f3f4f6',
+          allowOutsideClick: true
+        });
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+        }
+      }
+    });
+
+</script>
+</body>
+</html>

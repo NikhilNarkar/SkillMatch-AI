@@ -197,7 +197,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SkillMatch – Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="/logo.png?v=20260317">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* 🌌 Background gradient for consistency with login page */
@@ -588,7 +588,7 @@ html {
     <header class="sticky top-0 z-50" style="background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(99, 102, 241, 0.2);">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-2">
-                <img src="logo.png" alt="SkillMatch Logo" class="h-8 w-8">
+                <img src="/logo.png?v=20260317" alt="SkillMatch Logo" class="h-8 w-8">
                 <h1 class="text-2xl font-bold tracking-wide text-white">SkillMatch</h1>
             </div>
 
@@ -596,8 +596,8 @@ html {
                 <div class="relative">
                     <button onclick="toggleMenu('menu1')" class="hover:text-indigo-400 transition">Interviews ▼</button>
                     <div id="menu1" class="dropdown hidden absolute bg-slate-800 text-gray-200 shadow-lg rounded-lg p-3 w-44 mt-2 border border-indigo-500/20">
-                        <a href="#" class="block px-3 py-1 rounded transition hover:bg-indigo-500/20">Mock Interviews</a>
-                        <a href="#" class="block px-3 py-1 rounded transition hover:bg-indigo-500/20">Practice Sets</a>
+                        <a href="mock_interview.html" class="block px-3 py-1 rounded transition hover:bg-indigo-500/20">Mock Interviews</a>
+                        <a href="practice_sets.html" class="block px-3 py-1 rounded transition hover:bg-indigo-500/20">Practice Sets</a>
                     </div>
                 </div>
                 <div class="relative">
@@ -609,7 +609,6 @@ html {
                 </div>
                 <a href="jobs.html" class="hover:text-indigo-400 transition page-link">Jobs</a>
                 <a href="pricing.html" class="hover:text-indigo-400 transition page-link">Pricing</a>
-                <a href="#" class="hover:text-indigo-400 transition page-link">Business</a>
                 <a href="contact.html" class="hover:text-indigo-400 transition page-link">Contact</a>
             </nav>
 
@@ -635,28 +634,25 @@ html {
 
         <div class="max-w-3xl mx-auto search-bar rounded-full flex items-center px-4 py-3 shadow-lg">
             <i class="fas fa-briefcase text-gray-400 mr-2"></i>
-            <select class="bg-transparent text-gray-400 font-medium focus:outline-none pl-2 border-none">
+            <select id="practiceType" class="bg-transparent text-gray-400 font-medium focus:outline-none pl-2 border-none">
                 <option>Job</option>
                 <option>Internship</option>
                 <option>Technical</option>
             </select>
             <div class="w-px h-6 bg-gray-600 mx-2"></div>
             <i class="fas fa-search text-gray-400 mr-2"></i>
-            <input type="text" placeholder="Search position" class="flex-1 px-4 py-2 focus:outline-none text-gray-200 bg-transparent border-none" />
+            <input id="practicePosition" type="text" placeholder="Search position" class="flex-1 px-4 py-2 focus:outline-none text-gray-200 bg-transparent border-none" />
             <div class="w-px h-6 bg-gray-600 mx-2"></div>
             <i class="fas fa-list text-gray-400 mr-2"></i>
-            <select class="bg-transparent text-gray-400 font-medium focus:outline-none border-none">
+            <select id="practiceRound" class="bg-transparent text-gray-400 font-medium focus:outline-none border-none">
                 <option>Select Round</option>
                 <option>Aptitude</option>
                 <option>Coding</option>
                 <option>HR</option>
             </select>
-            <button class="ml-4 btn-glow"><i class="fas fa-play mr-2"></i>Start Practice</button>
+            <button id="startPracticeBtn" class="ml-4 btn-glow"><i class="fas fa-play mr-2"></i>Start Practice</button>
         </div>
 
-        <a href="#" class="mt-6 block text-indigo-400 font-medium hover:underline page-link">
-            <i class="fas fa-chart-line mr-2"></i>View sample analytics
-        </a>
     </section>
 
     <!-- 📊 Stats Section -->
@@ -736,9 +732,9 @@ html {
                     <div class="progress-fill" id="interviewBar" style="width: 0%"></div>
                 </div>
             </div>
-            <button class="mt-4 btn-glow page-link">
+            <a href="mock_interview.html" class="mt-4 btn-glow page-link inline-flex items-center justify-center">
                 <i class="fas fa-video mr-2"></i>Try Interview
-            </button>
+            </a>
         </div>
     </section>
 
@@ -764,7 +760,7 @@ html {
         <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
                 <div class="flex items-center space-x-2 mb-3">
-                    <img src="logo.png" class="h-8 w-8">
+                    <img src="/logo.png?v=20260317" class="h-8 w-8">
                     <h3 class="font-bold text-lg text-white">SkillMatch</h3>
                 </div>
                 <p class="text-sm text-gray-400">Empowering learners to ace every interview through AI-driven practice and analytics.</p>
@@ -772,7 +768,7 @@ html {
             <div>
                 <h4 class="font-semibold text-white mb-2">Product</h4>
                 <ul class="space-y-1 text-sm">
-                    <li><a href="#" class="hover:text-indigo-400 transition page-link">Mock Interviews</a></li>
+                    <li><a href="mock_interview.html" class="hover:text-indigo-400 transition page-link">Mock Interviews</a></li>
                     <li><a href="#" class="hover:text-indigo-400 transition page-link">Coding Practice</a></li>
                     <li><a href="#" class="hover:text-indigo-400 transition page-link">Aptitude Tests</a></li>
                 </ul>
@@ -800,6 +796,7 @@ html {
 
 </div>
 
+<script src="/js/api.js"></script>
 <script>
     // Initialize user info
     function initUserInfo() {
@@ -823,7 +820,7 @@ html {
     function createParticles() {
       const particlesContainer = document.getElementById('particles');
       if (!particlesContainer) return;
-      
+
       for (let i = 0; i < 30; i++) {
         const particle = document.createElement('div');
         particle.className = 'particle';
@@ -835,30 +832,32 @@ html {
       }
     }
 
-    // Animate stats numbers
-    function animateStats() {
-      const stats = [
-        { id: 'totalTests', value: 42, suffix: '', prefix: '' },
-        { id: 'avgScore', value: 85, suffix: '%', prefix: '' },
-        { id: 'streak', value: 7, suffix: '', prefix: '' },
-        { id: 'rank', value: 124, suffix: '', prefix: '#' }
-      ];
+    function setStat(id, text) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = text;
+    }
 
-      stats.forEach(stat => {
-        const el = document.getElementById(stat.id);
-        if (!el) return;
-        let current = 0;
-        const increment = stat.value / 30;
-        const timer = setInterval(() => {
-          current += increment;
-          if (current >= stat.value) {
-            el.textContent = (stat.prefix || '') + stat.value + (stat.suffix || '');
-            clearInterval(timer);
-          } else {
-            el.textContent = (stat.prefix || '') + Math.floor(current) + (stat.suffix || '');
-          }
-        }, 30);
-      });
+    async function loadStats() {
+      try {
+        if (!window.Api || !window.Api.isLoggedIn()) {
+          setStat('totalTests', '0');
+          setStat('avgScore', '0%');
+          setStat('streak', '0');
+          setStat('rank', '#0');
+          return;
+        }
+        const s = await window.Api.request('/api/v1/stats/me', { method: 'GET' });
+        setStat('totalTests', String(s.totalTests ?? 0));
+        setStat('avgScore', `${Math.round((s.avgScorePercent ?? 0) * 10) / 10}%`);
+        setStat('streak', String(s.loginStreakDays ?? 0));
+        setStat('rank', `#${s.rank ?? 0}`);
+      } catch (e) {
+        // keep zeros on error
+        setStat('totalTests', '0');
+        setStat('avgScore', '0%');
+        setStat('streak', '0');
+        setStat('rank', '#0');
+      }
     }
 
     // Animate progress bars
@@ -901,36 +900,39 @@ html {
       wrapper.classList.add('show');
       initUserInfo();
       createParticles();
-      setTimeout(animateStats, 300);
+      setTimeout(loadStats, 300);
       setTimeout(animateProgressBars, 600);
     });
 
-    // Load tech news with enhanced cards
+    // Load tech news from backend (fresh RSS server-side).
     async function loadNews() {
       const grid = document.getElementById('newsGrid');
       const status = document.getElementById('newsStatus');
       status.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Loading latest stories…';
       grid.innerHTML = '';
+
       try {
-        const res = await fetch('https://hn.algolia.com/api/v1/search?query=ai%20technology&tags=story&hitsPerPage=9');
-        const data = await res.json();
+        const res = await fetch(`/api/v1/news/tech?limit=9&t=${Date.now()}`, { cache: 'no-store' });
+        if (!res.ok) throw new Error('news fetch failed');
+        const items = await res.json();
+
         status.innerHTML = '';
-        data.hits.forEach((item, index) => {
+        items.forEach((item, index) => {
           const card = document.createElement('a');
-          card.href = item.url || '#';
+          card.href = item.url;
           card.target = '_blank';
           card.rel = 'noopener noreferrer';
           card.className = 'news-card fade-in';
           card.style.animationDelay = (index * 0.1) + 's';
+          const published = item.publishedAt ? new Date(item.publishedAt) : null;
           card.innerHTML = `
             <div class="flex items-start justify-between mb-3">
               <i class="fas fa-external-link-alt text-indigo-400 text-sm"></i>
-              <span class="text-xs text-gray-500">${new Date(item.created_at).toLocaleDateString()}</span>
+              <span class="text-xs text-gray-500">${published ? published.toLocaleDateString() : ''}</span>
             </div>
-            <h3 class="text-lg font-semibold mb-2 text-white hover:text-indigo-400 transition">${item.title || 'No title'}</h3>
+            <h3 class="text-lg font-semibold mb-2 text-white hover:text-indigo-400 transition">${item.title}</h3>
             <p class="text-gray-400 text-sm flex items-center">
-              <i class="fas fa-user mr-2"></i>${item.author || 'Anonymous'} • 
-              <i class="fas fa-comments ml-2 mr-1"></i>${item.num_comments || 0} comments
+              <i class="fas fa-newspaper mr-2"></i>${item.source || 'Tech News'}
             </p>
           `;
           grid.appendChild(card);
@@ -957,6 +959,40 @@ html {
         window.location.href = '/index.html';
       });
     }
+
+    // Start Practice -> Practice Sets wiring
+    (function initStartPractice() {
+      const typeEl = document.getElementById('practiceType');
+      const posEl = document.getElementById('practicePosition');
+      const roundEl = document.getElementById('practiceRound');
+      const btn = document.getElementById('startPracticeBtn');
+      if (!btn) return;
+
+      const mapToSet = (type, round) => {
+        const t = (type || '').toLowerCase();
+        const r = (round || '').toLowerCase();
+        if (r.includes('hr')) return 'hr';
+        if (r.includes('coding')) return 'dsa';
+        if (r.includes('aptitude')) return 'dsa';
+        if (t.includes('technical')) return 'tech_java';
+        return 'hr';
+      };
+
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const type = typeEl?.value || '';
+        const position = posEl?.value?.trim?.() || '';
+        const round = roundEl?.value || '';
+        const set = mapToSet(type, round);
+        const url = new URL('/practice_sets.html', window.location.origin);
+        url.searchParams.set('set', set);
+        url.searchParams.set('type', type);
+        url.searchParams.set('round', round);
+        if (position) url.searchParams.set('position', position);
+        url.searchParams.set('autostart', '1');
+        window.location.href = url.toString();
+      });
+    })();
 
     // Initialize on page load
     initUserInfo();

@@ -1,191 +1,696 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Resume Builder | SkillMatch</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="icon" type="image/png" href="logo.png">
-    <style>
-        #pageWrapper {
-          transition: transform 0.5s ease, opacity 0.5s ease;
-          transform: scale(0.95);
-          opacity: 0;
-        }
-        #pageWrapper.show {
-          transform: scale(1);
-          opacity: 1;
-        }
-        #pageWrapper.zoom-out {
-          transform: scale(0.9);
-          opacity: 0;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume Builder • SkillMatch</title>
+  <link rel="icon" type="image/png" href="/logo.png?v=20260317" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    .glass {
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(99, 102, 241, 0.18);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 30px 70px rgba(0,0,0,0.45);
+    }
+    /* Decorative background (UI only, not the resume PDF canvas) */
+    .bg-decor {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .bg-grid {
+      position: absolute;
+      inset: -20%;
+      background:
+        linear-gradient(to right, rgba(148,163,184,0.10) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148,163,184,0.10) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(circle at 50% 20%, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.25) 55%, transparent 75%);
+      opacity: 0.22;
+      transform: rotate(-6deg);
+    }
+    .blob {
+      position: absolute;
+      width: 520px;
+      height: 520px;
+      border-radius: 999px;
+      filter: blur(70px);
+      opacity: 0.35;
+      animation: floaty 18s ease-in-out infinite;
+    }
+    .blob.b1 { background: radial-gradient(circle at 30% 30%, rgba(99,102,241,0.9), rgba(99,102,241,0.1) 70%); top: -180px; left: -160px; }
+    .blob.b2 { background: radial-gradient(circle at 30% 30%, rgba(236,72,153,0.85), rgba(236,72,153,0.1) 70%); bottom: -220px; right: -180px; animation-delay: 3s; }
+    .blob.b3 { background: radial-gradient(circle at 30% 30%, rgba(34,197,94,0.65), rgba(34,197,94,0.08) 70%); top: 18%; right: -200px; animation-delay: 6s; }
+    .spark {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.65);
+      box-shadow: 0 0 16px rgba(99,102,241,0.45);
+      opacity: 0.3;
+      animation: twinkle 6s ease-in-out infinite;
+    }
+    .spark.s1 { top: 14%; left: 48%; }
+    .spark.s2 { top: 62%; left: 18%; animation-delay: 1.5s; }
+    .spark.s3 { top: 34%; left: 82%; animation-delay: 2.5s; }
+    .spark.s4 { top: 78%; left: 64%; animation-delay: 3.2s; }
+    @keyframes floaty {
+      0%, 100% { transform: translate3d(0,0,0) scale(1); }
+      50% { transform: translate3d(0, 18px, 0) scale(1.03); }
+    }
+    @keyframes twinkle {
+      0%, 100% { transform: scale(0.95); opacity: 0.22; }
+      50% { transform: scale(1.25); opacity: 0.45; }
+    }
+    /* PDF-friendly resume canvas */
+    #resumeCanvas {
+      background: #ffffff;
+      color: #0b1220;
+      width: 210mm;              /* A4 width */
+      min-height: 297mm;         /* A4 height */
+      padding: 18mm;
+      margin: 0 auto;
+    }
+    .resume-h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
+    .resume-sub { color: rgba(11,18,32,0.75); font-size: 12px; }
+    .resume-sec { margin-top: 14px; }
+    .resume-sec h2 { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(11,18,32,0.7); margin-bottom: 8px; }
+    .resume-item { margin-bottom: 10px; }
+    .resume-item .title { font-weight: 800; }
+    .resume-item .meta { color: rgba(11,18,32,0.75); font-size: 12px; }
+    .resume-bullets { margin-top: 6px; padding-left: 16px; font-size: 12.5px; }
+    .resume-bullets li { margin-bottom: 4px; }
+    .badge { font-size: 11px; padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(148,163,184,0.35); color: #cbd5e1; background: rgba(2,6,23,0.2); }
+  </style>
 </head>
-<body class="bg-black text-gray-100 font-sans overflow-x-hidden">
-
-<div id="pageWrapper">
-
-    <!-- Navbar -->
-    <header class="bg-[#0d0d0d] text-white sticky top-0 z-50 shadow-lg">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <img src="logo.png" alt="SkillMatch Logo" class="h-8 w-8">
-                <h1 class="text-2xl font-bold">SkillMatch</h1>
-            </div>
-            <nav class="hidden md:flex space-x-6 text-gray-300 font-medium">
-                <a href="dashboard.html" class="hover:text-indigo-400 transition duration-200 page-link">Home</a>
-                <a href="pricing.html" class="hover:text-indigo-400 transition duration-200 page-link">Pricing</a>
-                <a href="jobs.html" class="hover:text-indigo-400 transition duration-200 page-link">Jobs</a>
-                <a href="contact.html" class="hover:text-indigo-400 transition duration-200 page-link">Contact</a>
-            </nav>
-            <div class="flex items-center space-x-4">
-                <a href="user_login.html" class="hidden md:inline-block text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition page-link">Sign In</a>
-                <button class="bg-indigo-600 text-white px-5 py-2 rounded-md font-semibold hover:scale-105 hover:bg-indigo-700 transition-all duration-200">Get Started</button>
-            </div>
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-slate-100">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="bg-grid"></div>
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+    <div class="spark s1"></div>
+    <div class="spark s2"></div>
+    <div class="spark s3"></div>
+    <div class="spark s4"></div>
+  </div>
+  <header class="sticky top-0 z-20 border-b border-white/10 bg-slate-950/60 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="dashboard.html" class="flex items-center gap-3">
+        <img src="/logo.png?v=20260317" alt="SkillMatch" class="h-9 w-9 rounded-md" />
+        <div>
+          <div class="font-extrabold tracking-wide">SkillMatch</div>
+          <div class="text-xs text-slate-400">Resume builder</div>
         </div>
-    </header>
+      </a>
+      <a href="resume_analyzer.html" class="text-sm font-semibold text-indigo-300 hover:text-indigo-200">Analyze resume →</a>
+    </div>
+  </header>
 
-    <!-- Hero Section -->
-    <section class="text-center py-24 px-6 bg-black">
-        <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Build Your Professional Resume</h1>
-        <p class="text-gray-400 text-lg mb-10">
-            Step-by-step resume builder with live preview and AI-powered suggestions for interviews.
-        </p>
-        <button id="startBuilder" class="bg-indigo-600 px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 hover:scale-105 transition">
-            Start Building
-        </button>
+  <main class="max-w-6xl mx-auto px-4 py-8 grid gap-6" style="position: relative; z-index: 1;">
+    <section class="glass rounded-2xl p-6">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+        <div>
+          <h1 class="text-2xl md:text-3xl font-extrabold">Resume Builder</h1>
+          <p class="text-slate-300 mt-1">Pick a template, answer the questions, preview, and download as PDF.</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="badge" id="stepPill">Step 1/3</span>
+          <button id="resetBtn" class="rounded-xl px-4 py-2 bg-slate-900/60 hover:bg-slate-900 border border-white/10 font-bold">Reset</button>
+        </div>
+      </div>
     </section>
 
-    <!-- Resume Builder Panel -->
-    <section id="builderPanel" class="max-w-6xl mx-auto px-6 py-16 space-y-10 hidden">
+    <section class="grid lg:grid-cols-2 gap-6 items-start">
+      <!-- Left: builder -->
+      <div class="glass rounded-2xl p-6">
+        <!-- Step 1: template -->
+        <div id="step1">
+          <h2 class="text-lg font-extrabold">1) Choose a template</h2>
+          <p class="text-slate-300 text-sm mt-1">You can switch templates anytime before downloading.</p>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
+            <button class="tplBtn rounded-2xl border border-white/10 bg-slate-950/30 hover:bg-slate-950/50 p-4 text-left" data-tpl="classic">
+              <div class="font-extrabold">Classic ATS</div>
+              <div class="text-xs text-slate-400 mt-1">Ultra clean, recruiter-first</div>
+            </button>
+            <button class="tplBtn rounded-2xl border border-white/10 bg-slate-950/30 hover:bg-slate-950/50 p-4 text-left" data-tpl="accent">
+              <div class="font-extrabold">Accent Pro</div>
+              <div class="text-xs text-slate-400 mt-1">Stylish header + subtle color</div>
+            </button>
+            <button class="tplBtn rounded-2xl border border-white/10 bg-slate-950/30 hover:bg-slate-950/50 p-4 text-left" data-tpl="sidebar">
+              <div class="font-extrabold">Sidebar</div>
+              <div class="text-xs text-slate-400 mt-1">Skills on the left</div>
+            </button>
+            <button class="tplBtn rounded-2xl border border-white/10 bg-slate-950/30 hover:bg-slate-950/50 p-4 text-left" data-tpl="compact">
+              <div class="font-extrabold">Compact</div>
+              <div class="text-xs text-slate-400 mt-1">Fits more in one page</div>
+            </button>
+            <button class="tplBtn rounded-2xl border border-white/10 bg-slate-950/30 hover:bg-slate-950/50 p-4 text-left" data-tpl="bold">
+              <div class="font-extrabold">Bold Header</div>
+              <div class="text-xs text-slate-400 mt-1">Strong first impression</div>
+            </button>
+            <button class="tplBtn rounded-2xl border border-white/10 bg-slate-950/30 hover:bg-slate-950/50 p-4 text-left" data-tpl="minimal">
+              <div class="font-extrabold">Minimal</div>
+              <div class="text-xs text-slate-400 mt-1">Elegant typography</div>
+            </button>
+            <button class="tplBtn rounded-2xl border border-white/10 bg-slate-950/30 hover:bg-slate-950/50 p-4 text-left" data-tpl="modern">
+              <div class="font-extrabold">Modern</div>
+              <div class="text-xs text-slate-400 mt-1">Two-column header</div>
+            </button>
+            <button class="tplBtn rounded-2xl border border-white/10 bg-slate-950/30 hover:bg-slate-950/50 p-4 text-left" data-tpl="mono">
+              <div class="font-extrabold">Mono</div>
+              <div class="text-xs text-slate-400 mt-1">Developer style, crisp</div>
+            </button>
+            <button class="tplBtn rounded-2xl border border-white/10 bg-slate-950/30 hover:bg-slate-950/50 p-4 text-left" data-tpl="elegant">
+              <div class="font-extrabold">Elegant</div>
+              <div class="text-xs text-slate-400 mt-1">Subtle dividers + spacing</div>
+            </button>
+          </div>
+          <div class="mt-4 flex items-center justify-between">
+            <div class="text-sm text-slate-400">Selected: <span id="tplLabel" class="text-slate-200 font-bold">Classic</span></div>
+            <button id="toStep2" class="rounded-xl px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-slate-950 font-extrabold">Continue</button>
+          </div>
+        </div>
 
-        <!-- Step Form -->
-        <form id="resumeForm" class="space-y-8">
+        <!-- Step 2: questions -->
+        <div id="step2" class="hidden">
+          <h2 class="text-lg font-extrabold">2) Answer questions (details)</h2>
+          <p class="text-slate-300 text-sm mt-1">Fill as much as you can — you can edit later in preview.</p>
 
-            <!-- Personal Info -->
-            <div class="bg-[#111111] p-6 rounded-2xl border border-gray-700 shadow-lg hover:shadow-xl transition">
-                <h3 class="text-xl font-semibold text-indigo-400 mb-4 cursor-pointer" onclick="toggleSection(this)">Personal Information</h3>
-                <div class="space-y-4">
-                    <input type="text" placeholder="Full Name" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600" required/>
-                    <input type="email" placeholder="Email Address" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600" required/>
-                    <input type="text" placeholder="Phone Number" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600" />
-                </div>
+          <div class="mt-5 grid gap-6">
+            <div>
+              <div class="font-extrabold text-indigo-200">Personal</div>
+              <div class="grid sm:grid-cols-2 gap-3 mt-3">
+                <input id="fullName" class="w-full bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2" placeholder="Full name" />
+                <input id="title" class="w-full bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2" placeholder="Role title (e.g., Java Developer)" />
+                <input id="email" class="w-full bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2" placeholder="Email" />
+                <input id="phone" class="w-full bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2" placeholder="Phone" />
+                <input id="location" class="w-full bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2" placeholder="Location (City, Country)" />
+                <input id="links" class="w-full bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2" placeholder="Links (LinkedIn/GitHub/Portfolio)" />
+              </div>
+              <textarea id="summary" rows="4" class="w-full mt-3 bg-slate-900/70 border border-white/10 rounded-2xl px-3 py-2" placeholder="Professional summary (2–4 lines): what you do + strengths + proof"></textarea>
             </div>
 
-            <!-- Education -->
-            <div class="bg-[#111111] p-6 rounded-2xl border border-gray-700 shadow-lg hover:shadow-xl transition">
-                <h3 class="text-xl font-semibold text-indigo-400 mb-4 cursor-pointer" onclick="toggleSection(this)">Education</h3>
-                <div class="space-y-4">
-                    <input type="text" placeholder="Degree" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600"/>
-                    <input type="text" placeholder="University / College" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600"/>
-                    <input type="text" placeholder="Year of Graduation" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600"/>
-                </div>
+            <div>
+              <div class="font-extrabold text-indigo-200">Education</div>
+              <div id="eduList" class="mt-3 grid gap-3"></div>
+              <button id="addEdu" class="mt-2 rounded-xl px-3 py-2 bg-slate-900/60 hover:bg-slate-900 border border-white/10 font-bold">+ Add education</button>
             </div>
 
-            <!-- Experience -->
-            <div class="bg-[#111111] p-6 rounded-2xl border border-gray-700 shadow-lg hover:shadow-xl transition">
-                <h3 class="text-xl font-semibold text-indigo-400 mb-4 cursor-pointer" onclick="toggleSection(this)">Experience</h3>
-                <div class="space-y-4">
-                    <input type="text" placeholder="Company Name" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600"/>
-                    <input type="text" placeholder="Role / Position" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600"/>
-                    <textarea placeholder="Responsibilities / Achievements" rows="3" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600"></textarea>
-                </div>
+            <div>
+              <div class="font-extrabold text-indigo-200">Experience</div>
+              <div id="expList" class="mt-3 grid gap-3"></div>
+              <button id="addExp" class="mt-2 rounded-xl px-3 py-2 bg-slate-900/60 hover:bg-slate-900 border border-white/10 font-bold">+ Add experience</button>
             </div>
 
-            <!-- Skills -->
-            <div class="bg-[#111111] p-6 rounded-2xl border border-gray-700 shadow-lg hover:shadow-xl transition">
-                <h3 class="text-xl font-semibold text-indigo-400 mb-4 cursor-pointer" onclick="toggleSection(this)">Skills</h3>
-                <div class="space-y-4">
-                    <input type="text" placeholder="Add Skill (comma separated)" class="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600"/>
-                </div>
+            <div>
+              <div class="font-extrabold text-indigo-200">Projects</div>
+              <div id="projList" class="mt-3 grid gap-3"></div>
+              <button id="addProj" class="mt-2 rounded-xl px-3 py-2 bg-slate-900/60 hover:bg-slate-900 border border-white/10 font-bold">+ Add project</button>
             </div>
 
-            <div class="text-center">
-                <button type="submit" class="bg-green-600 px-6 py-3 rounded-full font-semibold hover:bg-green-700 hover:scale-105 transition">
-                    Preview & Save Resume
-                </button>
+            <div>
+              <div class="font-extrabold text-indigo-200">Skills</div>
+              <textarea id="skills" rows="2" class="w-full mt-3 bg-slate-900/70 border border-white/10 rounded-2xl px-3 py-2" placeholder="Skills (comma separated): Java, Spring Boot, SQL, ..."></textarea>
+              <textarea id="tools" rows="2" class="w-full mt-3 bg-slate-900/70 border border-white/10 rounded-2xl px-3 py-2" placeholder="Tools (comma separated): Git, Docker, Postman, ..."></textarea>
             </div>
+          </div>
 
-        </form>
+          <div class="mt-6 flex items-center justify-between">
+            <button id="backTo1" class="rounded-xl px-4 py-2 bg-slate-900/60 hover:bg-slate-900 border border-white/10 font-bold">Back</button>
+            <button id="toStep3" class="rounded-xl px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-slate-950 font-extrabold">Preview</button>
+          </div>
+        </div>
 
-        <!-- Live Preview Section -->
-        <section class="bg-[#111111] p-6 rounded-2xl border border-gray-700 shadow-lg transition mt-10" id="livePreview" style="display:none;">
-            <h2 class="text-2xl font-bold text-indigo-400 mb-4">Resume Preview</h2>
-            <div id="previewContent" class="text-gray-200 space-y-2"></div>
-            <div class="mt-6 text-center">
-                <button id="downloadResume" class="bg-indigo-600 px-6 py-3 rounded-full font-semibold hover:bg-indigo-700 hover:scale-105 transition">
-                    Download Resume
-                </button>
-            </div>
-        </section>
+        <!-- Step 3: actions -->
+        <div id="step3" class="hidden">
+          <h2 class="text-lg font-extrabold">3) Preview & download</h2>
+          <p class="text-slate-300 text-sm mt-1">Your resume preview is on the right. Download as PDF when ready.</p>
+          <div class="mt-5 flex flex-wrap gap-2">
+            <button id="backTo2" class="rounded-xl px-4 py-2 bg-slate-900/60 hover:bg-slate-900 border border-white/10 font-bold">Back</button>
+            <button id="downloadPdf" class="rounded-xl px-4 py-2 bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-extrabold">Download PDF</button>
+          </div>
+          <div class="mt-3 text-xs text-slate-400">Tip: If PDF looks clipped, reduce content or shorten bullets.</div>
+        </div>
+      </div>
 
+      <!-- Right: preview -->
+      <div class="glass rounded-2xl p-4">
+        <div class="flex items-center justify-between px-2 pb-3">
+          <div class="font-extrabold">Live preview</div>
+          <div class="text-xs text-slate-400">A4 • PDF-ready</div>
+        </div>
+        <div class="overflow-auto rounded-xl border border-white/10 bg-white">
+          <div id="resumeCanvas"></div>
+        </div>
+      </div>
     </section>
+  </main>
 
-    <footer class="bg-[#0d0d0d] text-gray-300 py-12 mt-16 text-center">
-        © 2025 SkillMatch. All rights reserved.
-    </footer>
+  <script>
+    const stateKey = 'sm_resume_builder_state_v1';
+    const stepPill = document.getElementById('stepPill');
+    const resetBtn = document.getElementById('resetBtn');
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    const toStep2 = document.getElementById('toStep2');
+    const toStep3 = document.getElementById('toStep3');
+    const backTo1 = document.getElementById('backTo1');
+    const backTo2 = document.getElementById('backTo2');
+    const downloadPdf = document.getElementById('downloadPdf');
+    const tplLabel = document.getElementById('tplLabel');
+    const resumeCanvas = document.getElementById('resumeCanvas');
 
-</div>
+    const TEMPLATE_META = {
+      classic: { label: 'Classic ATS' },
+      accent: { label: 'Accent Pro' },
+      sidebar: { label: 'Sidebar' },
+      compact: { label: 'Compact' },
+      bold: { label: 'Bold Header' },
+      minimal: { label: 'Minimal' },
+      modern: { label: 'Modern' },
+      mono: { label: 'Mono' },
+      elegant: { label: 'Elegant' }
+    };
 
-<script>
-    // Page transitions
-    const pageWrapper = document.getElementById('pageWrapper');
-    window.addEventListener('load', () => pageWrapper.classList.add('show'));
+    const fields = {
+      fullName: document.getElementById('fullName'),
+      title: document.getElementById('title'),
+      email: document.getElementById('email'),
+      phone: document.getElementById('phone'),
+      location: document.getElementById('location'),
+      links: document.getElementById('links'),
+      summary: document.getElementById('summary'),
+      skills: document.getElementById('skills'),
+      tools: document.getElementById('tools')
+    };
 
-    document.querySelectorAll('.page-link').forEach(link => {
-      link.addEventListener('click', function(e){
-        const href = this.getAttribute('href');
-        if(!href || href === "#") return;
-        e.preventDefault();
-        pageWrapper.classList.add('zoom-out');
-        setTimeout(() => window.location.href = href, 500);
-      });
-    });
+    const eduList = document.getElementById('eduList');
+    const expList = document.getElementById('expList');
+    const projList = document.getElementById('projList');
+    const addEdu = document.getElementById('addEdu');
+    const addExp = document.getElementById('addExp');
+    const addProj = document.getElementById('addProj');
 
-    // Start Builder
-    const startBuilder = document.getElementById('startBuilder');
-    const builderPanel = document.getElementById('builderPanel');
-    startBuilder.addEventListener('click', () => {
-      builderPanel.classList.remove('hidden');
-      startBuilder.disabled = true;
-    });
+    let state = {
+      step: 1,
+      template: 'classic',
+      personal: {
+        fullName: '',
+        title: '',
+        email: '',
+        phone: '',
+        location: '',
+        links: '',
+        summary: ''
+      },
+      education: [],
+      experience: [],
+      projects: [],
+      skills: '',
+      tools: ''
+    };
 
-    // Toggle form sections
-    function toggleSection(header) {
-      const div = header.nextElementSibling;
-      if(div.style.display === "none" || div.style.display === "") {
-        div.style.display = "block";
+    function save() {
+      localStorage.setItem(stateKey, JSON.stringify(state));
+    }
+
+    function load() {
+      try {
+        const s = JSON.parse(localStorage.getItem(stateKey) || 'null');
+        if (s && typeof s === 'object') state = { ...state, ...s };
+      } catch {}
+    }
+
+    function setStep(n) {
+      state.step = n;
+      step1.classList.toggle('hidden', n !== 1);
+      step2.classList.toggle('hidden', n !== 2);
+      step3.classList.toggle('hidden', n !== 3);
+      stepPill.textContent = `Step ${n}/3`;
+      save();
+      renderPreview();
+    }
+
+    function escapeHtml(s) {
+      return String(s || '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function tokensToBadges(text) {
+      const arr = (text || '').split(',').map(x => x.trim()).filter(Boolean);
+      if (!arr.length) return '';
+      return arr.map(x => `<span style="display:inline-block;border:1px solid rgba(11,18,32,0.15);padding:4px 10px;border-radius:999px;margin:4px 6px 0 0;font-size:11px;">${escapeHtml(x)}</span>`).join('');
+    }
+
+    function renderPreview() {
+      const p = state.personal;
+      const tpl = state.template || 'classic';
+      const tplLabelText = TEMPLATE_META[tpl]?.label || tpl;
+      const accentColor = (tpl === 'accent' || tpl === 'bold') ? '#4f46e5' : '#0b1220';
+      const divider = (tpl === 'elegant' || tpl === 'accent') ? '1px solid rgba(11,18,32,0.12)' : '1px solid rgba(11,18,32,0.08)';
+
+      const header = `
+        <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;">
+          <div>
+            <div class="resume-h1">${escapeHtml(p.fullName || 'Your Name')}</div>
+            <div style="font-weight:700;margin-top:2px;">${escapeHtml(p.title || 'Your Title')}</div>
+            <div class="resume-sub" style="margin-top:8px;">
+              ${escapeHtml(p.email || '')}${p.email ? ' • ' : ''}${escapeHtml(p.phone || '')}
+              ${(p.location || p.links) ? '<br/>' : ''}
+              ${escapeHtml(p.location || '')}${p.location ? ' • ' : ''}${escapeHtml(p.links || '')}
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:11px;font-weight:800;color:rgba(11,18,32,0.6);text-transform:uppercase;letter-spacing:0.12em;">Template</div>
+            <div style="font-weight:800;">${escapeHtml(tplLabelText)}</div>
+          </div>
+        </div>
+      `;
+
+      const headerBold = `
+        <div style="border-bottom:${divider}; padding-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-end;">
+            <div>
+              <div style="font-size:28px;font-weight:900;letter-spacing:-0.02em; color:${accentColor};">${escapeHtml(p.fullName || 'Your Name')}</div>
+              <div style="font-weight:800;margin-top:2px;">${escapeHtml(p.title || 'Your Title')}</div>
+            </div>
+            <div class="resume-sub" style="text-align:right;">
+              ${escapeHtml(p.email || '')}${p.email ? '<br/>' : ''}${escapeHtml(p.phone || '')}
+              ${(p.location || p.links) ? '<br/>' : ''}
+              ${escapeHtml(p.location || '')}${p.location ? '<br/>' : ''}${escapeHtml(p.links || '')}
+            </div>
+          </div>
+        </div>
+      `;
+
+      const headerModern = `
+        <div style="display:grid; grid-template-columns: 1.3fr 1fr; gap:14px; padding:12px; border: ${divider}; border-radius:12px;">
+          <div>
+            <div style="font-size:26px;font-weight:900;letter-spacing:-0.02em;">${escapeHtml(p.fullName || 'Your Name')}</div>
+            <div style="font-weight:800;color:${accentColor}; margin-top:2px;">${escapeHtml(p.title || 'Your Title')}</div>
+            ${p.summary ? `<div style="margin-top:8px; font-size:12.3px; line-height:1.45; color: rgba(11,18,32,0.82);">${escapeHtml(p.summary)}</div>` : ''}
+          </div>
+          <div class="resume-sub" style="text-align:right;">
+            ${escapeHtml(p.email || '')}${p.email ? '<br/>' : ''}${escapeHtml(p.phone || '')}
+            ${(p.location || p.links) ? '<br/>' : ''}
+            ${escapeHtml(p.location || '')}${p.location ? '<br/>' : ''}${escapeHtml(p.links || '')}
+            <div style="margin-top:10px; font-size:11px; font-weight:800; color: rgba(11,18,32,0.6);">Template: ${escapeHtml(tplLabelText)}</div>
+          </div>
+        </div>
+      `;
+
+      const summary = (p.summary && tpl !== 'modern')
+        ? `<div class="resume-sec"><h2 style="color:${tpl === 'accent' ? accentColor : 'rgba(11,18,32,0.7)'};">Summary</h2><div style="font-size:${tpl === 'compact' ? '12px' : '12.5px'};line-height:1.45;">${escapeHtml(p.summary)}</div></div>`
+        : '';
+
+      const education = state.education.length ? `
+        <div class="resume-sec"><h2 style="color:${tpl === 'accent' ? accentColor : 'rgba(11,18,32,0.7)'};">Education</h2>
+          ${state.education.map(e => `
+            <div class="resume-item">
+              <div class="title">${escapeHtml(e.degree || '')}</div>
+              <div class="meta">${escapeHtml([e.school, e.year, e.cgpa].filter(Boolean).join(' • '))}</div>
+            </div>
+          `).join('')}
+        </div>` : '';
+
+      const experience = state.experience.length ? `
+        <div class="resume-sec"><h2 style="color:${tpl === 'accent' ? accentColor : 'rgba(11,18,32,0.7)'};">Experience</h2>
+          ${state.experience.map(x => `
+            <div class="resume-item">
+              <div class="title">${escapeHtml(x.role || '')}</div>
+              <div class="meta">${escapeHtml([x.company, x.dates].filter(Boolean).join(' • '))}</div>
+              ${x.bullets?.length ? `<ul class="resume-bullets" style="font-size:${tpl === 'compact' ? '12px' : '12.5px'};">${x.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join('')}</ul>` : ''}
+            </div>
+          `).join('')}
+        </div>` : '';
+
+      const projects = state.projects.length ? `
+        <div class="resume-sec"><h2 style="color:${tpl === 'accent' ? accentColor : 'rgba(11,18,32,0.7)'};">Projects</h2>
+          ${state.projects.map(x => `
+            <div class="resume-item">
+              <div class="title">${escapeHtml(x.name || '')}</div>
+              <div class="meta">${escapeHtml([x.stack, x.link].filter(Boolean).join(' • '))}</div>
+              ${x.bullets?.length ? `<ul class="resume-bullets" style="font-size:${tpl === 'compact' ? '12px' : '12.5px'};">${x.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join('')}</ul>` : ''}
+            </div>
+          `).join('')}
+        </div>` : '';
+
+      const skills = (state.skills || state.tools) ? `
+        <div class="resume-sec"><h2 style="color:${tpl === 'accent' ? accentColor : 'rgba(11,18,32,0.7)'};">Skills</h2>
+          <div style="font-size:12px; line-height:1.35;">
+            ${state.skills ? `<div><strong>Skills:</strong> ${tokensToBadges(state.skills)}</div>` : ''}
+            ${state.tools ? `<div style="margin-top:6px;"><strong>Tools:</strong> ${tokensToBadges(state.tools)}</div>` : ''}
+          </div>
+        </div>` : '';
+
+      const mainContent = `${summary}${education}${experience}${projects}`;
+
+      // Font tweaks
+      resumeCanvas.style.fontFamily = (tpl === 'mono')
+        ? 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
+        : 'Inter, system-ui, sans-serif';
+
+      const headerHtml = (tpl === 'modern') ? headerModern : ((tpl === 'bold' || tpl === 'accent') ? headerBold : header);
+
+      if (tpl === 'sidebar') {
+        resumeCanvas.innerHTML = `
+          <div id="resumeInner">
+            ${headerHtml}
+            <div style="display:grid; grid-template-columns: 1.6fr 0.9fr; gap:16px; margin-top: 10px;">
+              <div>${mainContent}</div>
+              <div style="border-left:${divider}; padding-left:14px;">${skills}</div>
+            </div>
+          </div>
+        `;
+      } else if (tpl === 'compact') {
+        resumeCanvas.innerHTML = `
+          <div id="resumeInner" style="font-size:12px;">
+            ${headerHtml}
+            <div style="margin-top:10px;">${mainContent}${skills}</div>
+          </div>
+        `;
+      } else if (tpl === 'elegant') {
+        resumeCanvas.innerHTML = `
+          <div id="resumeInner">
+            ${headerHtml}
+            <div style="border-top:${divider}; margin-top:10px; padding-top:10px;"></div>
+            ${mainContent}
+            ${skills}
+          </div>
+        `;
       } else {
-        div.style.display = "none";
+        resumeCanvas.innerHTML = `
+          <div id="resumeInner">
+            ${headerHtml}
+            <div style="margin-top:10px;">${mainContent}${skills}</div>
+          </div>
+        `;
       }
     }
 
-    // Handle Resume Preview
-    const resumeForm = document.getElementById('resumeForm');
-    const livePreview = document.getElementById('livePreview');
-    const previewContent = document.getElementById('previewContent');
-
-    resumeForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      previewContent.innerHTML = "";
-      const inputs = resumeForm.querySelectorAll('input, textarea');
-      inputs.forEach(input => {
-        if(input.value) {
-          const p = document.createElement('p');
-          p.textContent = input.placeholder + ": " + input.value;
-          previewContent.appendChild(p);
-        }
+    function bindInput(el, path) {
+      const [group, key] = path.split('.');
+      el.value = state[group][key] ?? '';
+      el.addEventListener('input', () => {
+        state[group][key] = el.value;
+        save();
+        renderPreview();
       });
-      livePreview.style.display = "block";
+    }
+
+    function makeRowCard(title, onRemove, innerHtml) {
+      const wrap = document.createElement('div');
+      wrap.className = 'rounded-2xl border border-white/10 bg-slate-950/30 p-4';
+      wrap.innerHTML = `
+        <div class="flex items-center justify-between gap-2">
+          <div class="font-extrabold text-slate-100">${escapeHtml(title)}</div>
+          <button class="removeBtn rounded-xl px-3 py-2 bg-slate-900/60 hover:bg-slate-900 border border-white/10 font-bold">Remove</button>
+        </div>
+        <div class="mt-3 grid gap-3">${innerHtml}</div>
+      `;
+      wrap.querySelector('.removeBtn').addEventListener('click', onRemove);
+      return wrap;
+    }
+
+    function addEducationRow(e = { degree: '', school: '', year: '', cgpa: '' }) {
+      const idx = state.education.push(e) - 1;
+      const card = makeRowCard(`Education ${idx + 1}`, () => {
+        state.education.splice(idx, 1);
+        syncLists();
+      }, `
+        <input class="w-full bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2" placeholder="Degree (e.g., B.Tech CSE)" value="${escapeHtml(e.degree)}">
+        <input class="w-full bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2" placeholder="School/College" value="${escapeHtml(e.school)}">
+        <div class="grid sm:grid-cols-2 gap-3">
+          <input class="w-full bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2" placeholder="Year (e.g., 2026)" value="${escapeHtml(e.year)}">
+          <input class="w-full bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2" placeholder="CGPA/Percent (optional)" value="${escapeHtml(e.cgpa)}">
+        </div>
+      `);
+      const inputs = card.querySelectorAll('input');
+      inputs[0].addEventListener('input', ev => { state.education[idx].degree = ev.target.value; save(); renderPreview(); });
+      inputs[1].addEventListener('input', ev => { state.education[idx].school = ev.target.value; save(); renderPreview(); });
+      inputs[2].addEventListener('input', ev => { state.education[idx].year = ev.target.value; save(); renderPreview(); });
+      inputs[3].addEventListener('input', ev => { state.education[idx].cgpa = ev.target.value; save(); renderPreview(); });
+      eduList.appendChild(card);
+    }
+
+    function addExperienceRow(x = { company: '', role: '', dates: '', bulletsText: '' }) {
+      const idx = state.experience.push({ ...x, bullets: [] }) - 1;
+      const card = makeRowCard(`Experience ${idx + 1}`, () => {
+        state.experience.splice(idx, 1);
+        syncLists();
+      }, `
+        <input class="w-full bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2" placeholder="Company" value="${escapeHtml(x.company)}">
+        <input class="w-full bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2" placeholder="Role" value="${escapeHtml(x.role)}">
+        <input class="w-full bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2" placeholder="Dates (e.g., Jun 2025 – Aug 2025)" value="${escapeHtml(x.dates)}">
+        <textarea rows="3" class="w-full bg-slate-900/70 border border-white/10 rounded-2xl px-3 py-2" placeholder="Achievements (one per line)"></textarea>
+      `);
+      const [companyEl, roleEl, datesEl] = card.querySelectorAll('input');
+      const bulletsEl = card.querySelector('textarea');
+      companyEl.addEventListener('input', ev => { state.experience[idx].company = ev.target.value; save(); renderPreview(); });
+      roleEl.addEventListener('input', ev => { state.experience[idx].role = ev.target.value; save(); renderPreview(); });
+      datesEl.addEventListener('input', ev => { state.experience[idx].dates = ev.target.value; save(); renderPreview(); });
+      bulletsEl.addEventListener('input', ev => {
+        const bullets = ev.target.value.split('\n').map(s => s.trim()).filter(Boolean);
+        state.experience[idx].bullets = bullets;
+        save();
+        renderPreview();
+      });
+      expList.appendChild(card);
+    }
+
+    function addProjectRow(x = { name: '', stack: '', link: '', bulletsText: '' }) {
+      const idx = state.projects.push({ ...x, bullets: [] }) - 1;
+      const card = makeRowCard(`Project ${idx + 1}`, () => {
+        state.projects.splice(idx, 1);
+        syncLists();
+      }, `
+        <input class="w-full bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2" placeholder="Project name" value="${escapeHtml(x.name)}">
+        <input class="w-full bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2" placeholder="Tech stack (e.g., Spring Boot, MySQL)" value="${escapeHtml(x.stack)}">
+        <input class="w-full bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2" placeholder="Link (GitHub/Live)" value="${escapeHtml(x.link)}">
+        <textarea rows="3" class="w-full bg-slate-900/70 border border-white/10 rounded-2xl px-3 py-2" placeholder="Project bullets (one per line)"></textarea>
+      `);
+      const [nameEl, stackEl, linkEl] = card.querySelectorAll('input');
+      const bulletsEl = card.querySelector('textarea');
+      nameEl.addEventListener('input', ev => { state.projects[idx].name = ev.target.value; save(); renderPreview(); });
+      stackEl.addEventListener('input', ev => { state.projects[idx].stack = ev.target.value; save(); renderPreview(); });
+      linkEl.addEventListener('input', ev => { state.projects[idx].link = ev.target.value; save(); renderPreview(); });
+      bulletsEl.addEventListener('input', ev => {
+        const bullets = ev.target.value.split('\n').map(s => s.trim()).filter(Boolean);
+        state.projects[idx].bullets = bullets;
+        save();
+        renderPreview();
+      });
+      projList.appendChild(card);
+    }
+
+    function syncLists() {
+      // Rebuild lists to keep indexes correct after removals
+      eduList.innerHTML = '';
+      expList.innerHTML = '';
+      projList.innerHTML = '';
+      const edu = state.education;
+      const exp = state.experience;
+      const proj = state.projects;
+      state.education = [];
+      state.experience = [];
+      state.projects = [];
+      edu.forEach(e => addEducationRow(e));
+      exp.forEach(x => addExperienceRow(x));
+      proj.forEach(x => addProjectRow(x));
+      save();
+      renderPreview();
+    }
+
+    function applyStateToInputs() {
+      tplLabel.textContent = TEMPLATE_META[state.template]?.label || (state.template.charAt(0).toUpperCase() + state.template.slice(1));
+      bindInput(fields.fullName, 'personal.fullName');
+      bindInput(fields.title, 'personal.title');
+      bindInput(fields.email, 'personal.email');
+      bindInput(fields.phone, 'personal.phone');
+      bindInput(fields.location, 'personal.location');
+      bindInput(fields.links, 'personal.links');
+      bindInput(fields.summary, 'personal.summary');
+
+      fields.skills.value = state.skills || '';
+      fields.tools.value = state.tools || '';
+      fields.skills.addEventListener('input', () => { state.skills = fields.skills.value; save(); renderPreview(); });
+      fields.tools.addEventListener('input', () => { state.tools = fields.tools.value; save(); renderPreview(); });
+
+      syncLists();
+    }
+
+    function resetAll() {
+      localStorage.removeItem(stateKey);
+      state = {
+        step: 1,
+        template: 'classic',
+        personal: { fullName: '', title: '', email: '', phone: '', location: '', links: '', summary: '' },
+        education: [],
+        experience: [],
+        projects: [],
+        skills: '',
+        tools: ''
+      };
+      applyStateToInputs();
+      setStep(1);
+    }
+
+    // Template selection
+    document.querySelectorAll('.tplBtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.template = btn.dataset.tpl || 'classic';
+        tplLabel.textContent = TEMPLATE_META[state.template]?.label || (state.template.charAt(0).toUpperCase() + state.template.slice(1));
+        save();
+        renderPreview();
+      });
     });
 
-    // Download Resume (simulated)
-    document.getElementById('downloadResume').addEventListener('click', () => {
-      alert("Resume download simulated! In a real app, PDF download would happen here.");
-    });
-</script>
+    // Step nav
+    toStep2.addEventListener('click', () => setStep(2));
+    backTo1.addEventListener('click', () => setStep(1));
+    toStep3.addEventListener('click', () => setStep(3));
+    backTo2.addEventListener('click', () => setStep(2));
 
+    addEdu.addEventListener('click', () => { addEducationRow(); save(); renderPreview(); });
+    addExp.addEventListener('click', () => { addExperienceRow(); save(); renderPreview(); });
+    addProj.addEventListener('click', () => { addProjectRow(); save(); renderPreview(); });
+
+    resetBtn.addEventListener('click', resetAll);
+
+    // PDF download
+    downloadPdf.addEventListener('click', async () => {
+      renderPreview();
+      const name = (state.personal.fullName || 'resume').replace(/[^a-z0-9]+/gi, '_');
+      const element = document.getElementById('resumeCanvas');
+      const opt = {
+        margin: 0,
+        filename: `${name}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      await html2pdf().set(opt).from(element).save();
+    });
+
+    // init
+    load();
+    applyStateToInputs();
+    setStep(state.step || 1);
+  </script>
 </body>
 </html>

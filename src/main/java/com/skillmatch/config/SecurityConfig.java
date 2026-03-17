@@ -3,6 +3,7 @@ package com.skillmatch.config;
 import com.skillmatch.security.JwtAuthenticationFilter;
 import com.skillmatch.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,14 +43,19 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/public/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        // Static resources (classpath:/static, /public, etc.)
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         // Static and root
-                        .requestMatchers("/", "/health", "/favicon.ico").permitAll()
+                        .requestMatchers("/", "/health", "/favicon.ico", "/logo.png").permitAll()
+                        .requestMatchers("/*.png", "/*.jpg", "/*.jpeg", "/*.svg", "/*.webp", "/*.gif", "/*.ico").permitAll()
                         .requestMatchers("/static/**", "/assets/**", "/css/**", "/js/**", "/images/**").permitAll()
                         // All HTML files
                         .requestMatchers("/*.html").permitAll()
                         // Chat API (make public or secure as desired)
                         .requestMatchers("/api/v1/chat/**").permitAll()
                         .requestMatchers("/api/chatbot/**").permitAll()
+                        // News API
+                        .requestMatchers("/api/v1/news/**").permitAll()
                         // Preflight
                         .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
 

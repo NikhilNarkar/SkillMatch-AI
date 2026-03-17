@@ -16,13 +16,15 @@ public class AuthResponse {
     private String firstName;
     private String lastName;
     private User.UserType userType;
+    private Boolean paid;
 
-    public AuthResponse(String token, Long userId, String email, String firstName, String lastName, User.UserType userType) {
+    public AuthResponse(String token, Long userId, String email, String firstName, String lastName, User.UserType userType, Boolean paid) {
         this.token = token;
         this.userId = userId;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.userType = userType;
+        this.paid = paid;
     }
 }

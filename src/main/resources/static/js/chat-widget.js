@@ -27,6 +27,13 @@
   .sm-chat-input { display: flex; gap: 8px; padding: 10px; border-top: 1px solid #334155; background: #0f172a; }
   .sm-chat-input input { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #334155; background: #0b1220; color: #e5e7eb; }
   .sm-send { padding: 10px 12px; background: #6366f1; border: none; border-radius: 10px; color: #fff; cursor: pointer; }
+  @media (max-width: 520px) {
+    .sm-chat-panel {
+      right: 12px; left: 12px; bottom: 84px;
+      width: auto; max-height: 75vh;
+    }
+    .sm-msg { max-width: 92%; }
+  }
   `;
   document.head.appendChild(style);
 
@@ -73,6 +80,60 @@
     bodyEl.scrollTop = bodyEl.scrollHeight;
   }
 
+  function appendStructured(structured) {
+    const div = document.createElement('div');
+    div.className = 'sm-msg sm-bot';
+
+    const card = document.createElement('div');
+    card.style.display = 'grid';
+    card.style.gap = '8px';
+
+    function addSection(title, itemsOrText) {
+      if (!itemsOrText) return;
+      if (Array.isArray(itemsOrText) && itemsOrText.length === 0) return;
+
+      const section = document.createElement('div');
+      const h = document.createElement('div');
+      h.style.fontWeight = '700';
+      h.style.marginBottom = '2px';
+      h.textContent = title;
+      section.appendChild(h);
+
+      if (Array.isArray(itemsOrText)) {
+        const ul = document.createElement('ul');
+        ul.style.margin = '0';
+        ul.style.paddingLeft = '18px';
+        itemsOrText.forEach((t) => {
+          const li = document.createElement('li');
+          li.textContent = String(t);
+          ul.appendChild(li);
+        });
+        section.appendChild(ul);
+      } else {
+        const p = document.createElement('div');
+        p.textContent = String(itemsOrText);
+        section.appendChild(p);
+      }
+
+      card.appendChild(section);
+    }
+
+    addSection('Summary', structured.summary);
+    addSection('Key points', structured.keyPoints);
+    addSection('Next steps', structured.nextSteps);
+    addSection('Examples', structured.examples);
+    addSection('Warnings', structured.warnings);
+    addSection('Follow-up questions', structured.followUpQuestions);
+
+    if (card.childElementCount === 0) {
+      addSection('Answer', structured.rawText || 'No response');
+    }
+
+    div.appendChild(card);
+    bodyEl.appendChild(div);
+    bodyEl.scrollTop = bodyEl.scrollHeight;
+  }
+
   async function send() {
     const text = inputEl.value.trim();
     if (!text) return;
@@ -80,32 +141,36 @@
     inputEl.value = '';
     sendEl.disabled = true;
     try {
-      // Prefer external Node chatbot API; then Spring endpoint; then legacy
-      let res = await fetch('http://localhost:3000/api/chatbot/message', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text })
-      });
-      if (!res.ok) {
-        // fallback to Spring Boot unified endpoint
-        res = await fetch('/api/chatbot/message', {
+      const tryJson = async (url, body) => {
+        const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: text })
+          body: JSON.stringify(body)
         });
+        if (!res.ok) {
+          const msg = `HTTP ${res.status}`;
+          throw new Error(msg);
+        }
+        return await res.json();
+      };
+
+      // Always prefer Spring Boot endpoints (no Node dependency).
+      // 1) /api/v1/chat/ask returns { response, structured }
+      // 2) /api/chatbot/message returns { response, structured }
+      let data = null;
+      try {
+        data = await tryJson('/api/v1/chat/ask', { prompt: text });
+      } catch {
+        data = await tryJson('/api/chatbot/message', { message: text });
       }
-      if (!res.ok) {
-        // final fallback to legacy
-        res = await fetch('/api/v1/chat/ask', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt: text })
-        });
+
+      if (data?.structured && typeof data.structured === 'object') {
+        appendStructured(data.structured);
+      } else {
+        append(data.response ?? 'No response', 'bot');
       }
-      const data = await res.json();
-      append(data.response ?? 'No response', 'bot');
     } catch (e) {
-      append('Error: ' + e.message + ' (Is Node server running with CORS enabled?)', 'bot');
+      append('Error: ' + e.message, 'bot');
     } finally {
       sendEl.disabled = false;
       inputEl.focus();

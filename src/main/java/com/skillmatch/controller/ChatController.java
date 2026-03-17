@@ -23,8 +23,11 @@ public class ChatController {
     @PostMapping(path = "/ask", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> ask(@RequestBody Map<String, String> payload) {
         String prompt = payload.getOrDefault("prompt", "");
-        String response = chatService.ask(prompt);
-        return ResponseEntity.ok(Map.of("response", response));
+        ChatService.StructuredAnswer structured = chatService.askStructured(prompt);
+        return ResponseEntity.ok(Map.of(
+                "response", structured.asPlainText(), // backward compatible
+                "structured", structured.asMap()
+        ));
     }
 }
 

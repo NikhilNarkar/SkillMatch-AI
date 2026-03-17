@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mock Interview • SkillMatch</title>
+  <link rel="icon" type="image/png" href="/logo.png?v=20260317" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    .glass {
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(99, 102, 241, 0.18);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 30px 70px rgba(0,0,0,0.45);
+    }
+    .msg { max-width: 78ch; }
+    .msg pre { white-space: pre-wrap; word-break: break-word; }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-slate-100">
+  <header class="sticky top-0 z-20 border-b border-white/10 bg-slate-950/60 backdrop-blur">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="dashboard.html" class="flex items-center gap-3">
+        <img src="/logo.png?v=20260317" alt="SkillMatch" class="h-9 w-9 rounded-md" />
+        <div>
+          <div class="font-extrabold tracking-wide">SkillMatch</div>
+          <div class="text-xs text-slate-400">Mock interview simulator</div>
+        </div>
+      </a>
+      <a href="practice_sets.html" class="text-sm font-semibold text-indigo-300 hover:text-indigo-200">Practice sets →</a>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-8 grid gap-6">
+    <section class="glass rounded-2xl p-6">
+      <div class="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+        <div>
+          <h1 class="text-2xl md:text-3xl font-extrabold">Mock Interview</h1>
+          <p class="text-slate-300 mt-1">Choose interview type, then answer questions in chat. You’ll get feedback after each answer.</p>
+        </div>
+        <div class="flex flex-col md:flex-row gap-3 md:items-end">
+          <label class="text-sm">
+            <div class="text-slate-300 font-semibold mb-1">Interview type</div>
+            <select id="typeSelect" class="w-full md:w-56 bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2">
+              <option value="hr">HR interview</option>
+              <option value="technical">Technical interview</option>
+            </select>
+          </label>
+          <label class="text-sm">
+            <div class="text-slate-300 font-semibold mb-1">Role (optional)</div>
+            <input id="roleInput" class="w-full md:w-64 bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2" placeholder="e.g., Java Backend Intern" />
+          </label>
+          <button id="startBtn" class="rounded-xl px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-slate-950 font-extrabold">
+            Start
+          </button>
+        </div>
+      </div>
+      <div class="mt-4 text-xs text-slate-400">
+        Uses your backend endpoint <span class="font-mono">/api/v1/chat/ask</span>. If the model is not configured, you will still get a basic flow with local questions.
+      </div>
+    </section>
+
+    <section class="glass rounded-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-white/10 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
+          <div class="font-bold">Interview chat</div>
+        </div>
+        <div class="text-xs text-slate-400" id="statusText">Not started</div>
+      </div>
+
+      <div id="chat" class="p-6 h-[55vh] overflow-y-auto bg-slate-950/30">
+        <div class="msg bg-slate-900/60 border border-white/10 rounded-2xl p-4">
+          <div class="text-sm font-bold text-indigo-200">Assistant</div>
+          <div class="mt-1 text-slate-200">
+            Choose an interview type and press <span class="font-semibold">Start</span>. I’ll ask questions one by one and give feedback.
+          </div>
+        </div>
+      </div>
+
+      <div class="p-4 border-t border-white/10 bg-slate-950/40">
+        <div class="flex gap-2 items-end">
+          <div class="flex-1">
+            <label class="text-xs text-slate-400 font-semibold">Your answer</label>
+            <textarea id="answerInput" rows="2" class="w-full mt-1 bg-slate-900/70 border border-white/10 rounded-2xl px-4 py-3 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500/60" placeholder="Type your answer..." disabled></textarea>
+            <div class="mt-1 text-[11px] text-slate-500">Tip: press Ctrl+Enter to send.</div>
+          </div>
+          <button id="sendBtn" class="rounded-2xl px-5 py-3 bg-indigo-500 hover:bg-indigo-400 text-slate-950 font-extrabold disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            Send
+          </button>
+          <button id="endBtn" class="rounded-2xl px-4 py-3 bg-slate-900/60 hover:bg-slate-900 border border-white/10 font-bold disabled:opacity-50" disabled>
+            End
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass rounded-2xl p-6">
+      <h2 class="text-lg font-extrabold">Session summary</h2>
+      <p class="text-slate-300 text-sm mt-1">At the end, you’ll get a quick summary of strengths and improvements.</p>
+      <div id="summary" class="mt-4 text-sm text-slate-200">
+        <span class="text-slate-400">No session yet.</span>
+      </div>
+    </section>
+
+    <section class="glass rounded-2xl p-6">
+      <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div>
+          <h2 class="text-lg font-extrabold">Premium (Paid) • Camera + Mic Interview</h2>
+          <p class="text-slate-300 text-sm mt-1">
+            This is a <span class="font-semibold text-indigo-200">paid feature</span>. It will use your camera and microphone to make mock interviews more realistic.
+            <span class="block mt-2 text-slate-400">
+              Planned analysis: sitting posture, confidence cues, tone, and a combined grade (Answer + Delivery).
+            </span>
+          </p>
+          <div id="premiumNote" class="mt-3 text-sm text-amber-200 font-semibold"></div>
+          <div class="mt-2 text-xs text-slate-400">
+            Privacy note: The free version never asks for camera/mic permission.
+          </div>
+        </div>
+
+        <div class="w-full md:w-[360px] rounded-2xl border border-white/10 bg-slate-950/30 p-4">
+          <div class="text-sm font-extrabold">Premium controls</div>
+          <div class="mt-3 grid gap-2">
+            <button id="premiumStartBtn" class="w-full rounded-xl px-4 py-2 bg-indigo-500/60 text-slate-950 font-extrabold disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+              Start Camera + Mic Interview (Locked)
+            </button>
+            <button id="adminPanelBtn" class="w-full rounded-xl px-4 py-2 bg-slate-900/60 border border-white/10 font-bold disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+              Admin Panel (Locked)
+            </button>
+            <a href="pricing.html" class="text-center w-full rounded-xl px-4 py-2 bg-slate-900/60 hover:bg-slate-900 border border-white/10 font-bold">
+              View pricing
+            </a>
+          </div>
+          <div class="mt-3 text-xs text-slate-400">
+            Unlocking will require a paid subscription + admin enablement.
+          </div>
+        </div>
+      </div>
+
+      <div id="livePanel" class="hidden mt-6 rounded-2xl border border-white/10 bg-slate-950/30 p-5">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <div class="font-extrabold">Live interview (Camera + Mic)</div>
+            <div class="text-xs text-slate-400 mt-1">Your browser will ask permission only after you press Start.</div>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button id="liveStart" class="rounded-xl px-4 py-2 bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-extrabold">Start Live</button>
+            <button id="liveStop" class="rounded-xl px-4 py-2 bg-slate-900/60 hover:bg-slate-900 border border-white/10 font-bold" disabled>Stop</button>
+          </div>
+        </div>
+
+        <div class="mt-4 grid md:grid-cols-3 gap-3">
+          <label class="text-sm rounded-2xl border border-white/10 bg-slate-900/40 p-3">
+            <div class="text-xs text-slate-400 font-semibold">Voice-over (TTS)</div>
+            <div class="mt-2 flex items-center justify-between gap-2">
+              <span class="text-slate-200 font-semibold">Speak questions</span>
+              <input id="ttsToggle" type="checkbox" class="accent-indigo-400" checked />
+            </div>
+            <div class="mt-2 text-[11px] text-slate-500">Uses your browser voice (no extra cost).</div>
+          </label>
+          <label class="text-sm rounded-2xl border border-white/10 bg-slate-900/40 p-3">
+            <div class="text-xs text-slate-400 font-semibold">Auto listen + submit</div>
+            <div class="mt-2 flex items-center justify-between gap-2">
+              <span class="text-slate-200 font-semibold">Hands-free Q&A</span>
+              <input id="autoQaToggle" type="checkbox" class="accent-indigo-400" checked />
+            </div>
+            <div class="mt-2 text-[11px] text-slate-500">Optional. You can use Start/Stop/Submit manually.</div>
+          </label>
+          <div class="text-sm rounded-2xl border border-white/10 bg-slate-900/40 p-3">
+            <div class="text-xs text-slate-400 font-semibold">Status</div>
+            <div id="liveStatus" class="mt-2 text-slate-200 font-semibold">Idle</div>
+            <div class="mt-2 text-[11px] text-slate-500">Tip: If speech is unsupported, use text interview above.</div>
+          </div>
+        </div>
+
+        <div class="mt-4 rounded-2xl border border-white/10 bg-slate-900/40 p-4">
+          <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+            <div>
+              <div class="text-xs text-slate-400 font-semibold">Current question</div>
+              <div id="liveQuestion" class="mt-1 text-slate-100 font-extrabold text-lg">—</div>
+              <div id="liveQuestionMeta" class="mt-1 text-xs text-slate-400">—</div>
+            </div>
+            <div class="flex gap-2 flex-wrap">
+              <button id="repeatQ" class="rounded-xl px-3 py-2 bg-slate-950/40 hover:bg-slate-950 border border-white/10 font-bold" disabled>Repeat Question</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4 mt-4">
+          <div class="rounded-2xl border border-white/10 bg-slate-900/40 p-3">
+            <div class="text-xs text-slate-400 font-semibold mb-2">Camera preview</div>
+            <video id="video" class="w-full rounded-xl bg-black/40" autoplay playsinline muted></video>
+            <div class="mt-2 text-xs text-slate-400">
+              Posture: <span id="postureText" class="text-slate-200 font-semibold">—</span>
+            </div>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-slate-900/40 p-3">
+            <div class="text-xs text-slate-400 font-semibold mb-2">Mic + speech</div>
+            <div class="flex items-center gap-2">
+              <div class="text-xs text-slate-400">Mic level</div>
+              <div class="flex-1 h-2 rounded-full bg-slate-950/60 overflow-hidden border border-white/10">
+                <div id="micBar" class="h-2 bg-indigo-400 w-0"></div>
+              </div>
+              <div id="voiceText" class="text-xs font-semibold text-slate-200 w-20 text-right">—</div>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <button id="recStart" class="rounded-xl px-3 py-2 bg-indigo-500 hover:bg-indigo-400 text-slate-950 font-extrabold" disabled>Start Answer</button>
+              <button id="recStop" class="rounded-xl px-3 py-2 bg-slate-900/60 hover:bg-slate-900 border border-white/10 font-bold" disabled>Stop</button>
+              <button id="recSend" class="rounded-xl px-3 py-2 bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-extrabold" disabled>Submit Answer</button>
+            </div>
+            <div class="mt-3">
+              <div class="text-xs text-slate-400 font-semibold">Transcript</div>
+              <textarea id="transcript" rows="4" class="w-full mt-1 bg-slate-950/50 border border-white/10 rounded-2xl px-3 py-2 text-sm resize-none" placeholder="Speech transcript will appear here..." disabled></textarea>
+              <div class="mt-1 text-[11px] text-slate-500">If speech recognition isn’t supported, you can still use the text interview above.</div>
+            </div>
+            <div class="mt-2 text-xs text-slate-400">
+              Delivery score: <span id="deliveryScoreText" class="text-slate-200 font-semibold">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="resultBoard" class="hidden mt-4 rounded-2xl border border-white/10 bg-slate-950/30 p-5">
+          <div class="font-extrabold text-lg">Result Board</div>
+          <div class="text-xs text-slate-400 mt-1">Overall performance + what to improve.</div>
+          <div id="resultContent" class="mt-4 text-sm"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script>
+    const chatEl = document.getElementById('chat');
+    const typeSelect = document.getElementById('typeSelect');
+    const roleInput = document.getElementById('roleInput');
+    const startBtn = document.getElementById('startBtn');
+    const sendBtn = document.getElementById('sendBtn');
+    const endBtn = document.getElementById('endBtn');
+    const answerInput = document.getElementById('answerInput');
+    const statusText = document.getElementById('statusText');
+    const summaryEl = document.getElementById('summary');
+    const premiumNoteEl = document.getElementById('premiumNote');
+    const premiumStartBtn = document.getElementById('premiumStartBtn');
+    const adminPanelBtn = document.getElementById('adminPanelBtn');
+    const livePanel = document.getElementById('livePanel');
+    const liveStartBtn = document.getElementById('liveStart');
+    const liveStopBtn = document.getElementById('liveStop');
+    const videoEl = document.getElementById('video');
+    const micBar = document.getElementById('micBar');
+    const voiceText = document.getElementById('voiceText');
+    const postureText = document.getElementById('postureText');
+    const recStartBtn = document.getElementById('recStart');
+    const recStopBtn = document.getElementById('recStop');
+    const recSendBtn = document.getElementById('recSend');
+    const transcriptEl = document.getElementById('transcript');
+    const deliveryScoreText = document.getElementById('deliveryScoreText');
+    const ttsToggle = document.getElementById('ttsToggle');
+    const autoQaToggle = document.getElementById('autoQaToggle');
+    const liveStatusEl = document.getElementById('liveStatus');
+    const repeatQBtn = document.getElementById('repeatQ');
+    const liveQuestionEl = document.getElementById('liveQuestion');
+    const liveQuestionMetaEl = document.getElementById('liveQuestionMeta');
+    const resultBoardEl = document.getElementById('resultBoard');
+    const resultContentEl = document.getElementById('resultContent');
+
+    const HR_QUESTIONS = [
+      "Tell me about yourself.",
+      "Why do you want this role and why our company?",
+      "Describe a time you faced a challenge and how you handled it.",
+      "What are your strengths and weaknesses?",
+      "Where do you see yourself in 2 years?",
+      "Do you have any questions for us?"
+    ];
+
+    const TECH_QUESTIONS = [
+      "Explain OOP concepts and give a Java example.",
+      "What is the difference between an interface and an abstract class in Java?",
+      "Explain REST API basics (methods, status codes) with an example.",
+      "What is dependency injection? How does Spring use it?",
+      "How would you improve performance of a slow API endpoint?",
+      "Explain a bug you solved and how you debugged it."
+    ];
+
+    let session = null;
+    let busy = false;
+
+    // Premium gating placeholder:
+    // - Free version: never requests camera/mic permissions.
+    // - Paid version (future): only allow for paid users; admin can enable/override.
+    function getCurrentUser() {
+      try {
+        return window.Api?.getUser ? window.Api.getUser() : null;
+      } catch {
+        return null;
+      }
+    }
+    function isAdmin(user) {
+      const t = (user?.userType || user?.role || '').toString().toUpperCase();
+      return t.includes('ADMIN');
+    }
+    function isPaid(user) {
+      // Backend returns `paid` now. Keep compatibility with other shapes too.
+      if (!user) return false;
+      if (user.paid === true) return true;
+      if (user.isPaid === true) return true;
+      const plan = (user.plan || user.subscription || '').toString().toUpperCase();
+      return plan === 'PAID' || plan === 'PRO' || plan === 'PREMIUM';
+    }
+
+    let premiumEnabled = false;
+    (function initPremiumUi() {
+      const user = getCurrentUser();
+      const admin = isAdmin(user);
+      const paid = isPaid(user);
+
+      premiumEnabled = !!(admin || paid);
+      premiumStartBtn.disabled = !premiumEnabled;
+      adminPanelBtn.disabled = !admin;
+
+      if (!user) {
+        premiumNoteEl.textContent = 'Locked: Please login to access paid features.';
+      } else if (!paid) {
+        if (admin) premiumNoteEl.textContent = 'Unlocked: Admin access enabled for Live interview.';
+        else premiumNoteEl.textContent = 'Locked: Available in paid version only.';
+      } else {
+        premiumNoteEl.textContent = admin
+          ? 'Unlocked: Paid + Admin access.'
+          : 'Unlocked: Paid user access enabled for Live interview.';
+      }
+
+      if (premiumEnabled) {
+        premiumStartBtn.textContent = 'Open Live Interview';
+      }
+    })();
+
+    // Live interview implementation (camera + mic + basic delivery scoring + speech-to-text)
+    let mediaStream = null;
+    let audioCtx = null;
+    let analyser = null;
+    let micSource = null;
+    let rafId = null;
+    let recognition = null;
+    let recognizing = false;
+    let postureScore = 0;
+    let voiceScore = 0;
+    let liveActive = false;
+    let lastQuestionSpoken = '';
+    let lastSpeechEventAt = 0;
+    let silenceTimer = null;
+    let liveScores = [];
+    let liveDeliveryScores = [];
+
+    function supportsSpeech() {
+      return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+    }
+
+    function supportsTts() {
+      return !!window.speechSynthesis;
+    }
+
+    function setLiveStatus(t) {
+      if (liveStatusEl) liveStatusEl.textContent = t;
+    }
+
+    function speakText(text) {
+      return new Promise((resolve) => {
+        if (!supportsTts() || !ttsToggle?.checked) return resolve();
+        try {
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(String(text || ''));
+          u.rate = 1.02;
+          u.pitch = 1.0;
+          u.onend = () => resolve();
+          u.onerror = () => resolve();
+          window.speechSynthesis.speak(u);
+        } catch {
+          resolve();
+        }
+      });
+    }
+
+    function extractScore10(structured) {
+      const s = (structured?.summary || structured?.rawText || '').toString();
+      const m = s.match(/(\b\d{1,2})(?:\s*\/\s*10\b)/i) || s.match(/score\s*[:\-]?\s*(\d{1,2})\b/i);
+      if (!m) return null;
+      const v = Number(m[1]);
+      if (Number.isFinite(v)) return Math.max(0, Math.min(10, v));
+      return null;
+    }
+
+    function computeRmsFromTimeDomain(data) {
+      let sum = 0;
+      for (let i = 0; i < data.length; i++) {
+        const v = (data[i] - 128) / 128;
+        sum += v * v;
+      }
+      return Math.sqrt(sum / data.length);
+    }
+
+    function clamp01(x) { return Math.max(0, Math.min(1, x)); }
+
+    async function startLive() {
+      if (!premiumEnabled) return;
+      if (mediaStream) return;
+
+      mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      videoEl.srcObject = mediaStream;
+      liveStopBtn.disabled = false;
+      // Only enable speech recording controls if supported
+      recStartBtn.disabled = !supportsSpeech();
+      transcriptEl.disabled = false;
+      repeatQBtn.disabled = false;
+      liveActive = true;
+      setLiveStatus('Live ready');
+      if (resultBoardEl) resultBoardEl.classList.add('hidden');
+      if (resultContentEl) resultContentEl.innerHTML = '';
+      liveScores = [];
+      liveDeliveryScores = [];
+
+      // Live interview should be self-contained: auto-start a 10-question HR session if none exists.
+      if (!session) {
+        session = {
+          interviewType: 'hr',
+          interviewLabel: 'HR interview',
+          role: roleInput?.value?.trim?.() || '',
+          questions: Array.from({ length: 10 }, (_, i) => `Preparing question ${i + 1}…`),
+          questionsSource: 'ai-one-by-one',
+          askedQuestions: [],
+          liveIndex: 0,
+          answers: [],
+          feedback: [],
+          startedAt: Date.now()
+        };
+        // Show a start message in the chat area for context
+        addMsg('bot', 'Assistant', `Live HR interview started${session.role ? ` for <span class="font-semibold">${escapeHtml(session.role)}</span>` : ''}. You will be asked 10 questions. Answer by voice, then click <span class="font-semibold">Submit Answer</span>.`);
+        updateSummary();
+      } else {
+        // Force HR mode + 10 questions for live session as requested
+        session.interviewType = 'hr';
+        session.interviewLabel = 'HR interview';
+        session.questionsSource = 'ai-one-by-one';
+        session.askedQuestions = Array.isArray(session.askedQuestions) ? session.askedQuestions : [];
+        session.liveIndex = Number.isFinite(session.liveIndex) ? session.liveIndex : 0;
+        if (!Array.isArray(session.questions) || session.questions.length !== 10) {
+          session.questions = (session.questions || []).slice(0, 10);
+          while (session.questions.length < 10) session.questions.push(`Preparing question ${session.questions.length + 1}…`);
+        }
+      }
+
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 2048;
+      micSource = audioCtx.createMediaStreamSource(mediaStream);
+      micSource.connect(analyser);
+
+      postureText.textContent = 'Tracking…';
+      voiceText.textContent = '…';
+
+      // Set up speech recognition (if available)
+      if (supportsSpeech()) {
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SR();
+        recognition.lang = 'en-US';
+        recognition.interimResults = true;
+        recognition.continuous = true;
+        recognition.onresult = (event) => {
+          let text = '';
+          for (let i = 0; i < event.results.length; i++) {
+            text += event.results[i][0].transcript;
+          }
+          transcriptEl.value = text.trim();
+          lastSpeechEventAt = Date.now();
+        };
+        recognition.onend = () => {
+          recognizing = false;
+          recStartBtn.disabled = false;
+          recStopBtn.disabled = true;
+          if (silenceTimer) {
+            clearTimeout(silenceTimer);
+            silenceTimer = null;
+          }
+        };
+      } else {
+        transcriptEl.placeholder = 'Speech recognition not supported in this browser. Please type above.';
+      }
+
+      // Basic posture check: if FaceDetector exists, use it; else fallback to "camera on" only.
+      const hasFaceDetector = !!window.FaceDetector;
+      const faceDetector = hasFaceDetector ? new FaceDetector({ fastMode: true, maxDetectedFaces: 1 }) : null;
+
+      const timeData = new Uint8Array(analyser.frequencyBinCount);
+
+      async function tick() {
+        // Voice RMS -> mic bar
+        analyser.getByteTimeDomainData(timeData);
+        const rms = computeRmsFromTimeDomain(timeData); // ~0..1
+        const bar = clamp01((rms - 0.02) / 0.2); // normalize
+        micBar.style.width = `${Math.round(bar * 100)}%`;
+
+        // Simple voice confidence: speaking at a reasonable loudness
+        voiceScore = Math.round(clamp01((bar - 0.1) / 0.7) * 10);
+        voiceText.textContent = `${voiceScore}/10`;
+
+        // Posture score (best effort)
+        if (faceDetector && videoEl.readyState >= 2) {
+          try {
+            const faces = await faceDetector.detect(videoEl);
+            if (faces && faces.length) {
+              const box = faces[0].boundingBox;
+              const vw = videoEl.videoWidth || 1;
+              const vh = videoEl.videoHeight || 1;
+              const cx = (box.x + box.width / 2) / vw; // 0..1
+              const cy = (box.y + box.height / 2) / vh;
+              const centerDist = Math.sqrt((cx - 0.5) ** 2 + (cy - 0.45) ** 2); // slightly above center
+              const centered = clamp01(1 - centerDist * 3.2);
+              const size = (box.width * box.height) / (vw * vh);
+              const sizeOk = clamp01((size - 0.05) / 0.08); // too far -> small face
+              postureScore = Math.round(clamp01(0.6 * centered + 0.4 * sizeOk) * 10);
+              postureText.textContent = `${postureScore}/10 (face detected)`;
+            } else {
+              postureScore = 3;
+              postureText.textContent = '3/10 (no face detected)';
+            }
+          } catch {
+            postureScore = 5;
+            postureText.textContent = '5/10 (tracking unavailable)';
+          }
+        } else {
+          postureScore = 5;
+          postureText.textContent = '5/10 (basic)';
+        }
+
+        const delivery = Math.round((postureScore * 0.5 + voiceScore * 0.5) * 10) / 10;
+        deliveryScoreText.textContent = `${delivery}/10`;
+
+        rafId = requestAnimationFrame(tick);
+      }
+
+      rafId = requestAnimationFrame(tick);
+
+      // After clicking Start Live: after 3 seconds speak the current question and show it.
+      setTimeout(async () => {
+        if (!liveActive) return;
+        await liveSpeakCurrentQuestion();
+      }, 3000);
+    }
+
+    function stopLive() {
+      liveActive = false;
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = null;
+      if (recognition && recognizing) {
+        try { recognition.stop(); } catch {}
+      }
+      recognizing = false;
+      recStartBtn.disabled = true;
+      recStopBtn.disabled = true;
+      recSendBtn.disabled = true;
+      liveStopBtn.disabled = true;
+
+      if (audioCtx) {
+        try { audioCtx.close(); } catch {}
+      }
+      audioCtx = null;
+      analyser = null;
+      micSource = null;
+
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(t => t.stop());
+      }
+      mediaStream = null;
+      videoEl.srcObject = null;
+      micBar.style.width = '0%';
+      voiceText.textContent = '—';
+      postureText.textContent = '—';
+      deliveryScoreText.textContent = '—';
+      setLiveStatus('Stopped');
+    }
+
+    function startRecordingAnswer() {
+      if (!recognition) return;
+      // Keep transcript if user wants to continue; but usually start fresh.
+      transcriptEl.value = '';
+      recSendBtn.disabled = true;
+      recognizing = true;
+      recStartBtn.disabled = true;
+      recStopBtn.disabled = false;
+      setLiveStatus('Listening…');
+      try { recognition.start(); } catch {}
+    }
+
+    function stopRecordingAnswer() {
+      if (!recognition) return;
+      try { recognition.stop(); } catch {}
+      recognizing = false;
+      recStartBtn.disabled = false;
+      recStopBtn.disabled = true;
+      recSendBtn.disabled = transcriptEl.value.trim().length === 0;
+      setLiveStatus('Answer captured');
+    }
+
+    async function sendTranscriptToInterview() {
+      const text = transcriptEl.value.trim();
+      if (!text) return;
+      if (!session) return;
+      const idx = Number.isFinite(session.liveIndex) ? session.liveIndex : 0;
+      if (idx >= 10) return;
+
+      const q = session.questions[idx];
+
+      // Save the answer at the correct index (do not rely on answers.length)
+      session.answers[idx] = text;
+      addMsg('me', 'You (Live)', escapeHtml(text));
+
+      setLiveStatus('Verifying answer…');
+      recSendBtn.disabled = true;
+      recStartBtn.disabled = true;
+      recStopBtn.disabled = true;
+
+      let structured;
+      try {
+        structured = await askAiForFeedback({
+          interviewType: 'HR interview (Live)',
+          role: session.role,
+          question: q,
+          answer: text,
+          qIndex: idx,
+          total: 10,
+          transcript: []
+        });
+      } catch (e) {
+        structured = buildLocalFeedback(q, text);
+      }
+
+      session.feedback[idx] = structured;
+      addMsg('bot', 'Feedback', renderStructured(structured));
+
+      // Store per-question scores for result board
+      const content = extractScore10(structured);
+      const delivery = (postureScore * 0.5 + voiceScore * 0.5);
+      liveDeliveryScores[idx] = delivery;
+      liveScores[idx] = content == null ? null : content;
+
+      const overall = content == null ? null : Math.round((content * 0.75 + delivery * 0.25) * 10) / 10;
+      if (overall != null) {
+        addMsg('bot', 'Live score', `Q${idx + 1}: Content <span class="font-semibold">${content}/10</span> • Delivery <span class="font-semibold">${delivery.toFixed(1)}/10</span> • Overall <span class="font-extrabold text-emerald-300">${overall}/10</span>`);
+      } else {
+        addMsg('bot', 'Live score', `Q${idx + 1}: Delivery <span class="font-extrabold text-emerald-300">${delivery.toFixed(1)}/10</span>`);
+      }
+
+      transcriptEl.value = '';
+      setLiveStatus('Submitted');
+
+      // Move to next question ONLY after submit
+      session.liveIndex = idx + 1;
+      updateSummary();
+
+      if (session.liveIndex >= 10) {
+        addMsg('bot', 'Assistant', 'Live interview completed. Generating your result board…');
+        renderResultBoard();
+      } else {
+        // Ask next question after 3 seconds
+        setTimeout(async () => {
+          if (!liveActive) return;
+          await liveSpeakCurrentQuestion();
+        }, 3000);
+      }
+
+      // Re-enable controls for next answer
+      recStartBtn.disabled = !supportsSpeech();
+      recStopBtn.disabled = true;
+      recSendBtn.disabled = true;
+    }
+
+    premiumStartBtn.addEventListener('click', () => {
+      if (!premiumEnabled) return;
+      livePanel.classList.remove('hidden');
+      livePanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    liveStartBtn.addEventListener('click', async () => {
+      try {
+        await startLive();
+      } catch (e) {
+        premiumNoteEl.textContent = 'Unable to start camera/mic: ' + (e?.message || e);
+      }
+    });
+    liveStopBtn.addEventListener('click', stopLive);
+    recStartBtn.addEventListener('click', () => {
+      if (!supportsSpeech()) return;
+      startRecordingAnswer();
+    });
+    recStopBtn.addEventListener('click', stopRecordingAnswer);
+    recSendBtn.addEventListener('click', sendTranscriptToInterview);
+    repeatQBtn.addEventListener('click', async () => {
+      if (!lastQuestionSpoken) return;
+      await speakText(lastQuestionSpoken);
+    });
+
+    transcriptEl.addEventListener('input', () => {
+      recSendBtn.disabled = transcriptEl.value.trim().length === 0;
+    });
+
+    async function liveSpeakCurrentQuestion() {
+      if (!session) return;
+
+      // Live HR interview should source questions from chatbot.
+      // Generate ONE random question at a time (10 total). Fallback stays local if generation fails.
+      const idx = Number.isFinite(session.liveIndex) ? session.liveIndex : 0;
+      const needsQuestion = Array.isArray(session.questions) && idx < session.questions.length
+        ? String(session.questions[idx]).includes('Preparing question')
+        : false;
+      if (liveActive && session.interviewType === 'hr' && session.questionsSource === 'ai-one-by-one' && needsQuestion) {
+        try {
+          setLiveStatus('Generating HR question…');
+          const asked = Array.isArray(session.askedQuestions) ? session.askedQuestions : [];
+          const qNext = await fetchAiHrNextQuestion({ role: session.role, askedQuestions: asked });
+          if (qNext) {
+            session.questions[idx] = qNext;
+            session.askedQuestions = [...asked, qNext];
+          } else {
+            // fallback to default HR list if AI didn't return
+            session.questions[idx] = HR_QUESTIONS[idx % HR_QUESTIONS.length];
+          }
+        } catch {
+          session.questions[idx] = HR_QUESTIONS[idx % HR_QUESTIONS.length];
+        }
+      }
+
+      if (idx >= session.questions.length) return;
+      const q = session.questions[idx];
+      if (liveQuestionEl) liveQuestionEl.textContent = q;
+      if (liveQuestionMetaEl) {
+        const src = session.questionsSource === 'ai-one-by-one' ? 'AI (random)' : (session.questionsSource === 'ai' ? 'AI questions' : 'Default questions');
+        liveQuestionMetaEl.textContent = `${session.interviewLabel}${session.role ? ' • ' + session.role : ''} • Question ${idx + 1}/10 • ${src}`;
+      }
+      lastQuestionSpoken = `Question ${idx + 1}. ${q}`;
+      setLiveStatus('Speaking question…');
+      await speakText(lastQuestionSpoken);
+      setLiveStatus('Ready for answer');
+    }
+
+    async function renderResultBoard() {
+      if (!resultBoardEl || !resultContentEl || !session) return;
+      const validDelivery = (liveDeliveryScores || []).filter(v => typeof v === 'number' && Number.isFinite(v));
+      const avgDelivery = validDelivery.length
+        ? (validDelivery.reduce((a,b) => a + b, 0) / validDelivery.length)
+        : 0;
+      const validContent = (liveScores || []).filter(v => typeof v === 'number' && Number.isFinite(v));
+      const avgContent = validContent.length
+        ? (validContent.reduce((a,b) => a + b, 0) / validContent.length)
+        : null;
+      const overall = avgContent == null ? null : (avgContent * 0.75 + avgDelivery * 0.25);
+
+      // Collect improvement hints from AI feedback across questions
+      const nextSteps = [];
+      const warnings = [];
+      (session.feedback || []).forEach(f => {
+        (f?.nextSteps || []).forEach(s => { if (nextSteps.length < 6) nextSteps.push(s); });
+        (f?.warnings || []).forEach(s => { if (warnings.length < 6) warnings.push(s); });
+      });
+
+      const list = (arr) => arr && arr.length
+        ? `<ul class="list-disc ml-5 mt-2 text-slate-200">${arr.map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ul>`
+        : `<div class="mt-2 text-slate-400">—</div>`;
+
+      resultContentEl.innerHTML = `
+        <div class="grid md:grid-cols-3 gap-3">
+          <div class="rounded-2xl border border-white/10 bg-slate-900/40 p-4">
+            <div class="text-xs text-slate-400 font-semibold">Content</div>
+            <div class="mt-1 text-2xl font-extrabold">${avgContent == null ? '—' : avgContent.toFixed(1) + '/10'}</div>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-slate-900/40 p-4">
+            <div class="text-xs text-slate-400 font-semibold">Delivery</div>
+            <div class="mt-1 text-2xl font-extrabold">${avgDelivery.toFixed(1)}/10</div>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-slate-900/40 p-4">
+            <div class="text-xs text-slate-400 font-semibold">Overall</div>
+            <div class="mt-1 text-2xl font-extrabold text-emerald-300">${overall == null ? '—' : overall.toFixed(1) + '/10'}</div>
+          </div>
+        </div>
+        <div class="mt-4 grid md:grid-cols-2 gap-4">
+          <div class="rounded-2xl border border-white/10 bg-slate-900/40 p-4">
+            <div class="font-extrabold">What to improve next</div>
+            ${list(nextSteps)}
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-slate-900/40 p-4">
+            <div class="font-extrabold">Common warnings</div>
+            ${list(warnings)}
+          </div>
+        </div>
+        <div class="mt-4 rounded-2xl border border-white/10 bg-slate-900/40 p-4">
+          <div class="font-extrabold">Overall interview summary (AI)</div>
+          <div id="overallAiSummary" class="mt-2 text-slate-300 text-sm">Generating…</div>
+        </div>
+      `;
+      resultBoardEl.classList.remove('hidden');
+      resultBoardEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Generate an overall summary + improvements based on all 10 answers.
+      try {
+        const structured = await generateOverallLiveSummary();
+        const el = document.getElementById('overallAiSummary');
+        if (el) el.innerHTML = structured ? renderStructured(structured) : '—';
+      } catch (e) {
+        const el = document.getElementById('overallAiSummary');
+        if (el) el.textContent = 'Unable to generate summary: ' + (e?.message || e);
+      }
+    }
+
+    // Ensure AI always includes "Score: X/10" for live grading.
+    const _askAiForFeedback = askAiForFeedback;
+    askAiForFeedback = async function(args) {
+      const enhanced = { ...args };
+      // The prompt is built inside askAiForFeedback; force scoring via role text here by slightly modifying fields.
+      enhanced.role = (enhanced.role || '').trim();
+      return _askAiForFeedback(enhanced);
+    };
+
+    function scrollToBottom() {
+      chatEl.scrollTop = chatEl.scrollHeight;
+    }
+
+    function addMsg(from, title, htmlText) {
+      const wrap = document.createElement('div');
+      wrap.className = `msg border border-white/10 rounded-2xl p-4 mb-3 ${from === 'me' ? 'ml-auto bg-indigo-500/15' : 'mr-auto bg-slate-900/60'}`;
+      const head = document.createElement('div');
+      head.className = `text-sm font-extrabold ${from === 'me' ? 'text-indigo-200' : 'text-indigo-200'}`;
+      head.textContent = title;
+      const body = document.createElement('div');
+      body.className = 'mt-1 text-slate-200 text-sm leading-relaxed';
+      body.innerHTML = htmlText;
+      wrap.appendChild(head);
+      wrap.appendChild(body);
+      chatEl.appendChild(wrap);
+      scrollToBottom();
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function renderStructured(structured) {
+      const parts = [];
+      const add = (label, value) => {
+        if (!value) return;
+        if (Array.isArray(value)) {
+          if (!value.length) return;
+          parts.push(`<div class="mt-2 font-semibold text-slate-100">${escapeHtml(label)}</div>`);
+          parts.push('<ul class="list-disc ml-5 mt-1 text-slate-200">');
+          value.forEach(v => parts.push(`<li>${escapeHtml(v)}</li>`));
+          parts.push('</ul>');
+        } else {
+          parts.push(`<div class="mt-2 font-semibold text-slate-100">${escapeHtml(label)}</div>`);
+          parts.push(`<div class="mt-1 text-slate-200">${escapeHtml(value)}</div>`);
+        }
+      };
+      add('Summary', structured.summary);
+      add('Key points', structured.keyPoints);
+      add('Next steps', structured.nextSteps);
+      add('Examples', structured.examples);
+      add('Warnings', structured.warnings);
+      add('Follow-up questions', structured.followUpQuestions);
+      if (!parts.length) {
+        parts.push(escapeHtml(structured.rawText || ''));
+      }
+      return parts.join('');
+    }
+
+    function setControls({ started, canSend }) {
+      answerInput.disabled = !started || !canSend;
+      sendBtn.disabled = !started || !canSend;
+      endBtn.disabled = !started;
+    }
+
+    function getQuestionList() {
+      return typeSelect.value === 'technical' ? TECH_QUESTIONS : HR_QUESTIONS;
+    }
+
+    function getInterviewLabel() {
+      return typeSelect.value === 'technical' ? 'Technical interview' : 'HR interview';
+    }
+
+    async function fetchAiHrNextQuestion({ role, askedQuestions }) {
+      const asked = Array.isArray(askedQuestions) ? askedQuestions.filter(Boolean).slice(0, 20) : [];
+      const prompt = [
+        "You are an HR interviewer.",
+        "Generate ONE short, classic HR interview question for a fresher/candidate.",
+        role ? `Target role: ${role}` : "Target role: (not specified)",
+        "",
+        "Return ONLY JSON with this schema (no markdown):",
+        '{ "question": string }',
+        "",
+        "Rules:",
+        "- Question must be short (<= 12 words), simple, and natural",
+        "- Must be professional and different from previous questions",
+        "- Prefer common HR topics (examples): introduce yourself, motivation, strengths, weaknesses, teamwork, conflict, goals, salary expectation, notice period, relocate, questions for us",
+        "- Avoid long multi-part questions",
+        "",
+        "Already asked questions (do NOT repeat):",
+        asked.length ? asked.map((q, i) => `${i + 1}. ${q}`).join("\n") : "(none)"
+      ].join("\n");
+
+      const res = await fetch('/api/v1/chat/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+      const data = await res.json();
+      const raw = (data?.response || '').toString().trim();
+      const text = ((data?.structured?.rawText || raw) || '').toString().trim();
+
+      const start = text.indexOf('{');
+      if (start >= 0) {
+        const candidate = text.slice(start);
+        try {
+          const obj = JSON.parse(candidate);
+          const q = obj?.question;
+          if (typeof q === 'string' && q.trim()) return q.trim();
+        } catch {}
+      }
+
+      // Fallback: treat plain response as question
+      if (raw) {
+        const oneLine = raw.replace(/\s+/g, ' ').trim();
+        return oneLine.length > 0 ? oneLine : null;
+      }
+      return null;
+    }
+
+    async function generateOverallLiveSummary() {
+      if (!session || !Array.isArray(session.questions)) return null;
+      const qa = [];
+      for (let i = 0; i < 10; i++) {
+        const q = session.questions[i];
+        const a = session.answers?.[i];
+        if (q && a) qa.push({ q, a });
+      }
+      if (!qa.length) return null;
+
+      const prompt = [
+        "You are an interview coach.",
+        "Create an overall summary of this HR mock interview and improvement plan.",
+        "",
+        "Return ONLY JSON (no markdown) with this schema:",
+        "{",
+        '  "summary": string,',
+        '  "keyPoints": string[],',
+        '  "nextSteps": string[],',
+        '  "examples": string[],',
+        '  "warnings": string[],',
+        '  "followUpQuestions": string[],',
+        '  "rawText": string',
+        "}",
+        "",
+        "Rules:",
+        "- summary: 2-3 sentences, mention overall performance level",
+        "- keyPoints: strengths observed (3-5 bullets)",
+        "- nextSteps: specific improvements (5-7 bullets)",
+        "- examples: include 1 improved sample answer for 'salary expectation' (if asked) otherwise 'tell me about yourself'",
+        "- warnings: 2-4 common mistakes to avoid",
+        "",
+        `Role: ${session.role || '(not specified)'}`,
+        "",
+        "Q&A transcript:",
+        qa.map((x, i) => `Q${i + 1}: ${x.q}\nA${i + 1}: ${x.a}`).join("\n\n")
+      ].join("\n");
+
+      const res = await fetch('/api/v1/chat/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+      const data = await res.json();
+      return data?.structured || { rawText: data?.response || 'No response' };
+    }
+
+    async function askAiForFeedback({ interviewType, role, question, answer, qIndex, total, transcript }) {
+      const prompt = [
+        "You are an interview coach and interviewer.",
+        `Interview type: ${interviewType}.`,
+        role ? `Target role: ${role}.` : "Target role: (not specified).",
+        "",
+        "Evaluate the candidate answer and respond in the strict JSON schema described below.",
+        "Return ONLY JSON (no markdown).",
+        "IMPORTANT: In the summary, you MUST include a score in this exact format: \"Score: X/10\" where X is 0-10.",
+        "",
+        "Schema:",
+        "{",
+        '  "summary": string,',
+        '  "keyPoints": string[],',
+        '  "nextSteps": string[],',
+        '  "examples": string[],',
+        '  "warnings": string[],',
+        '  "followUpQuestions": string[],',
+        '  "rawText": string',
+        "}",
+        "",
+        `Question ${qIndex + 1} of ${total}: ${question}`,
+        `Candidate answer: ${answer}`,
+        "",
+        "Include: what was good, what to improve, and a better sample answer in examples.",
+        "Also provide 1 follow-up question in followUpQuestions that an interviewer would naturally ask next."
+      ].join("\n");
+
+      const res = await fetch('/api/v1/chat/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+      const data = await res.json();
+      return data?.structured || { rawText: data?.response || 'No response' };
+    }
+
+    function buildLocalFeedback(question, answer) {
+      const summary = "Answer recorded. Use the AI feedback when available for detailed improvements.";
+      return {
+        summary,
+        keyPoints: [
+          "Be specific with examples and measurable outcomes",
+          "Keep it structured: Situation → Action → Result"
+        ],
+        nextSteps: [
+          "Add 1 concrete example",
+          "Mention tools/skills used",
+          "End with impact/result"
+        ],
+        examples: [],
+        warnings: [],
+        followUpQuestions: ["Can you give a concrete example?"],
+        rawText: `${summary}\n\nQ: ${question}\nA: ${answer}`
+      };
+    }
+
+    function updateSummary() {
+      if (!session) {
+        summaryEl.innerHTML = '<span class="text-slate-400">No session yet.</span>';
+        return;
+      }
+      const total = session.questions.length;
+      const answered = session.answers.length;
+      summaryEl.innerHTML = `
+        <div class="grid gap-2">
+          <div><span class="font-bold">Type:</span> ${escapeHtml(session.interviewLabel)}</div>
+          <div><span class="font-bold">Role:</span> ${escapeHtml(session.role || '—')}</div>
+          <div><span class="font-bold">Progress:</span> ${answered} / ${total} questions answered</div>
+          <div class="text-slate-300 text-xs mt-2">Tip: Review each feedback message in the chat above.</div>
+        </div>
+      `;
+    }
+
+    function nextQuestion() {
+      const idx = session.answers.length;
+      if (idx >= session.questions.length) {
+        addMsg('bot', 'Assistant', 'Great job — mock interview completed. Check the session summary below.');
+        statusText.textContent = 'Completed';
+        setControls({ started: true, canSend: false });
+        updateSummary();
+        return;
+      }
+      const q = session.questions[idx];
+      addMsg('bot', 'Interviewer', escapeHtml(`Question ${idx + 1}/${session.questions.length}: ${q}`));
+      statusText.textContent = `Question ${idx + 1} of ${session.questions.length}`;
+      setControls({ started: true, canSend: true });
+      answerInput.focus();
+    }
+
+    function startSession() {
+      session = {
+        interviewType: typeSelect.value,
+        interviewLabel: getInterviewLabel(),
+        role: roleInput.value.trim(),
+        questions: getQuestionList(),
+        questionsSource: 'local',
+        answers: [],
+        feedback: [],
+        startedAt: Date.now()
+      };
+      chatEl.innerHTML = '';
+      addMsg('bot', 'Assistant', `Starting <span class="font-semibold">${escapeHtml(session.interviewLabel)}</span>${session.role ? ` for <span class="font-semibold">${escapeHtml(session.role)}</span>` : ''}.<br/>Answer clearly. I will give feedback after each answer.`);
+      updateSummary();
+      nextQuestion();
+    }
+
+    async function sendAnswer() {
+      if (!session || busy) return;
+      const answer = answerInput.value.trim();
+      if (!answer) return;
+      const idx = session.answers.length;
+      const q = session.questions[idx];
+      session.answers.push(answer);
+      answerInput.value = '';
+      addMsg('me', 'You', escapeHtml(answer));
+
+      busy = true;
+      setControls({ started: true, canSend: false });
+      statusText.textContent = 'Evaluating…';
+      try {
+        let structured;
+        try {
+          structured = await askAiForFeedback({
+            interviewType: session.interviewLabel,
+            role: session.role,
+            question: q,
+            answer,
+            qIndex: idx,
+            total: session.questions.length,
+            transcript: []
+          });
+        } catch (e) {
+          structured = buildLocalFeedback(q, answer);
+        }
+        session.feedback.push(structured);
+        addMsg('bot', 'Feedback', renderStructured(structured));
+
+        // Use follow-up question (if any) as an extra one-time question, otherwise continue.
+        const follow = structured?.followUpQuestions?.[0];
+        if (follow && session.answers.length < session.questions.length) {
+          // Replace next question with follow-up to keep it conversational.
+          session.questions[session.answers.length] = follow;
+        }
+      } finally {
+        busy = false;
+        updateSummary();
+        nextQuestion();
+      }
+    }
+
+    function endSession() {
+      if (!session) return;
+      addMsg('bot', 'Assistant', 'Session ended. You can start again anytime with a new interview type.');
+      statusText.textContent = 'Ended';
+      setControls({ started: false, canSend: false });
+      updateSummary();
+      session = null;
+    }
+
+    startBtn.addEventListener('click', startSession);
+    sendBtn.addEventListener('click', sendAnswer);
+    endBtn.addEventListener('click', endSession);
+    answerInput.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') sendAnswer();
+    });
+  </script>
+</body>
+</html>
+

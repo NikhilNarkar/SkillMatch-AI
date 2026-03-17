@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
@@ -54,6 +55,24 @@ public class User implements UserDetails {
 
     @Column(name = "is_active")
     private Boolean isActive = true;
+
+    @Column(name = "is_paid")
+    private Boolean isPaid = false;
+
+    @Column(name = "tests_taken")
+    private Integer testsTaken = 0;
+
+    @Column(name = "score_total_percent")
+    private Double scoreTotalPercent = 0.0;
+
+    @Column(name = "avg_score_percent")
+    private Double avgScorePercent = 0.0;
+
+    @Column(name = "login_streak_days")
+    private Integer loginStreakDays = 0;
+
+    @Column(name = "last_login_date")
+    private LocalDate lastLoginDate;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

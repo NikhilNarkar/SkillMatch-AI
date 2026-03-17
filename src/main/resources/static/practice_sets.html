@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Practice Sets • SkillMatch</title>
+  <link rel="icon" type="image/png" href="/logo.png?v=20260317" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    .glass {
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(99, 102, 241, 0.18);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 30px 70px rgba(0,0,0,0.45);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-slate-100">
+  <header class="sticky top-0 z-20 border-b border-white/10 bg-slate-950/60 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="dashboard.html" class="flex items-center gap-3">
+        <img src="/logo.png?v=20260317" alt="SkillMatch" class="h-9 w-9 rounded-md" />
+        <div>
+          <div class="font-extrabold tracking-wide">SkillMatch</div>
+          <div class="text-xs text-slate-400">Practice sets</div>
+        </div>
+      </a>
+      <a href="mock_interview.html" class="text-sm font-semibold text-indigo-300 hover:text-indigo-200">Mock interview →</a>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8 grid gap-6">
+    <section class="glass rounded-2xl p-6">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+        <div>
+          <h1 class="text-2xl md:text-3xl font-extrabold">Practice Sets</h1>
+          <p class="text-slate-300 mt-1">Pick a set and practice at your own pace. You can optionally ask the AI to review your answer.</p>
+        </div>
+        <div class="flex gap-3 items-end">
+          <label class="text-sm">
+            <div class="text-slate-300 font-semibold mb-1">Set</div>
+            <select id="setSelect" class="w-full md:w-72 bg-slate-900/70 border border-white/10 rounded-xl px-3 py-2">
+              <option value="hr">HR basics (Fresher)</option>
+              <option value="tech_java">Technical (Java + Spring Boot)</option>
+              <option value="dsa">Technical (DSA quick)</option>
+            </select>
+          </label>
+          <button id="loadBtn" class="rounded-xl px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-slate-950 font-extrabold">Load</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass rounded-2xl p-6">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+        <div>
+          <h2 class="text-lg font-extrabold">Quick Practice (1-by-1)</h2>
+          <p class="text-slate-300 text-sm mt-1" id="practiceMeta">Use Dashboard “Start Practice” to prefill selection.</p>
+        </div>
+        <div class="flex gap-2">
+          <button id="beginBtn" class="rounded-xl px-4 py-2 bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-extrabold">Begin</button>
+          <button id="nextBtn" class="rounded-xl px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-slate-950 font-extrabold" disabled>Next</button>
+          <button id="endBtn" class="rounded-xl px-4 py-2 bg-slate-900/60 hover:bg-slate-900 border border-white/10 font-bold" disabled>End</button>
+        </div>
+      </div>
+
+      <div class="mt-4 rounded-2xl border border-white/10 bg-slate-950/30 p-5">
+        <div class="text-xs text-slate-400 font-semibold">Current question</div>
+        <div id="curQ" class="mt-1 text-slate-100 font-extrabold text-lg">—</div>
+        <div class="mt-3 grid md:grid-cols-2 gap-4">
+          <label class="text-sm">
+            <div class="text-slate-300 font-semibold mb-1">Your answer</div>
+            <textarea id="curA" rows="5" class="w-full bg-slate-900/70 border border-white/10 rounded-2xl px-4 py-3 resize-none" placeholder="Type your answer..."></textarea>
+          </label>
+          <div class="text-sm">
+            <div class="text-slate-300 font-semibold mb-1">AI feedback</div>
+            <div id="curOut" class="rounded-2xl border border-white/10 bg-slate-900/50 p-4 min-h-[140px] text-slate-200">
+              <span class="text-slate-400">Press Begin to start.</span>
+            </div>
+          </div>
+        </div>
+        <div class="mt-3 flex flex-wrap gap-2 items-center">
+          <button id="submitBtn" class="rounded-xl px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-slate-950 font-extrabold" disabled>Submit answer</button>
+          <div id="qStatus" class="text-xs text-slate-400"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass rounded-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-white/10 flex items-center justify-between">
+        <div class="font-extrabold">Questions</div>
+        <div class="text-xs text-slate-400" id="countText">0 questions</div>
+      </div>
+      <div id="list" class="p-6 grid gap-4 bg-slate-950/30">
+        <div class="text-slate-400 text-sm">Select a set and click Load.</div>
+      </div>
+    </section>
+
+    <section class="glass rounded-2xl p-6">
+      <h2 class="text-lg font-extrabold">Ask AI to review (optional)</h2>
+      <p class="text-slate-300 text-sm mt-1">Paste any question + your answer and get structured feedback.</p>
+      <div class="grid md:grid-cols-2 gap-4 mt-4">
+        <label class="text-sm">
+          <div class="text-slate-300 font-semibold mb-1">Question</div>
+          <textarea id="aiQuestion" rows="4" class="w-full bg-slate-900/70 border border-white/10 rounded-2xl px-4 py-3 resize-none"></textarea>
+        </label>
+        <label class="text-sm">
+          <div class="text-slate-300 font-semibold mb-1">Your answer</div>
+          <textarea id="aiAnswer" rows="4" class="w-full bg-slate-900/70 border border-white/10 rounded-2xl px-4 py-3 resize-none"></textarea>
+        </label>
+      </div>
+      <div class="flex flex-wrap gap-3 mt-4 items-center">
+        <button id="reviewBtn" class="rounded-xl px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-slate-950 font-extrabold">Review with AI</button>
+        <div class="text-xs text-slate-400" id="reviewStatus"></div>
+      </div>
+      <div id="reviewOut" class="mt-4 text-sm"></div>
+    </section>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script>
+    const SETS = {
+      hr: {
+        title: "HR basics (Fresher)",
+        items: [
+          { q: "Tell me about yourself.", hint: "30–60 seconds. Present → past → future.", points: ["Who you are (role/student)", "1–2 relevant skills", "1 project/achievement", "Why this role"] },
+          { q: "Why should we hire you?", hint: "Match your strengths to role needs.", points: ["2 strengths with proof", "How you’ll add value", "Eagerness to learn"] },
+          { q: "Describe a conflict you handled.", hint: "Use STAR.", points: ["Situation", "Your action", "Result/learning"] },
+          { q: "What are your strengths and weaknesses?", hint: "Weakness + improvement plan.", points: ["Strengths with examples", "Weakness + steps taken"] },
+          { q: "Where do you see yourself in 2 years?", hint: "Be realistic and role-aligned.", points: ["Skill goals", "Role growth", "Contribution to company"] }
+        ]
+      },
+      tech_java: {
+        title: "Technical (Java + Spring Boot)",
+        items: [
+          { q: "Explain dependency injection. Why is it useful?", hint: "Inversion of control + testability.", points: ["IoC concept", "Loose coupling", "Constructor injection", "Testing/mocking"] },
+          { q: "What is the difference between @Controller and @RestController?", hint: "View vs JSON.", points: ["@RestController = @Controller + @ResponseBody", "Returns JSON by default", "Use cases"] },
+          { q: "How do you handle exceptions in Spring Boot APIs?", hint: "@ControllerAdvice.", points: ["@ExceptionHandler", "@ControllerAdvice", "Meaningful status codes", "Error body"] },
+          { q: "Explain JPA lazy vs eager loading.", hint: "N+1 issue.", points: ["Default behaviors", "Performance impact", "Join fetch/entity graph"] },
+          { q: "How do you secure an API with JWT?", hint: "Filter + validation.", points: ["Auth endpoint issues token", "Filter validates token", "Set SecurityContext", "Expiry/refresh"] }
+        ]
+      },
+      dsa: {
+        title: "Technical (DSA quick)",
+        items: [
+          { q: "Explain time complexity of binary search.", hint: "Logarithmic.", points: ["O(log n)", "Sorted array requirement"] },
+          { q: "What is a hash map collision and how is it handled?", hint: "Chaining / open addressing.", points: ["What collision is", "Chaining", "Probing", "Load factor"] },
+          { q: "Difference between stack and queue?", hint: "LIFO vs FIFO.", points: ["Definitions", "Use cases"] },
+          { q: "Explain BFS vs DFS.", hint: "Queue vs stack/recursion.", points: ["Traversal strategy", "Data structure", "Typical use cases"] },
+          { q: "What is dynamic programming?", hint: "Overlapping subproblems.", points: ["Memoization/tabulation", "Optimal substructure", "Example"] }
+        ]
+      }
+    };
+
+    const setSelect = document.getElementById('setSelect');
+    const loadBtn = document.getElementById('loadBtn');
+    const listEl = document.getElementById('list');
+    const countText = document.getElementById('countText');
+    const practiceMeta = document.getElementById('practiceMeta');
+    const beginBtn = document.getElementById('beginBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const endBtn = document.getElementById('endBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const curQ = document.getElementById('curQ');
+    const curA = document.getElementById('curA');
+    const curOut = document.getElementById('curOut');
+    const qStatus = document.getElementById('qStatus');
+
+    const aiQ = document.getElementById('aiQuestion');
+    const aiA = document.getElementById('aiAnswer');
+    const reviewBtn = document.getElementById('reviewBtn');
+    const reviewStatus = document.getElementById('reviewStatus');
+    const reviewOut = document.getElementById('reviewOut');
+
+    function escapeHtml(s) {
+      return String(s)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function renderStructured(structured) {
+      const parts = [];
+      const add = (label, value) => {
+        if (!value) return;
+        if (Array.isArray(value)) {
+          if (!value.length) return;
+          parts.push(`<div class="mt-2 font-semibold text-slate-100">${escapeHtml(label)}</div>`);
+          parts.push('<ul class="list-disc ml-5 mt-1 text-slate-200">');
+          value.forEach(v => parts.push(`<li>${escapeHtml(v)}</li>`));
+          parts.push('</ul>');
+        } else {
+          parts.push(`<div class="mt-2 font-semibold text-slate-100">${escapeHtml(label)}</div>`);
+          parts.push(`<div class="mt-1 text-slate-200">${escapeHtml(value)}</div>`);
+        }
+      };
+      add('Summary', structured.summary);
+      add('Key points', structured.keyPoints);
+      add('Next steps', structured.nextSteps);
+      add('Examples', structured.examples);
+      add('Warnings', structured.warnings);
+      add('Follow-up questions', structured.followUpQuestions);
+      if (!parts.length) parts.push(escapeHtml(structured.rawText || ''));
+      return parts.join('');
+    }
+
+    function renderSet(key) {
+      const set = SETS[key];
+      listEl.innerHTML = '';
+      countText.textContent = `${set.items.length} questions`;
+
+      set.items.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = 'rounded-2xl border border-white/10 bg-slate-900/50 p-5';
+        card.innerHTML = `
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <div class="text-xs text-slate-400 font-semibold">Q${idx + 1}</div>
+              <div class="text-slate-100 font-extrabold mt-1">${escapeHtml(item.q)}</div>
+              <div class="text-slate-300 text-sm mt-2">${escapeHtml(item.hint || '')}</div>
+            </div>
+            <div class="flex flex-col gap-2 shrink-0">
+              <button class="useBtn rounded-xl px-3 py-2 bg-indigo-500 hover:bg-indigo-400 text-slate-950 font-extrabold text-sm">Use in AI review</button>
+              <button class="toggleBtn rounded-xl px-3 py-2 bg-slate-950/40 hover:bg-slate-950 border border-white/10 font-bold text-sm">Show points</button>
+            </div>
+          </div>
+          <div class="points hidden mt-4 text-sm">
+            <div class="font-semibold text-slate-100">Expected points</div>
+            <ul class="list-disc ml-5 mt-2 text-slate-200">
+              ${(item.points || []).map(p => `<li>${escapeHtml(p)}</li>`).join('')}
+            </ul>
+          </div>
+        `;
+        card.querySelector('.toggleBtn').addEventListener('click', (e) => {
+          const p = card.querySelector('.points');
+          const open = !p.classList.contains('hidden');
+          p.classList.toggle('hidden');
+          e.target.textContent = open ? 'Show points' : 'Hide points';
+        });
+        card.querySelector('.useBtn').addEventListener('click', () => {
+          aiQ.value = item.q;
+          aiA.value = '';
+          aiA.focus();
+          window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        });
+        listEl.appendChild(card);
+      });
+    }
+
+    function getParams() {
+      const p = new URLSearchParams(window.location.search);
+      return {
+        set: p.get('set') || '',
+        type: p.get('type') || '',
+        round: p.get('round') || '',
+        position: p.get('position') || '',
+        autostart: p.get('autostart') === '1'
+      };
+    }
+
+    // Quick practice session state
+    let session = { active: false, idx: 0, key: 'hr', items: [], position: '', round: '', type: '' };
+
+    function setSessionActive(active) {
+      session.active = active;
+      nextBtn.disabled = !active;
+      endBtn.disabled = !active;
+      submitBtn.disabled = !active;
+      beginBtn.disabled = active;
+    }
+
+    async function reviewAnswer(question, answer, roleHint) {
+      const prompt = [
+        "You are an interview coach.",
+        "Review the answer for the given question and provide feedback.",
+        "Return ONLY JSON (no markdown) in this schema:",
+        "{",
+        '  "summary": string,',
+        '  "keyPoints": string[],',
+        '  "nextSteps": string[],',
+        '  "examples": string[],',
+        '  "warnings": string[],',
+        '  "followUpQuestions": string[],',
+        '  "rawText": string',
+        "}",
+        "",
+        "IMPORTANT: summary MUST contain a score like: Score: X/10",
+        "",
+        roleHint ? `Target role: ${roleHint}` : "Target role: (not specified)",
+        "",
+        `Question: ${question}`,
+        `Answer: ${answer}`
+      ].join("\n");
+
+      const res = await fetch('/api/v1/chat/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+      const data = await res.json();
+      return data?.structured || { rawText: data?.response || 'No response' };
+    }
+
+    function showQuestion() {
+      const item = session.items[session.idx];
+      curQ.textContent = item?.q || '—';
+      curA.value = '';
+      curOut.innerHTML = '<span class="text-slate-400">Write your answer, then click Submit.</span>';
+      qStatus.textContent = `Question ${session.idx + 1} of ${session.items.length}`;
+      // Prefill analyzer box too
+      aiQ.value = item?.q || '';
+      aiA.value = '';
+    }
+
+    async function submitCurrent() {
+      const item = session.items[session.idx];
+      const answer = curA.value.trim();
+      if (!item || !answer) return;
+      submitBtn.disabled = true;
+      qStatus.textContent = 'Reviewing…';
+      try {
+        const structured = await reviewAnswer(item.q, answer, session.position);
+        curOut.innerHTML = renderStructured(structured);
+
+        // Record "test" stats if we have a score and user is logged in
+        try {
+          const scoreText = (structured?.summary || structured?.rawText || '').toString();
+          const m = scoreText.match(/Score:\s*(\d{1,2})\s*\/\s*10/i);
+          if (m && window.Api && window.Api.isLoggedIn()) {
+            const score10 = Math.max(0, Math.min(10, Number(m[1])));
+            const percent = Math.round(score10 * 10);
+            await window.Api.request('/api/v1/stats/record-test', {
+              method: 'POST',
+              body: JSON.stringify({ scorePercent: percent, category: (session.round || 'PRACTICE') })
+            });
+          }
+        } catch {}
+      } catch (e) {
+        curOut.innerHTML = `<span class="text-rose-300 font-semibold">Error: ${escapeHtml(e.message || e)}</span>`;
+      } finally {
+        submitBtn.disabled = false;
+        qStatus.textContent = `Question ${session.idx + 1} of ${session.items.length}`;
+      }
+    }
+
+    function nextQuestion() {
+      if (!session.active) return;
+      if (session.idx < session.items.length - 1) {
+        session.idx += 1;
+        showQuestion();
+      } else {
+        curQ.textContent = 'Completed';
+        qStatus.textContent = 'Done. Great job!';
+        curOut.innerHTML = '<span class="text-emerald-300 font-semibold">Practice session completed. Use "Ask AI to review" below for any extra questions.</span>';
+        setSessionActive(false);
+      }
+    }
+
+    function startSessionFromSet(key, meta) {
+      const set = SETS[key] || SETS.hr;
+      session = {
+        active: true,
+        idx: 0,
+        key,
+        items: set.items || [],
+        position: meta.position || '',
+        round: meta.round || '',
+        type: meta.type || ''
+      };
+      setSelect.value = key;
+      renderSet(key);
+      practiceMeta.textContent = meta.position
+        ? `Prefilled from Dashboard • Round: ${meta.round || '—'} • Position: ${meta.position}`
+        : 'Practice session ready.';
+      setSessionActive(true);
+      showQuestion();
+    }
+
+    async function reviewWithAi() {
+      const q = aiQ.value.trim();
+      const a = aiA.value.trim();
+      if (!q || !a) {
+        reviewOut.innerHTML = '<div class="text-rose-300 font-semibold">Please fill both question and answer.</div>';
+        return;
+      }
+      reviewBtn.disabled = true;
+      reviewStatus.textContent = 'Reviewing…';
+      reviewOut.innerHTML = '';
+      try {
+        const prompt = [
+          "You are an interview coach. Review the answer for the question below.",
+          "Return ONLY JSON using this schema (no markdown):",
+          "{",
+          '  "summary": string,',
+          '  "keyPoints": string[],',
+          '  "nextSteps": string[],',
+          '  "examples": string[],',
+          '  "warnings": string[],',
+          '  "followUpQuestions": string[],',
+          '  "rawText": string',
+          "}",
+          "",
+          `Question: ${q}`,
+          `Answer: ${a}`,
+          "",
+          "Include a score out of 10 in summary if possible, plus one improved sample answer in examples."
+        ].join("\\n");
+
+        const res = await fetch('/api/v1/chat/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt })
+        });
+        const data = await res.json();
+        const structured = data?.structured || { rawText: data?.response || 'No response' };
+        reviewOut.innerHTML = `<div class="rounded-2xl border border-white/10 bg-slate-900/50 p-5">${renderStructured(structured)}</div>`;
+      } catch (e) {
+        reviewOut.innerHTML = `<div class="text-rose-300 font-semibold">Error: ${escapeHtml(e.message)}</div>`;
+      } finally {
+        reviewBtn.disabled = false;
+        reviewStatus.textContent = '';
+      }
+    }
+
+    loadBtn.addEventListener('click', () => renderSet(setSelect.value));
+    reviewBtn.addEventListener('click', reviewWithAi);
+
+    // Quick practice wiring
+    beginBtn.addEventListener('click', () => {
+      const meta = getParams();
+      startSessionFromSet(setSelect.value, meta);
+    });
+    nextBtn.addEventListener('click', nextQuestion);
+    endBtn.addEventListener('click', () => {
+      setSessionActive(false);
+      qStatus.textContent = 'Ended.';
+      curQ.textContent = '—';
+      curA.value = '';
+      curOut.innerHTML = '<span class="text-slate-400">Session ended.</span>';
+    });
+    submitBtn.addEventListener('click', submitCurrent);
+
+    // Auto-start if coming from Dashboard
+    (function initFromDashboard() {
+      const meta = getParams();
+      if (meta.set && SETS[meta.set]) setSelect.value = meta.set;
+      if (meta.set) renderSet(meta.set);
+      if (meta.autostart) {
+        startSessionFromSet(setSelect.value, meta);
+      }
+    })();
+  </script>
+</body>
+</html>
+

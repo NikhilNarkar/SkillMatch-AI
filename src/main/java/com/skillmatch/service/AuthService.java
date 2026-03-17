@@ -14,6 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -23,6 +25,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final StatsService statsService;
 
     public AuthResponse login(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -34,8 +37,10 @@ public class AuthService {
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        statsService.updateLoginStreak(user, LocalDate.now());
+
         return new AuthResponse(token, user.getUserId(), user.getEmail(),
-                user.getFirstName(), user.getLastName(), user.getUserType());
+                user.getFirstName(), user.getLastName(), user.getUserType(), user.getIsPaid());
     }
 
     public AuthResponse register(RegisterRequest registerRequest) {
@@ -60,6 +65,9 @@ public class AuthService {
 
         User savedUser = userRepository.save(user);
 
+        // Initialize streak on first login day (optional)
+        statsService.updateLoginStreak(savedUser, LocalDate.now());
+
         // Generate token
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(registerRequest.getEmail(), registerRequest.getPassword())
@@ -68,6 +76,6 @@ public class AuthService {
         String token = jwtUtil.generateToken(authentication);
 
         return new AuthResponse(token, savedUser.getUserId(), savedUser.getEmail(),
-                savedUser.getFirstName(), savedUser.getLastName(), savedUser.getUserType());
+                savedUser.getFirstName(), savedUser.getLastName(), savedUser.getUserType(), savedUser.getIsPaid());
     }
 }

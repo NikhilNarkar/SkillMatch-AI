@@ -7,6 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/chatbot")
 @RequiredArgsConstructor
@@ -19,10 +21,10 @@ public class ChatbotController {
     public ResponseEntity<ChatResponse> getChatResponse(@RequestBody ChatRequest request) {
         String userInput = request == null ? null : request.getMessage();
         if (userInput == null || userInput.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body(new ChatResponse("Input message is empty"));
+            return ResponseEntity.badRequest().body(ChatResponse.error("Input message is empty"));
         }
-        String apiResponse = chatService.ask(userInput);
-        return ResponseEntity.ok(new ChatResponse(apiResponse));
+        ChatService.StructuredAnswer structured = chatService.askStructured(userInput);
+        return ResponseEntity.ok(new ChatResponse(structured.asPlainText(), structured.asMap()));
     }
 
     @Data
@@ -32,7 +34,20 @@ public class ChatbotController {
 
     @Data
     public static class ChatResponse {
-        private final String response;
+        private String response;
+        private Map<String, Object> structured;
+        private String error;
+
+        public ChatResponse(String response, Map<String, Object> structured) {
+            this.response = response;
+            this.structured = structured;
+        }
+
+        public static ChatResponse error(String message) {
+            ChatResponse r = new ChatResponse("Error: " + message, Map.of());
+            r.error = message;
+            return r;
+        }
     }
 }
 
